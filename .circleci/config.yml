@@ -1,0 +1,210 @@
+version: 2.1
+
+aliases:
+  - &checkout_fun
+    checkout:
+      path: ~/fun
+
+  - &restore_node_modules
+    restore_cache:
+      name: Restore node_modules cache
+      keys:
+        - v0-front-dependencies-{{ checksum "~/fun/yarn.lock" }}
+        - v0-front-dependencies-
+
+# Define the jobs we want to run for this project
+jobs:
+  # ---- Git jobs ----
+  # Check that the git history is clean and complies with our expectations
+  lint-git:
+    docker:
+      - image: cimg/python:3.10
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASS
+    working_directory: ~/fun
+    steps:
+      - checkout
+      - run:
+          name: Check absence of fixup commits
+          command: ! git log | grep 'fixup!'
+      - run:
+          name: Install gitlint
+          command: pip install --user requests gitlint
+      - run:
+          name: lint commit messages added to master
+          command: ~/.local/bin/gitlint --commits origin/master..HEAD
+
+  # Check that the CHANGELOG has been updated in the current branch
+  check-changelog:
+    docker:
+      - image: circleci/buildpack-deps:stretch-scm
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASS
+    working_directory: ~/fun
+    steps:
+      - checkout
+      - run:
+          name: Check that the CHANGELOG has been modified in the current branch
+          command: |
+            git whatchanged --name-only --pretty="" origin..HEAD | grep CHANGELOG
+
+  # Check that the CHANGELOG max line length does not exceed 80 characters
+  lint-changelog:
+    docker:
+      - image: debian:stretch
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASS
+    working_directory: ~/fun
+    steps:
+      - checkout
+      - run:
+          name: Check CHANGELOG max line length
+          command: |
+            # Get the longuest line width (ignoring release links)
+            test $(cat CHANGELOG.md | grep -Ev "^\[.*\]: https://github.com/openfun" | wc -L) -le 80
+
+  # Check that renovate configuration file is valid
+  check-renovate-configuration:
+    docker:
+      - image: renovate/renovate
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASS
+    working_directory: ~/fun
+    steps:
+      - checkout
+      - run:
+          name: Run renovate-config-validator command
+          command: renovate-config-validator
+
+  # ---- Front-end jobs ----
+  build:
+    docker:
+      - image: circleci/node:14
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASS
+    working_directory: ~/fun
+    steps:
+      - *checkout_fun
+      - *restore_node_modules
+      # If the yarn.lock file is not up-to-date with the package.json file,
+      # using the --frozen-lockfile should fail.
+      - run:
+          name: Install front-end dependencies
+          command: yarn install --frozen-lockfile
+      - run:
+          name: Build front-end application for production
+          command: yarn build
+      - save_cache:
+          paths:
+            - ./node_modules
+          key: v0-front-dependencies-{{ checksum "yarn.lock" }}
+
+  lint:
+    docker:
+      - image: circleci/node:14
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASS
+    working_directory: ~/fun
+    steps:
+      - *checkout_fun
+      - *restore_node_modules
+      - run:
+          name: Lint code with eslint
+          command: yarn lint
+  test:
+    docker:
+      - image: circleci/node:14
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASS
+    working_directory: ~/fun
+    steps:
+      - *checkout_fun
+      - *restore_node_modules
+      - run:
+          name: Run tests
+          # Circle CI needs the tests to be run sequentially, otherwise it hangs. See Jest docs below:
+          # (https://jestjs.io/docs/en/troubleshooting#tests-are-extremely-slow-on-docker-and-or-continuous-integration-ci-server)
+          command: yarn test --runInBand
+  # Publishing to npm requires that you have defined the NPM_TOKEN secret
+  # environment variables in CircleCI UI.
+  publish:
+    docker:
+      - image: circleci/node:14
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASS
+    working_directory: ~/fun
+    steps:
+      - *checkout_fun
+      - run:
+          name: Authenticate with registry
+          command: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/fun/.npmrc
+      - run:
+          name: Publish package
+          command: npm publish
+
+
+
+
+# Orchestrate our job run sequence
+workflows:
+  vernajs:
+    jobs:
+      # ---- Front-end jobs ----
+      - build:
+          filters:
+            tags:
+              only: /.*/
+      - lint:
+          requires:
+            - build
+          filters:
+            tags:
+              only: /.*/
+      - test:
+          requires:
+            - lint
+          filters:
+            tags:
+              only: /.*/
+
+      # ---- Git jobs ----
+      - lint-git:
+          filters:
+            tags:
+              only: /.*/
+      - check-changelog:
+          filters:
+            branches:
+              ignore: master
+            tags:
+              only: /(?!^v).*/
+      - lint-changelog:
+          filters:
+            branches:
+              ignore: master
+            tags:
+              only: /.*/
+      - check-renovate-configuration:
+          filters:
+            tags:
+              only: /.*/
+
+      # ---- NPM Publication ----
+      # Publish frontend package to NPM only if all build, lint and test jobs
+      # succeed, and it has been tagged with a tag starting with the letter v
+      - publish:
+          requires:
+            - test
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v.*/
