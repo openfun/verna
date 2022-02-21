@@ -16,9 +16,9 @@ const schema: JSONSchema7 = {
       type: 'string',
       title: 'Last name',
     },
-    telephone: {
+    phone: {
       type: 'string',
-      title: 'Telephone',
+      title: 'Phone',
       minLength: 10,
     },
   },

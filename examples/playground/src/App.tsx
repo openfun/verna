@@ -1,7 +1,7 @@
-import DrafFrom from '@openfun/vernajs';
+import VernaForm from '@openfun/vernajs';
 
 function App() {
-  return <DrafFrom />;
+  return <VernaForm />;
 }
 
 export default App;

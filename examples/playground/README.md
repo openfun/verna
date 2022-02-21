@@ -1,5 +1,4 @@
-# Draft Form - Examples
-## Playground
+# Verna.js - Playground
 
 You can use this playground for development purpose.
 

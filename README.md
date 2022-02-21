@@ -5,15 +5,15 @@ An extensible form builder based on [React JSON Schema Form](https://github.com/
 
 ## Overview
 
-Verna.js is a React component using [JSON Schema](http://json-schema.org/) to build and
-generate forms. As it relies on [React JSON Schema Form](https://github.com/rjsf-team/react-jsonschema-form)
-library, it is fully extensible to fit your needs.
+Verna.js is a React component to build forms that generates a [JSON Schema](http://json-schema.org/)
+description of the form as output. The form can then be rendered with the [React JSON Schema Form](https://github.com/rjsf-team/react-jsonschema-form)
+library, which makes it fully extensible to fit your needs.
 
 
 ## Quick preview
 
-You can check examples available within `examples` folder. Take a loot at `README.md` in
-each example then follow instructions to run it.
+You can check examples available within the `examples` folder. Take a loot at the
+`README.md` file in each example then follow instructions to run it.
 
 ### Instructions
 
@@ -21,10 +21,10 @@ each example then follow instructions to run it.
 Soon instructions to install `@openfun/vernajs` within your project.
 
 To run the project, you have to run :
-1. `npm install` or `yarn`
-2. `npm start` or `yarn start`
+1. `yarn` or `npm install` 
+2. `yarn dev` or `npm run dev`
 
-You should now be able to access to the playground example from http://localhost:3000
+You should now be able to access the playground example from http://localhost:3000
 
 ## Contributing
 
