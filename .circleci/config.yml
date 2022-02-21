@@ -27,13 +27,14 @@ jobs:
       - checkout
       - run:
           name: Check absence of fixup commits
-          command: ! git log | grep 'fixup!'
+          command: |
+            ! git log | grep 'fixup!'
       - run:
           name: Install gitlint
           command: pip install --user requests gitlint
       - run:
-          name: lint commit messages added to master
-          command: ~/.local/bin/gitlint --commits origin/master..HEAD
+          name: lint commit messages added to main
+          command: ~/.local/bin/gitlint --commits origin/main..HEAD
 
   # Check that the CHANGELOG has been updated in the current branch
   check-changelog:
@@ -183,13 +184,13 @@ workflows:
       - check-changelog:
           filters:
             branches:
-              ignore: master
+              ignore: main
             tags:
               only: /(?!^v).*/
       - lint-changelog:
           filters:
             branches:
-              ignore: master
+              ignore: main
             tags:
               only: /.*/
       - check-renovate-configuration:

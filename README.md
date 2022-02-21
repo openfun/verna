@@ -1,5 +1,5 @@
 # Verna.js 🏗
-[![CircleCI](https://circleci.com/gh/openfun/vernajs/tree/master.svg?style=svg)](https://circleci.com/gh/openfun/vernajs/tree/master)
+[![CircleCI](https://circleci.com/gh/openfun/vernajs/tree/main.svg?style=svg)](https://circleci.com/gh/openfun/vernajs/tree/main)
 
 An extensible form builder based on [React JSON Schema Form](https://github.com/rjsf-team/react-jsonschema-form).
 
