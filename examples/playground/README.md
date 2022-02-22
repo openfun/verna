@@ -1,4 +1,4 @@
-# Verna.js - Playground
+# Verna - Playground
 
 You can use this playground for development purpose.
 

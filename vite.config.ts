@@ -10,7 +10,7 @@ export default defineConfig({
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'index',
-      fileName: (format) => `vernajs.${format}.js`,
+      fileName: (format) => `verna.${format}.js`,
     },
     rollupOptions: {
       external: ['react'],

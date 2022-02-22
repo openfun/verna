@@ -1,11 +1,11 @@
-# Verna.js 🏗
-[![CircleCI](https://circleci.com/gh/openfun/vernajs/tree/main.svg?style=svg)](https://circleci.com/gh/openfun/vernajs/tree/main)
+# Verna 🏗
+[![CircleCI](https://circleci.com/gh/openfun/verna/tree/main.svg?style=svg)](https://circleci.com/gh/openfun/verna/tree/main)
 
 An extensible form builder based on [React JSON Schema Form](https://github.com/rjsf-team/react-jsonschema-form).
 
 ## Overview
 
-Verna.js is a React component to build forms that generates a [JSON Schema](http://json-schema.org/)
+Verna is a React component to build forms that generates a [JSON Schema](http://json-schema.org/)
 description of the form as output. The form can then be rendered with the [React JSON Schema Form](https://github.com/rjsf-team/react-jsonschema-form)
 library, which makes it fully extensible to fit your needs.
 
@@ -17,8 +17,8 @@ You can check examples available within the `examples` folder. Take a loot at th
 
 ### Instructions
 
-🚧 **`@openfun/vernajs` is not yet available on NPM. Stay tuned !**
-Soon instructions to install `@openfun/vernajs` within your project.
+🚧 **`@openfun/verna` is not yet available on NPM. Stay tuned !**
+Soon instructions to install `@openfun/verna` within your project.
 
 To run the project, you have to run :
 1. `yarn` or `npm install` 

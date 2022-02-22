@@ -1,5 +1,5 @@
 {
-  "name": "@openfun/vernajs",
+  "name": "@openfun/verna",
   "version": "0.0.0",
   "private": false,
   "description": "An extensible form builder based on React JSON Schema Form.",
@@ -9,20 +9,20 @@
     "lint": "eslint 'src/**/*.{ts,tsx}'",
     "test": "jest"
   },
-  "main": "./dist/vernajs.umd.js",
+  "main": "./dist/verna.umd.js",
   "exports": {
     ".": {
-      "import": "./dist/vernajs.es.js",
-      "require": "./dist/vernajs.umd.js"
+      "import": "./dist/verna.es.js",
+      "require": "./dist/verna.umd.js"
     }
   },
-  "repository": "https://github.com/openfun/vernajs",
+  "repository": "https://github.com/openfun/verna",
   "author": {
     "name": "Open FUN (France Université Numérique)",
     "email": "fun.dev@fun-mooc.fr"
   },
   "bugs": {
-    "url": "https://github.com/openfun/vernajs/issues"
+    "url": "https://github.com/openfun/verna/issues"
   },
   "browserslist": [
     "last 2 versions",

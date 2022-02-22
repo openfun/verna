@@ -156,7 +156,7 @@ jobs:
 
 # Orchestrate our job run sequence
 workflows:
-  vernajs:
+  verna:
     jobs:
       # ---- Front-end jobs ----
       - build:
