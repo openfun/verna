@@ -7,7 +7,7 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      '@openfun/vernajs': resolve(__dirname, '../../src/'),
+      '@openfun/verna': resolve(__dirname, '../../src/'),
     },
   },
 });

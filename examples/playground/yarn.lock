@@ -261,7 +261,7 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
-"@openfun/vernajs@../../src":
+"@openfun/verna@../../src":
   version "0.0.0"
 
 "@rollup/pluginutils@^4.1.2":

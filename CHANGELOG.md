@@ -8,4 +8,4 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
-[unreleased]: https://github.com/openfun/vernajs
+[unreleased]: https://github.com/openfun/verna

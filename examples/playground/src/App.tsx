@@ -1,4 +1,4 @@
-import VernaForm from '@openfun/vernajs';
+import VernaForm from '@openfun/verna';
 
 function App() {
   return <VernaForm />;
