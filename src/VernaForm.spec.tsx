@@ -1,33 +1,108 @@
 import { screen, render } from '@testing-library/react';
 import VernaForm from '.';
+import { JSONSchema7 } from 'json-schema';
+import _ from 'lodash';
+import { VernaContextProvider } from './VernaContextProvider';
+
+const schemaDefault: JSONSchema7 = {
+  title: 'A registration form',
+  description: 'Desc registration form',
+  type: 'object',
+  properties: {
+    testSection: {
+      type: 'object',
+      title: 'Sectiontest',
+      properties: {
+        champ1: {
+          type: 'string',
+          title: 'Field name 1',
+          propertyNames: true,
+        },
+      },
+    },
+  },
+};
 
 describe('VernaForm', () => {
   it('should render', async () => {
-    render(<VernaForm />);
+    render(
+      <VernaContextProvider defaultSchema={schemaDefault}>
+        <VernaForm />
+      </VernaContextProvider>,
+    );
 
     // - A fieldset legend should be displayed with form title
     screen.getByRole('group', { name: 'A registration form' });
 
     // - A paragraph with form description should be displayed
-    screen.getByText('A simple form example.');
+    screen.getByText('Desc registration form');
 
-    // - A required text input First name should be displayed with a default value Richie
-    const $firstnameField = screen.getByRole('textbox', {
-      name: 'First name *',
-    }) as HTMLInputElement;
-    expect($firstnameField.required).toEqual(true);
-    expect($firstnameField.value).toEqual('Richie');
+    // - The first section should be displayed
+    screen.getByRole('group', { name: 'Sectiontest' });
 
-    // - A required text input Last name should be displayed with no default value
-    const $lastnameField = screen.getByRole('textbox', { name: 'Last name *' }) as HTMLInputElement;
-    expect($lastnameField.required).toEqual(true);
-    expect($lastnameField.value).toEqual('');
+    const $field1 = document.getElementById('root_testSection_champ1') as HTMLInputElement;
 
-    // - A not required text input Phone should be displayed with no default value
-    const $phoneField = screen.getByRole('textbox', { name: 'Phone' }) as HTMLInputElement;
-    expect($phoneField.required).toEqual(false);
-    expect($phoneField.value).toEqual('');
+    expect($field1).toBeInstanceOf(HTMLInputElement);
+    expect($field1.type).toBe('text');
 
+    // Add two sections
+    screen
+      .getByRole('button', {
+        name: 'Add a section',
+      })
+      .click();
+    _.last(
+      (await screen.findAllByRole('button', {
+        name: 'Add a section',
+      })) as HTMLElement[],
+    )?.click();
+
+    const $addFieldButtons1 = await screen.findAllByRole('button', {
+      name: 'Add an input',
+    });
+    expect($addFieldButtons1).toHaveLength(3);
+
+    // Add two input fields
+    _.last(
+      (await screen.findAllByRole('button', {
+        name: 'Add an input',
+      })) as HTMLElement[],
+    )?.click();
+    _.last(
+      (await screen.findAllByRole('button', {
+        name: 'Add an input',
+      })) as HTMLElement[],
+    )?.click();
+
+    const $addFieldButtons2 = await screen.findAllByRole('button', {
+      name: 'Add an input',
+    });
+    expect($addFieldButtons2).toHaveLength(4);
+
+    const $addSectionButtons = await screen.findAllByRole('button', {
+      name: 'Add a section',
+    });
+    expect($addSectionButtons).toHaveLength(3);
+
+    // Delete every elements from top to bottom
     screen.getByRole('button', { name: 'Submit' });
+    _.forEach(
+      (await screen.findAllByRole('button', {
+        name: 'x',
+      })) as HTMLElement[],
+      (element) => element.click(),
+    );
+    const $deleteButtons = screen.queryAllByRole('button', { name: 'x' });
+    expect($deleteButtons).toHaveLength(0);
+
+    const $addSectionButtons2 = await screen.findAllByRole('button', {
+      name: 'Add a section',
+    });
+    expect($addSectionButtons2).toHaveLength(1);
+
+    const $addFieldButtons3 = screen.queryAllByRole('button', {
+      name: 'Add an input',
+    });
+    expect($addFieldButtons3).toHaveLength(0);
   });
 });

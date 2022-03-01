@@ -1,31 +1,26 @@
+import { useVerna } from './VernaContextProvider';
 import Form from '@rjsf/core';
-import type { JSONSchema7 } from 'json-schema';
+import RenderFieldTemplate from './RenderMethods/RenderFieldTemplate';
+import { type FormProps } from '@rjsf/core';
 
-const schema: JSONSchema7 = {
-  title: 'A registration form',
-  description: 'A simple form example.',
-  type: 'object',
-  required: ['firstName', 'lastName'],
-  properties: {
-    firstName: {
-      type: 'string',
-      title: 'First name',
-      default: 'Richie',
-    },
-    lastName: {
-      type: 'string',
-      title: 'Last name',
-    },
-    phone: {
-      type: 'string',
-      title: 'Phone',
-      minLength: 10,
-    },
-  },
-};
+interface VernaFormProperties {
+  onSubmit?: FormProps<unknown>['onSubmit'];
+}
 
-function VernaForm() {
-  return <Form schema={schema} />;
+function VernaForm({ onSubmit }: VernaFormProperties) {
+  const { schema, uiSchema, readOnly, widgets } = useVerna();
+
+  return (
+    <Form
+      className={'form'}
+      schema={schema}
+      uiSchema={uiSchema}
+      onSubmit={onSubmit}
+      readonly={readOnly}
+      widgets={widgets}
+      FieldTemplate={RenderFieldTemplate}
+    />
+  );
 }
 
 export default VernaForm;

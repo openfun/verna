@@ -8,4 +8,9 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Added
+
+- Functionality to add or remove widgets and sections
+
+
 [unreleased]: https://github.com/openfun/verna

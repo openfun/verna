@@ -13,7 +13,9 @@
     "indent": ["error", 2],
     "linebreak-style": "warn",
     "react/react-in-jsx-scope": "off",
-    "react/jsx-uses-react": "off"
+    "react/jsx-uses-react": "off",
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": "error"
   },
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
