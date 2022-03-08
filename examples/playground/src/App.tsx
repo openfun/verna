@@ -8,7 +8,38 @@ function App() {
     title: 'A registration form',
     description: 'Desc registration form',
     type: 'object',
-    properties: {},
+    properties: {
+      testSection: {
+        type: 'object',
+        title: 'Sectiontest',
+        properties: {
+          field1: {
+            type: 'string',
+            title: 'Field name 1',
+            propertyNames: true,
+          },
+        },
+      },
+      secondSection: {
+        type: 'object',
+        title: 'Second section',
+        properties: {
+          secondField: {
+            type: 'string',
+            title: 'field second section',
+          },
+        },
+      },
+    },
+  };
+
+  const formData = {
+    secondSection: {
+      secondField: 'BBBBB',
+    },
+    testSection: {
+      field1: 'AAAAAAAA',
+    },
   };
 
   const widgets = {};
@@ -20,12 +51,13 @@ function App() {
   };
 
   return (
-    <div style={{ backgroundColor: 'lightcyan' }}>
+    <div style={{ backgroundColor: 'lightgray' }}>
       <VernaContextProvider
         defaultSchema={schemaDefault}
         defaultUiSchema={uiSchema}
+        defaultFormValues={formData}
         defaultReadOnly={false}
-        defaultWidget={widgets}
+        defaultWidgets={widgets}
       >
         <FormWrapper />
       </VernaContextProvider>

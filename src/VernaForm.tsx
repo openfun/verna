@@ -1,26 +1,30 @@
 import { useVerna } from './VernaContextProvider';
 import Form from '@rjsf/core';
 import RenderFieldTemplate from './RenderMethods/RenderFieldTemplate';
-import { type FormProps } from '@rjsf/core';
 
 interface VernaFormProperties {
-  onSubmit?: FormProps<unknown>['onSubmit'];
+  onSubmit: (formData: unknown) => void;
 }
 
 function VernaForm({ onSubmit }: VernaFormProperties) {
-  const { schema, uiSchema, readOnly, widgets } = useVerna();
+  const { schema, uiSchema, readOnly, widgets, selectedFormData, handleSubmit } = useVerna();
 
   return (
     <Form
       className={'form'}
       schema={schema}
       uiSchema={uiSchema}
-      onSubmit={onSubmit}
+      formData={selectedFormData}
+      onSubmit={handleSubmit(onSubmit)}
       readonly={readOnly}
       widgets={widgets}
       FieldTemplate={RenderFieldTemplate}
     />
   );
 }
+
+VernaForm.defaultProps = {
+  onSubmit: () => undefined,
+};
 
 export default VernaForm;

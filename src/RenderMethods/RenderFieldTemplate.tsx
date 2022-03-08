@@ -9,20 +9,27 @@ import { JSONSchema7 } from 'json-schema';
 // It will be used to add drag and drop area later
 
 export default function RenderFieldTemplate({ id, schema, children }: FieldTemplateProps) {
-  const { schema: vernaSchema, setSchema, uiSchema, setUiSchema } = useVerna();
-  const canAddField = id.split('_').length === 3;
-  const canAddSection = id.split('_').length === 2;
+  const { schema: vernaSchema, setSchema, uiSchema, setUiSchema, selector } = useVerna();
   const isRoot = id === 'root';
-  const ownProperties = Object.keys(schema.properties || {}).length === 0;
+  const isSection = schema.type === 'object';
+  const ownProperties = Object.keys(schema.properties || {}).length > 0;
+  const canAddField = schema.type !== 'object';
+  const canAddSection = isSection && !isRoot && !selector;
   const currentSection = getCurrentSection(id);
   const currentField = getCurrentField(id);
 
   function addItemToSchema(newKey: string) {
     const newSchema = { ...vernaSchema };
     if (newSchema.properties) {
-      const section = newSchema.properties[currentSection] as JSONSchema7;
-      if (section.properties) {
-        section.properties[newKey] = stringDefinition(newKey);
+      if (selector) {
+        if (newSchema.properties) {
+          newSchema.properties[newKey] = stringDefinition(newKey);
+        }
+      } else {
+        const section = newSchema.properties[currentSection] as JSONSchema7;
+        if (section.properties) {
+          section.properties[newKey] = stringDefinition(newKey);
+        }
       }
     }
     setSchema(newSchema);
@@ -30,14 +37,25 @@ export default function RenderFieldTemplate({ id, schema, children }: FieldTempl
 
   function addItemToUiSchemaOrder(newKey: string) {
     const newUiSchema = { ...uiSchema };
-    if (currentSection in newUiSchema && 'ui:order' in newUiSchema[currentSection]) {
-      const currentSectionIndex = uiSchema[currentSection]['ui:order'].findIndex(
-        (key: string) => key === currentField,
-      );
-      newUiSchema[currentSection]['ui:order'].splice(currentSectionIndex + 1, 0, newKey);
+    if (selector) {
+      if (newUiSchema['ui:order']) {
+        const currentOrderIndex = newUiSchema['ui:order'].findIndex(
+          (key: string) => key === currentField,
+        );
+        newUiSchema['ui:order'].splice(currentOrderIndex + 1, 0, newKey);
+      } else {
+        newUiSchema['ui:order'] = [newKey];
+      }
     } else {
-      newUiSchema[currentSection] = {};
-      newUiSchema[currentSection]['ui:order'] = [newKey];
+      if (newUiSchema?.[currentSection]?.['ui:order']) {
+        const currentSectionIndex = uiSchema[currentSection]['ui:order'].findIndex(
+          (key: string) => key === currentField,
+        );
+        newUiSchema[currentSection]['ui:order'].splice(currentSectionIndex + 1, 0, newKey);
+      } else {
+        newUiSchema[currentSection] = {};
+        newUiSchema[currentSection]['ui:order'] = [newKey];
+      }
     }
     setUiSchema(newUiSchema);
   }
@@ -67,20 +85,29 @@ export default function RenderFieldTemplate({ id, schema, children }: FieldTempl
 
   function removeItem() {
     const newSchema = { ...vernaSchema };
-    if (newSchema.properties) {
-      const sectionProperties = newSchema.properties[currentSection] as JSONSchema7;
-      if (sectionProperties.properties) {
-        delete sectionProperties.properties[currentField];
+    const newUiSchema = { ...uiSchema };
+    if (selector) {
+      if (newSchema.properties) delete newSchema.properties[currentField];
+      if (newUiSchema['ui:order']) {
+        newUiSchema['ui:order'] = newUiSchema['ui:order'].filter(
+          (key: string) => key !== currentField,
+        );
+      }
+    } else {
+      if (newSchema.properties) {
+        const sectionProperties = newSchema.properties[currentSection] as JSONSchema7;
+        if (sectionProperties.properties) {
+          delete sectionProperties.properties[currentField];
+        }
+      }
+      if (newUiSchema[currentSection]['ui:order']) {
+        newUiSchema[currentSection]['ui:order'] = newUiSchema[currentSection]['ui:order'].filter(
+          (key: string) => key !== currentField,
+        );
       }
     }
     setSchema(newSchema);
-    if (uiSchema[currentSection]['ui:order']) {
-      const newUiSchema = { ...uiSchema };
-      newUiSchema[currentSection]['ui:order'] = newUiSchema[currentSection]['ui:order'].filter(
-        (key: string) => key !== currentField,
-      );
-      setUiSchema(newUiSchema);
-    }
+    setUiSchema(newUiSchema);
   }
 
   function removeSection() {
@@ -96,25 +123,17 @@ export default function RenderFieldTemplate({ id, schema, children }: FieldTempl
 
   return (
     <div>
-      {ownProperties && !canAddField && !isRoot ? (
-        <button onClick={addItem} style={{ width: '100%' }}>
-          Add an input
-        </button>
-      ) : (
-        children
-      )}
-      {isRoot && ownProperties && (
-        <button onClick={addSection} style={{ width: '100%' }}>
-          Add a section
-        </button>
-      )}
+      {id}
+      {children}
       <div style={{ display: 'flex', flexDirection: 'row' }}>
-        {canAddField && (
+        {(canAddField ||
+          (!ownProperties && isSection && !isRoot) ||
+          (selector && !ownProperties)) && (
           <button onClick={addItem} style={{ width: '100%' }}>
             Add an input
           </button>
         )}
-        {canAddSection && (
+        {(canAddSection || (isRoot && !ownProperties && !selector)) && (
           <button onClick={addSection} style={{ width: '100%' }}>
             Add a section
           </button>
