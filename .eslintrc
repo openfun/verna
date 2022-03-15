@@ -9,13 +9,16 @@
   ],
   "plugins": ["@typescript-eslint","react","import","jsx-a11y"],
   "rules": {
-    "react/prop-types": "off",
+    "@typescript-eslint/no-unused-vars": "error",
     "indent": ["error", 2],
     "linebreak-style": "warn",
-    "react/react-in-jsx-scope": "off",
-    "react/jsx-uses-react": "off",
+    "no-console": ["error"],
     "no-unused-vars": "off",
-    "@typescript-eslint/no-unused-vars": "error"
+    "react/jsx-curly-brace-presence": ["error", { "props": "never", "children": "never" }],
+    "react/jsx-uses-react": "off",
+    "react/prop-types": "off",
+    "react/react-in-jsx-scope": "off",
+    "sort-keys": ["warn", "asc", {"caseSensitive": true, "natural": true, "minKeys": 2}]
   },
   "parser": "@typescript-eslint/parser",
   "parserOptions": {

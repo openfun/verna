@@ -6,9 +6,9 @@ const stringDefinition = (title: string): JSONSchema7Definition => ({
 });
 
 const sectionDefinition = (title: string): JSONSchema7Definition => ({
+  properties: {},
   title: title,
   type: 'object',
-  properties: {},
 });
 
 export { stringDefinition, sectionDefinition };
