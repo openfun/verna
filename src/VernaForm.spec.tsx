@@ -6,21 +6,21 @@ import { VernaContextProvider } from './VernaContextProvider';
 
 describe('VernaForm', () => {
   const getSchemaDefault = (): JSONSchema7 => ({
-    title: 'A registration form',
     description: 'Desc registration form',
-    type: 'object',
     properties: {
       testSection: {
-        type: 'object',
-        title: 'Sectiontest',
         properties: {
           champ1: {
-            type: 'string',
             title: 'Field name 1',
+            type: 'string',
           },
         },
+        title: 'Sectiontest',
+        type: 'object',
       },
     },
+    title: 'A registration form',
+    type: 'object',
   });
 
   async function clickOnLastAddInputButton() {
@@ -114,7 +114,7 @@ describe('VernaForm', () => {
 
   it('Should use selector parameter to query sub schema and render it', async () => {
     render(
-      <VernaContextProvider defaultSchema={getSchemaDefault()} defaultSelector={'testSection'}>
+      <VernaContextProvider defaultSchema={getSchemaDefault()} defaultSelector="testSection">
         <VernaForm />
       </VernaContextProvider>,
     );
@@ -136,7 +136,7 @@ describe('VernaForm', () => {
 
   it('Should use selector parameter to query sub schema and add or remove fields on it', async () => {
     render(
-      <VernaContextProvider defaultSchema={getSchemaDefault()} defaultSelector={'testSection'}>
+      <VernaContextProvider defaultSchema={getSchemaDefault()} defaultSelector="testSection">
         <VernaForm />
       </VernaContextProvider>,
     );

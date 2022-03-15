@@ -11,7 +11,7 @@ function VernaForm({ onSubmit }: VernaFormProperties) {
 
   return (
     <Form
-      className={'form'}
+      className="form"
       schema={schema}
       uiSchema={uiSchema}
       formData={selectedFormData}

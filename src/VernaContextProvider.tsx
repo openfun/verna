@@ -35,24 +35,24 @@ interface VernaContextProps {
 }
 
 const VernaContext = createContext<VernaContextProps>({
-  fullSchema: {},
-  setFullSchema: () => functionNotSet(),
-  fullUiSchema: {},
-  setFullUiSchema: () => functionNotSet(),
-  schema: {},
-  setSchema: () => functionNotSet(),
-  uiSchema: {},
-  setUiSchema: () => functionNotSet(),
-  handleSubmit: () => () => functionNotSet(),
-  selectedFormData: {},
   formData: {},
-  setFormData: () => functionNotSet(),
-  widgets: {},
-  setWidgets: () => functionNotSet(),
+  fullSchema: {},
+  fullUiSchema: {},
+  handleSubmit: () => () => functionNotSet(),
   readOnly: true,
-  setReadOnly: () => functionNotSet(),
+  schema: {},
+  selectedFormData: {},
   selector: undefined,
+  setFormData: () => functionNotSet(),
+  setFullSchema: () => functionNotSet(),
+  setFullUiSchema: () => functionNotSet(),
+  setReadOnly: () => functionNotSet(),
+  setSchema: () => functionNotSet(),
   setSelector: () => functionNotSet(),
+  setUiSchema: () => functionNotSet(),
+  setWidgets: () => functionNotSet(),
+  uiSchema: {},
+  widgets: {},
 });
 
 function useVerna() {
@@ -192,24 +192,24 @@ function VernaContextProvider({
   return (
     <VernaContext.Provider
       value={{
-        fullSchema,
-        setFullSchema,
-        fullUiSchema,
-        setFullUiSchema,
-        schema,
-        setSchema,
-        uiSchema,
-        setUiSchema,
-        handleSubmit,
-        selectedFormData,
         formData,
-        setFormData,
-        widgets,
-        setWidgets,
+        fullSchema,
+        fullUiSchema,
+        handleSubmit,
         readOnly,
-        setReadOnly,
+        schema,
+        selectedFormData,
         selector,
+        setFormData,
+        setFullSchema,
+        setFullUiSchema,
+        setReadOnly,
+        setSchema,
         setSelector,
+        setUiSchema,
+        setWidgets,
+        uiSchema,
+        widgets,
       }}
     >
       {children}
@@ -218,11 +218,11 @@ function VernaContextProvider({
 }
 
 VernaContextProvider.defaultProps = {
+  defaultReadOnly: false,
   defaultSchema: {},
   defaultUiSchema: {},
-  defaultWidgets: {},
   defaultValues: {},
-  defaultReadOnly: false,
+  defaultWidgets: {},
 };
 
 export { VernaContextProvider, useVerna };
