@@ -1,0 +1,40 @@
+.buttons-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.drop-zone {
+  width: 100%;
+  height: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.drop-zone-drag-over {
+  @extend .drop-zone;
+  height: 30px;
+  border: 3px dashed #838383;
+}
+
+.drop-zone-divider {
+  width: 100%;
+  border-top: 3px solid #b4b4b4;
+}
+
+.drop-zone-divider-drag-over {
+  width: 100%;
+  border-top: none;
+}
+
+.verna-wrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+
+.widget-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin: 5px 0 0 5px;
+}
