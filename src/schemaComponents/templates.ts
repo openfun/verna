@@ -1,8 +1,12 @@
-import { JSONSchema7Definition } from 'json-schema';
+import { JSONSchema7Definition, JSONSchema7TypeName } from 'json-schema';
+import Section from '../Widgets/Section';
 
-const stringDefinition = (title: string): JSONSchema7Definition => ({
-  title: title,
-  type: 'string',
+const stringDefinition = (
+  title: string,
+  type: JSONSchema7TypeName = 'string',
+): JSONSchema7Definition => ({
+  title,
+  type,
 });
 
 const sectionDefinition = (title: string): JSONSchema7Definition => ({
@@ -11,4 +15,10 @@ const sectionDefinition = (title: string): JSONSchema7Definition => ({
   type: 'object',
 });
 
-export { stringDefinition, sectionDefinition };
+const defaultVernaWidgets = {};
+
+const defaultObjectFieldTemplate = {
+  section: Section,
+};
+
+export { stringDefinition, sectionDefinition, defaultVernaWidgets, defaultObjectFieldTemplate };

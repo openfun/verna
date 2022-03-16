@@ -1,54 +1,35 @@
+import { useState } from 'react';
 import type { JSONSchema7 } from 'json-schema';
 import type { UiSchema } from '@rjsf/core';
 import { VernaContextProvider } from '@openfun/verna';
 import FormWrapper from './FormWrapper';
+import TextWidget from './widgets/TextWidget';
+import PasswordWidget from './widgets/PasswordWidget';
+import QuizWidget from './widgets/QuizWidget';
+import './styles/verna.scss';
 
 function App() {
   const schemaDefault: JSONSchema7 = {
-    title: 'A registration form',
     description: 'Desc registration form',
+    properties: {},
+    title: 'A registration form',
     type: 'object',
-    properties: {
-      testSection: {
-        type: 'object',
-        title: 'Sectiontest',
-        properties: {
-          field1: {
-            type: 'string',
-            title: 'Field name 1',
-            propertyNames: true,
-          },
-        },
-      },
-      secondSection: {
-        type: 'object',
-        title: 'Second section',
-        properties: {
-          secondField: {
-            type: 'string',
-            title: 'field second section',
-          },
-        },
-      },
-    },
   };
 
-  const formData = {
-    secondSection: {
-      secondField: 'BBBBB',
-    },
-    testSection: {
-      field1: 'AAAAAAAA',
-    },
+  const formData = {};
+
+  const widgets = {
+    passwordWidget: PasswordWidget,
+    quizWidget: QuizWidget,
+    textWidget: TextWidget,
   };
 
-  const widgets = {};
-  const uiSchema: UiSchema = {
-    'ui:options': {
-      orderable: true,
-      addable: true,
-    },
-  };
+  // TODO: Add management for ui:ObjectFieldTemplate saving
+  const uiSchema: UiSchema = {};
+
+  const [isEditor, setIsEditor] = useState(true);
+
+  const toggleEditorMode = () => setIsEditor(!isEditor);
 
   return (
     <div style={{ backgroundColor: 'lightgray' }}>
@@ -56,10 +37,10 @@ function App() {
         defaultSchema={schemaDefault}
         defaultUiSchema={uiSchema}
         defaultFormValues={formData}
-        defaultReadOnly={false}
         defaultWidgets={widgets}
+        isEditor={isEditor}
       >
-        <FormWrapper />
+        <FormWrapper toggleEditorMode={toggleEditorMode} />
       </VernaContextProvider>
     </div>
   );

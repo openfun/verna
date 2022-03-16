@@ -1,13 +1,13 @@
-import { useVerna } from './VernaContextProvider';
 import Form from '@rjsf/core';
-import RenderFieldTemplate from './RenderMethods/RenderFieldTemplate';
+import { useVerna } from './context/VernaContextProvider';
+import RenderEditorFieldTemplate from './RenderMethods/RenderEditorFieldTemplate';
 
 interface VernaFormProperties {
   onSubmit: (formData: unknown) => void;
 }
 
 function VernaForm({ onSubmit }: VernaFormProperties) {
-  const { schema, uiSchema, readOnly, widgets, selectedFormData, handleSubmit } = useVerna();
+  const { schema, uiSchema, widgets, selectedFormData, handleSubmit } = useVerna();
 
   return (
     <Form
@@ -16,9 +16,8 @@ function VernaForm({ onSubmit }: VernaFormProperties) {
       uiSchema={uiSchema}
       formData={selectedFormData}
       onSubmit={handleSubmit(onSubmit)}
-      readonly={readOnly}
       widgets={widgets}
-      FieldTemplate={RenderFieldTemplate}
+      FieldTemplate={RenderEditorFieldTemplate}
     />
   );
 }
