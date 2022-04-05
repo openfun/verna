@@ -13,5 +13,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Functionality to select and display only a section of the schema
 - Functionality to add or remove widgets and sections
 
+### Changed
+
+- Pin React to version less than 17
 
 [unreleased]: https://github.com/openfun/verna
