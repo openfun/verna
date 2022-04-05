@@ -60,11 +60,8 @@ describe('VernaForm', () => {
     );
 
     // Add two sections
-    screen
-      .getByRole('button', {
-        name: 'Add a section',
-      })
-      .click();
+    screen.getByRole('button', { name: 'Add a section' }).click();
+
     _.last(
       (await screen.findAllByRole('button', {
         name: 'Add a section',
@@ -98,6 +95,7 @@ describe('VernaForm', () => {
       })) as HTMLElement[],
       (element) => element.click(),
     );
+
     const $deleteButtons = screen.queryAllByRole('button', { name: 'x' });
     expect($deleteButtons).toHaveLength(0);
 
