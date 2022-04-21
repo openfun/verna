@@ -86,7 +86,7 @@ describe('VernaForm', () => {
       name: 'Add a section',
     });
     expect($addSectionButtons).toHaveLength(3);
-    screen.getByRole('button', { name: 'Submit' });
+    screen.getByRole('button', { name: 'Save' });
 
     // Delete every elements from top to bottom
     _.forEach(

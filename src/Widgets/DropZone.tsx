@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
-import type { WidgetProps } from '@rjsf/core';
 import ShowCaseWidgetProps from '../types/Widgets';
 import { makeid } from '../utils';
 import { addItemToSchema, addItemToUiSchema } from '../context/InteractionMethods';
 import { useVerna } from '../context/VernaContextProvider';
 
-export default function DropZone({ id }: Partial<WidgetProps>) {
+interface DropZoneProps {
+  onDropItem?: () => void;
+  id: string;
+}
+
+export default function DropZone({ id, onDropItem }: DropZoneProps) {
   const [draggingOver, setDraggingOver] = useState(false);
   const verna = useVerna();
 
@@ -20,6 +24,7 @@ export default function DropZone({ id }: Partial<WidgetProps>) {
     event.preventDefault();
     const widgetProps = JSON.parse(event.dataTransfer.getData('object'));
     addItem(widgetProps);
+    onDropItem && onDropItem();
     setDraggingOver(false);
   }
 
