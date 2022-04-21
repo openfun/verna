@@ -1,5 +1,6 @@
 import React, {
   createContext,
+  FormEvent,
   PropsWithChildren,
   useContext,
   useEffect,
@@ -14,7 +15,7 @@ import {
   getSelectedSchema,
   getSelectedUiSchema,
 } from './DataProcessingMethods';
-import { defaultObjectFieldTemplate, defaultVernaWidgets } from '../schemaComponents/templates';
+import { defaultObjectFieldTemplate, defaultVernaWidgets } from '../templates';
 
 function functionNotSet() {
   throw new Error('function context not set');
@@ -30,12 +31,13 @@ export interface ObjectFieldTemplateType {
 
 export interface VernaContextProps {
   objectFieldTemplate: ObjectFieldTemplateType;
+  configSchema?: JSONSchema7;
   formData: unknown;
   fullSchema: JSONSchema7;
   fullUiSchema: UiSchema;
   handleSubmit: <FormData = unknown>(
     callback: (formData: unknown) => void,
-  ) => (event: ISubmitEvent<FormData>) => void;
+  ) => (event: ISubmitEvent<FormData>, nativeEvent: FormEvent<HTMLFormElement>) => void;
   isEditor: boolean;
   schema: JSONSchema7;
   selectedFormData: unknown;
@@ -52,6 +54,7 @@ export interface VernaContextProps {
 }
 
 const VernaContext = createContext<VernaContextProps>({
+  configSchema: undefined,
   formData: {},
   fullSchema: {},
   fullUiSchema: {},
@@ -81,6 +84,7 @@ function useVerna() {
 }
 
 interface VernaContextProviderProps {
+  configSchema?: JSONSchema7;
   defaultSchema: JSONSchema7;
   defaultUiSchema: UiSchema;
   defaultFormValues?: any;
@@ -91,6 +95,7 @@ interface VernaContextProviderProps {
 }
 
 function VernaContextProvider({
+  configSchema,
   defaultSchema,
   defaultUiSchema,
   defaultFormValues,
@@ -159,8 +164,10 @@ function VernaContextProvider({
   }, [formData, selector]);
 
   function handleSubmit<FormData = unknown>(callback?: (formData: unknown) => void) {
-    return (event: ISubmitEvent<FormData>) => {
+    return (event: ISubmitEvent<FormData>, nativeEvent: FormEvent<HTMLFormElement>) => {
       const newFormData = selector ? { ...formData, [selector]: event.formData } : event.formData;
+      nativeEvent.stopPropagation();
+      nativeEvent.preventDefault();
       setFormData(newFormData);
       callback && callback(newFormData);
     };
@@ -169,6 +176,7 @@ function VernaContextProvider({
   return (
     <VernaContext.Provider
       value={{
+        configSchema,
         formData,
         fullSchema,
         fullUiSchema,

@@ -1,5 +1,6 @@
-import DropZone from './DropZone';
+import React from 'react';
 import type { ObjectFieldTemplateProps } from '@rjsf/core';
+import DropZone from './DropZone';
 import { useVerna } from '../context/VernaContextProvider';
 
 export default function Section(props: ObjectFieldTemplateProps) {
