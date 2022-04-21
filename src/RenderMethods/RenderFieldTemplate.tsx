@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import type { FieldTemplateProps } from '@rjsf/core';
 import { useVerna } from '../context/VernaContextProvider';
-import { makeid } from '../utils';
+import { makeid, SEPARATOR_ID_RJSF } from '../utils';
 import {
   addItemToSchema,
   addItemToUiSchema,
@@ -11,15 +11,19 @@ import {
 } from '../context/InteractionMethods';
 import ShowCaseWidgetProps from '../types/Widgets';
 import DropZone from '../Widgets/DropZone';
+import WidgetParametersConfiguration from '../Widgets/configuration/WidgetParametersConfiguration';
 
 // This component is used to render every field
 // Its purpose here is to add functionality common to every of those such as add or remove
 // It will be used to add drag and drop area later
 
-export default function RenderEditorFieldTemplate({ id, schema, children }: FieldTemplateProps) {
+export default function RenderFieldTemplate(props: FieldTemplateProps) {
+  const { id, schema, children } = props;
+  const [isEditing, setIsEditing] = useState(false);
   const verna = useVerna();
+  const idParts = id.split(SEPARATOR_ID_RJSF);
   const isRoot = id === 'root';
-  const isSection = id.split('_').length === 2 && !verna.selector;
+  const isSection = idParts.length === 2 && !verna.selector;
   const ownProperties = Object.keys(schema.properties || {}).length > 0;
   const canAddField = schema.type !== 'object';
   const canAddSection = isSection && !isRoot && !verna.selector;
@@ -35,7 +39,15 @@ export default function RenderEditorFieldTemplate({ id, schema, children }: Fiel
   return (
     <div>
       {children}
-      {!isSection && (!isRoot || verna.selector) && <DropZone id={id} />}
+      {!isSection && (!isRoot || verna.selector) && (
+        <>
+          <button onClick={() => setIsEditing(!isEditing)}> Editer </button>
+          {isEditing && (
+            <WidgetParametersConfiguration onClose={() => setIsEditing(false)} widgetId={id} />
+          )}
+          <DropZone id={id} />
+        </>
+      )}
       <div style={{ display: 'flex', flexDirection: 'row' }}>
         {(canAddField ||
           (!ownProperties && isSection && !isRoot) ||

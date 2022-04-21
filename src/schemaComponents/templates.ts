@@ -5,6 +5,7 @@ const stringDefinition = (
   title: string,
   type: JSONSchema7TypeName = 'string',
 ): JSONSchema7Definition => ({
+  enum: type === 'string' ? [' '] : undefined,
   title,
   type,
 });
