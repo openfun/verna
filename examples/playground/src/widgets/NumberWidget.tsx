@@ -6,7 +6,7 @@ export default function TextWidget(props: Partial<WidgetProps>) {
       {props.label}
       {props.required && '*'}
       <input
-        type="text"
+        type="number"
         value={props.value}
         required={props.required}
         onChange={(event) => props.onChange && props.onChange(event.target.value)}

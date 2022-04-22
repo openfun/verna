@@ -3,6 +3,10 @@ import { JSONSchema7 } from 'json-schema';
 import TextWidget from './WidgetToolbarItems/TextWidget';
 import PasswordWidget from './WidgetToolbarItems/PasswordWidget';
 import QuizWidget from './WidgetToolbarItems/QuizWidget';
+import TextareaWidget from './WidgetToolbarItems/TextareaWidget';
+import NumberWidget from './WidgetToolbarItems/NumberWidget';
+import CheckboxWidget from './WidgetToolbarItems/CheckboxWidget';
+import SelectWidget from './WidgetToolbarItems/SelectWidget';
 
 interface FormWrapperProps {
   toggleEditorMode: () => void;
@@ -19,6 +23,10 @@ export default function FormWrapper({ toggleEditorMode }: FormWrapperProps) {
             <TextWidget widgetName="textWidget" type="string" />
             <PasswordWidget widgetName="passwordWidget" type="string" />
             <QuizWidget widgetName="quizWidget" type="string" />
+            <TextareaWidget widgetName="TextareaWidget" type="string" />
+            <NumberWidget widgetName="numberWidget" type="number" />
+            <CheckboxWidget widgetName="CheckboxWidget" type="boolean" />
+            <SelectWidget widgetName="SelectWidget" type="string" />
           </VernaToolbar>
         </div>
       )}

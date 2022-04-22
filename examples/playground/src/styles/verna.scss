@@ -38,3 +38,96 @@
   gap: 5px;
   margin: 5px 0 0 5px;
 }
+
+.widget-parameters-wrapper {
+  width: 350px;
+  padding: 8px;
+  background-color: #b9b9b9;
+  border: solid 1px gray;
+  display: flex;
+  flex-direction: column;
+
+  .option-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+.arrow {
+  border: solid black;
+  border-width: 0 3px 3px 0;
+  display: inline-block;
+  padding: 3px;
+}
+
+.cross-after {
+  content: " ";
+  position: absolute;
+  background-color: white;
+  height: 3px;
+  margin-top: -2px;
+  top: 50%;
+  left: 5px;
+  right: 5px;
+}
+
+.cross-before {
+  content: " ";
+  position: absolute;
+  background-color: white;
+  width: 3px;
+  margin-left: -2px;
+  left: 50%;
+  top: 5px;
+  bottom: 5px;
+}
+
+.array-item-move-up {
+  width: 30px;
+  height: 30px;
+  .glyphicon-arrow-up {
+    @extend .arrow;
+    transform: rotate(-135deg);
+  }
+}
+.array-item-move-down {
+  width: 30px;
+  height: 30px;
+  .glyphicon-arrow-down {
+    @extend .arrow;
+    transform: rotate(45deg);
+  }
+}
+
+.array-item-remove {
+  width: 30px;
+  height: 30px;
+  position: relative;
+}
+
+.array-item-remove::after {
+  @extend .cross-before;
+  background-color: black;
+  transform: rotate(-45deg);
+}
+
+.array-item-remove::before {
+  @extend .cross-before;
+  background-color: black;
+  transform: rotate(45deg);
+}
+
+.btn-add {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: gray;
+  position: relative;
+}
+.btn-add::after {
+  @extend .cross-after;
+}
+.btn-add::before {
+  @extend .cross-before;
+}
