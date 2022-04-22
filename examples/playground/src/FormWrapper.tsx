@@ -1,8 +1,12 @@
 import VernaForm, { useVerna, VernaToolbar } from '@openfun/verna';
 import { JSONSchema7 } from 'json-schema';
-import TextWidget from './WidgetToolbarItems/TextWidget';
-import PasswordWidget from './WidgetToolbarItems/PasswordWidget';
-import QuizWidget from './WidgetToolbarItems/QuizWidget';
+import TextWidget from './widgetToolbarItems/TextWidget';
+import PasswordWidget from './widgetToolbarItems/PasswordWidget';
+import QuizWidget from './widgetToolbarItems/QuizWidget';
+import TextareaWidget from './widgetToolbarItems/TextareaWidget';
+import NumberWidget from './widgetToolbarItems/NumberWidget';
+import CheckboxWidget from './widgetToolbarItems/CheckboxWidget';
+import SelectWidget from './widgetToolbarItems/SelectWidget';
 
 interface FormWrapperProps {
   toggleEditorMode: () => void;
@@ -16,9 +20,13 @@ export default function FormWrapper({ toggleEditorMode }: FormWrapperProps) {
       {isEditor && (
         <div className="widget-wrapper">
           <VernaToolbar>
-            <TextWidget widgetName="textWidget" type="string" />
-            <PasswordWidget widgetName="passwordWidget" type="string" />
-            <QuizWidget widgetName="quizWidget" type="string" />
+            <TextWidget type="string" widgetName="textWidget" />
+            <PasswordWidget type="string" widgetName="passwordWidget" />
+            <QuizWidget type="string" widgetName="quizWidget" />
+            <TextareaWidget type="string" widgetName="TextareaWidget" />
+            <NumberWidget type="number" widgetName="numberWidget" />
+            <CheckboxWidget type="boolean" widgetName="CheckboxWidget" />
+            <SelectWidget type="string" widgetName="SelectWidget" />
           </VernaToolbar>
         </div>
       )}
@@ -32,7 +40,7 @@ export default function FormWrapper({ toggleEditorMode }: FormWrapperProps) {
           <legend>Select a section</legend>
           {!selector &&
             Object.keys(schema.properties as JSONSchema7)?.map((key) => (
-              <button onClick={() => setSelector(key)} key={key}>
+              <button key={key} onClick={() => setSelector(key)}>
                 Section {key}
               </button>
             ))}
