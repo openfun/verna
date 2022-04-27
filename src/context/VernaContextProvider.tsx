@@ -15,7 +15,7 @@ import {
   getSelectedSchema,
   getSelectedUiSchema,
 } from './DataProcessingMethods';
-import { defaultObjectFieldTemplate, defaultVernaWidgets } from '../schemaComponents/templates';
+import { defaultObjectFieldTemplate, defaultVernaWidgets } from '../templates';
 
 function functionNotSet() {
   throw new Error('function context not set');
@@ -170,7 +170,6 @@ function VernaContextProvider({
       nativeEvent.preventDefault();
       setFormData(newFormData);
       callback && callback(newFormData);
-      return false;
     };
   }
 

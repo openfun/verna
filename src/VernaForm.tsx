@@ -1,6 +1,7 @@
 import Form from '@rjsf/core';
 import { useVerna } from './context/VernaContextProvider';
-import RenderFieldTemplate from './RenderMethods/RenderFieldTemplate';
+import RenderFieldTemplate from './FieldTemplate/RenderFieldTemplate';
+import { RJSF_ID_SEPARATOR } from './settings';
 
 interface VernaFormProperties {
   onSubmit: (formData: unknown) => void;
@@ -11,22 +12,18 @@ function VernaForm({ onSubmit }: VernaFormProperties) {
 
   return (
     <Form
-      name="verna-form"
-      tagName={isEditor ? 'div' : undefined}
-      className="form"
-      schema={schema}
-      uiSchema={uiSchema}
-      formData={selectedFormData}
-      onSubmit={handleSubmit(onSubmit)}
-      widgets={widgets}
-      disabled={isEditor}
       FieldTemplate={RenderFieldTemplate}
+      className="form"
+      disabled={isEditor}
+      formData={selectedFormData}
+      idSeparator={RJSF_ID_SEPARATOR}
       liveValidate={!isEditor}
-    >
-      <button type="submit" name="verna-form">
-        Save
-      </button>
-    </Form>
+      onSubmit={handleSubmit(onSubmit)}
+      schema={schema}
+      tagName={isEditor ? 'div' : undefined}
+      uiSchema={uiSchema}
+      widgets={widgets}
+    />
   );
 }
 

@@ -1,6 +1,5 @@
 import type { UiSchema } from '@rjsf/core';
-
-const SEPARATOR_ID_RJSF = '_';
+import { RJSF_ID_SEPARATOR } from './settings';
 
 function makeid(length: number) {
   let result = '';
@@ -14,19 +13,22 @@ function makeid(length: number) {
 
 // Ids of elements in JSON Schema, are split by "_" for every levels starting with root, such as root_section_field
 function getCurrentSection(id: string): string {
-  return id.split(SEPARATOR_ID_RJSF)[1];
+  return id.split(RJSF_ID_SEPARATOR)[1];
 }
 
 function getCurrentField(id: string): string {
-  return id.split(SEPARATOR_ID_RJSF).pop() || id;
+  return id.split(RJSF_ID_SEPARATOR).pop() || id;
 }
 
 function getTemplateWidgetName(id: string, uiSchema: UiSchema) {
-  const idParts = id.split(SEPARATOR_ID_RJSF);
+  const idParts = id.split(RJSF_ID_SEPARATOR);
   const section = uiSchema?.[idParts[1]];
+
+  // If the id is made of 3 parts, it's that there is a section before the widget used
+  // Then you need to get it in the UiSchema before accessing the ui:widget
   return idParts.length === 3
     ? section?.[idParts[2]]?.['ui:widget'] || ''
     : section?.['ui:widget'] || '';
 }
 
-export { makeid, getCurrentSection, getCurrentField, getTemplateWidgetName, SEPARATOR_ID_RJSF };
+export { makeid, getCurrentSection, getCurrentField, getTemplateWidgetName };

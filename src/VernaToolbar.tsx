@@ -24,7 +24,7 @@ export default function VernaToolbar({ children }: VernaToolbarProps) {
     <>
       {React.Children.map(children, (child) => {
         return (
-          <span onDragStart={(e) => onDrag(e, child)} style={{ cursor: 'grab' }} draggable>
+          <span draggable onDragStart={(e) => onDrag(e, child)} style={{ cursor: 'grab' }}>
             {child}
           </span>
         );
