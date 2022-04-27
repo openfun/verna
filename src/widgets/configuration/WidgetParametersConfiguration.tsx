@@ -2,8 +2,9 @@ import { JSONSchema7, JSONSchema7Definition } from 'json-schema';
 import Form, { type ISubmitEvent, type UiSchema } from '@rjsf/core';
 import { useVerna } from '../../context/VernaContextProvider';
 import { FormEvent } from 'react';
-import WidgetParametersApplyer, { WidgetParameters } from './WidgetParametersApplyer';
-import { getTemplateWidgetName, SEPARATOR_ID_RJSF } from '../../utils';
+import WidgetParametersModifier, { WidgetParameters } from './WidgetParametersModifier';
+import { getTemplateWidgetName } from '../../utils';
+import { RJSF_ID_SEPARATOR } from '../../settings';
 
 interface WidgetParametersConfigurationProps {
   onClose: () => void;
@@ -19,7 +20,7 @@ export default function WidgetParametersConfiguration({
 
   function handleSubmit(event: ISubmitEvent<unknown>, nativeEvent: FormEvent<HTMLFormElement>) {
     nativeEvent.preventDefault();
-    WidgetParametersApplyer(event.formData as WidgetParameters, verna, widgetId);
+    WidgetParametersModifier(event.formData as WidgetParameters, verna, widgetId);
     onClose();
     return false;
   }
@@ -36,7 +37,7 @@ export default function WidgetParametersConfiguration({
   };
 
   function getDefaultParameterValues() {
-    const widgetIdParts = widgetId.split(SEPARATOR_ID_RJSF);
+    const widgetIdParts = widgetId.split(RJSF_ID_SEPARATOR);
     const currentWidgetName = widgetIdParts[verna.selector ? 1 : 2];
     const currentSection = ((verna.selector
       ? verna.schema
@@ -62,16 +63,12 @@ export default function WidgetParametersConfiguration({
 
   return (
     <Form
-      name="parameter-form"
       className="widget-parameters-wrapper"
+      formData={formData}
+      idSeparator={RJSF_ID_SEPARATOR}
+      onSubmit={handleSubmit}
       schema={(verna.configSchema?.properties?.[templateWidgetName] as JSONSchema7) || {}}
       uiSchema={uiSchema}
-      formData={formData}
-      onSubmit={handleSubmit}
-    >
-      <button type="submit" name="parameter-form">
-        Save
-      </button>
-    </Form>
+    />
   );
 }

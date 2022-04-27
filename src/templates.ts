@@ -1,11 +1,10 @@
 import { JSONSchema7Definition, JSONSchema7TypeName } from 'json-schema';
-import Section from '../Widgets/Section';
+import Section from './widgets/Section';
 
 const stringDefinition = (
   title: string,
   type: JSONSchema7TypeName = 'string',
 ): JSONSchema7Definition => ({
-  enum: type === 'string' ? [' '] : undefined,
   title,
   type,
 });

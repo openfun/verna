@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
 import type { FieldTemplateProps } from '@rjsf/core';
 import { useVerna } from '../context/VernaContextProvider';
-import { makeid, SEPARATOR_ID_RJSF } from '../utils';
+import { makeid } from '../utils';
 import {
   addItemToSchema,
   addItemToUiSchema,
   addSection,
   removeItem,
   removeSection,
-} from '../context/InteractionMethods';
+} from './InteractionMethods';
 import ShowCaseWidgetProps from '../types/Widgets';
-import DropZone from '../Widgets/DropZone';
-import WidgetParametersConfiguration from '../Widgets/configuration/WidgetParametersConfiguration';
+import DropZone from '../widgets/DropZone';
+import WidgetParametersConfiguration from '../widgets/configuration/WidgetParametersConfiguration';
+import { RJSF_ID_SEPARATOR } from '../settings';
 
 // This component is used to render every field
 // Its purpose here is to add functionality common to every of those such as add or remove
@@ -21,7 +22,7 @@ export default function RenderFieldTemplate(props: FieldTemplateProps) {
   const { id, schema, children } = props;
   const [isEditing, setIsEditing] = useState(false);
   const verna = useVerna();
-  const idParts = id.split(SEPARATOR_ID_RJSF);
+  const idParts = id.split(RJSF_ID_SEPARATOR);
   const isRoot = id === 'root';
   const isSection = idParts.length === 2 && !verna.selector;
   const ownProperties = Object.keys(schema.properties || {}).length > 0;
@@ -41,7 +42,7 @@ export default function RenderFieldTemplate(props: FieldTemplateProps) {
       {children}
       {!isSection && (!isRoot || verna.selector) && (
         <>
-          <button onClick={() => setIsEditing(!isEditing)}> Editer </button>
+          <button onClick={() => setIsEditing(!isEditing)}> Edit </button>
           {isEditing && (
             <WidgetParametersConfiguration onClose={() => setIsEditing(false)} widgetId={id} />
           )}

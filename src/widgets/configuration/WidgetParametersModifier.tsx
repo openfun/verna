@@ -1,5 +1,5 @@
 import { VernaContextProps } from '../../context/VernaContextProvider';
-import { SEPARATOR_ID_RJSF } from '../../utils';
+import { RJSF_ID_SEPARATOR } from '../../settings';
 
 type Maybe<T> = T | undefined;
 type Parameters = {
@@ -10,7 +10,7 @@ type Parameters = {
 type ParameterType = Parameters[keyof Parameters];
 
 function updateRequiredValidator(
-  newValue: Parameters['required'],
+  value: Parameters['required'],
   verna: VernaContextProps,
   widgetIdParts: string[],
 ) {
@@ -21,7 +21,7 @@ function updateRequiredValidator(
     if (newSchema.properties) {
       const section = newSchema.properties[widgetIdParts[0]];
       if (section && typeof section !== 'boolean') {
-        if (newValue) {
+        if (value) {
           section.required = [...(section.required || []), widgetIdParts[1]];
         } else {
           section.required = section.required?.filter((e) => e !== widgetIdParts[1]);
@@ -33,7 +33,7 @@ function updateRequiredValidator(
 }
 
 function updateMaxLengthValidator(
-  newValue: Parameters['maxLength'],
+  value: Parameters['maxLength'],
   verna: VernaContextProps,
   widgetIdParts: string[],
 ) {
@@ -46,7 +46,7 @@ function updateMaxLengthValidator(
       if (section && typeof section !== 'boolean') {
         const widget = section.properties?.[widgetIdParts[1]];
         if (widget && typeof widget !== 'boolean') {
-          widget.maxLength = newValue as number;
+          widget.maxLength = value as number;
         }
       }
     }
@@ -55,7 +55,7 @@ function updateMaxLengthValidator(
 }
 
 function updateItemsValidator(
-  newValue: Parameters['items'],
+  value: Parameters['items'],
   verna: VernaContextProps,
   widgetIdParts: string[],
 ) {
@@ -68,7 +68,7 @@ function updateItemsValidator(
       if (section && typeof section !== 'boolean') {
         const widget = section.properties?.[widgetIdParts[1]];
         if (widget && typeof widget !== 'boolean') {
-          widget.enum = newValue as string[];
+          widget.enum = value as string[];
         }
       }
     }
@@ -82,13 +82,17 @@ export interface WidgetParameters {
   maxLength: Maybe<number>;
 }
 
-type ApplierFunction<T> = (newValue: T, verna: VernaContextProps, widgetIdParts: string[]) => void;
+type WidgetParameterModifier<T> = (
+  value: T,
+  verna: VernaContextProps,
+  widgetIdParts: string[],
+) => void;
 
-type ParameterApplyer = {
-  [key in keyof Parameters]: ApplierFunction<Parameters[key]>;
+type ParameterModifier = {
+  [key in keyof Parameters]: WidgetParameterModifier<Parameters[key]>;
 };
 
-const parametersApplyer: ParameterApplyer = {
+const parametersModifier: ParameterModifier = {
   items: updateItemsValidator,
   maxLength: updateMaxLengthValidator,
   required: updateRequiredValidator,
@@ -96,20 +100,20 @@ const parametersApplyer: ParameterApplyer = {
   // minimum:,
 };
 
-export default function WidgetParametersApplyer(
+export default function WidgetParametersModifier(
   parameters: WidgetParameters,
   verna: VernaContextProps,
   widgetId: string,
 ) {
-  const widgetIdParts = widgetId.split(SEPARATOR_ID_RJSF);
+  const widgetIdParts = widgetId.split(RJSF_ID_SEPARATOR);
   widgetIdParts.shift();
 
   const applyParams = (key: keyof Parameters) => {
-    const func = parametersApplyer[key] as ApplierFunction<ParameterType>;
+    const func = parametersModifier[key] as WidgetParameterModifier<ParameterType>;
     const value = parameters[key];
     func(value, verna, widgetIdParts);
   };
 
-  const params = Object.keys(parametersApplyer);
+  const params = Object.keys(parametersModifier);
   params.forEach((key) => applyParams(key as keyof Parameters));
 }
