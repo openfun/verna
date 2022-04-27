@@ -11,11 +11,13 @@ export default function SelectWidget(props: Partial<WidgetProps>) {
       {props.label}
       {props.required && '*'}
       <select
-        value={props.value}
-        required={props.required}
+        disabled={props.disabled}
+        id={props.id}
         onChange={(event) => props.onChange && props.onChange(event.target.value)}
+        required={props.required}
+        value={props.value}
       >
-        {(props.options?.enumOptions as option[] | undefined)?.map((option, index) => (
+        {((props.options?.enumOptions || []) as option[])?.map((option, index) => (
           <option key={`${option.label}-${index}`} value={option.value}>
             {option.label}
           </option>

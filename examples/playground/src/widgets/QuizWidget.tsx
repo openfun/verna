@@ -18,7 +18,7 @@ export default function QuizWidget(props: Partial<WidgetProps>) {
       <h3>Quiz {props.label}</h3>
       {choices.map((choice) => (
         <label key={choice}>
-          <input type="checkbox" value={choice} onChange={handleChange} />
+          <input onChange={handleChange} type="checkbox" value={choice} />
           Answer {choice}
         </label>
       ))}

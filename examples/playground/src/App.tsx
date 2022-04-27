@@ -17,10 +17,10 @@ function App() {
       section: {
         properties: {
           select: {
-            enum: ['aaaaaaa'],
-            type: 'string',
-            title: 'TEST select',
             description: 'description',
+            enum: ['aaaaaaa'],
+            title: 'TEST select',
+            type: 'string',
           },
         },
         type: 'object',
@@ -42,12 +42,30 @@ function App() {
 
   // TODO: Add management for ui:ObjectFieldTemplate saving
   const uiSchema: UiSchema = {
-    section: {
-      select: {
-        'ui:widget': 'SelectWidget',
+    'ui:options': {
+      'ui:submitButtonOptions': {
+        submitText: 'Confirm Details',
+        norender: false,
+        props: {
+          disabled: false,
+          className: 'btn btn-info',
+        },
       },
-      'ui:order': ['select'],
     },
+    // section: {
+    //   select: {
+    //     'ui:widget': 'SelectWidget',
+    //   },
+    //   'ui:order': ['select'],
+    // },
+    // 'ui:submitButtonOptions': {
+    //   norender: true,
+    //   props: {
+    //     className: 'btn btn-info',
+    //     disabled: true,
+    //   },
+    //   submitText: 'Save',
+    // },
   };
 
   const configSchema: JSONSchema7 = {
@@ -106,11 +124,11 @@ function App() {
   return (
     <div style={{ backgroundColor: 'lightgray' }}>
       <VernaContextProvider
+        configSchema={configSchema}
+        defaultFormValues={formData}
         defaultSchema={schemaDefault}
         defaultUiSchema={uiSchema}
-        defaultFormValues={formData}
         defaultWidgets={widgets}
-        configSchema={configSchema}
         isEditor={isEditor}
       >
         <FormWrapper toggleEditorMode={toggleEditorMode} />
