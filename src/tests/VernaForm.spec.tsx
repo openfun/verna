@@ -1,29 +1,11 @@
 import { screen, render } from '@testing-library/react';
-import VernaForm from '.';
-import { JSONSchema7 } from 'json-schema';
+import VernaForm from '../index';
 import _ from 'lodash';
-import { VernaContextProvider } from './context/VernaContextProvider';
+import { VernaContextProvider } from '../context/VernaContextProvider';
+import { getSchemaDefault } from './mocks/FormProps';
 
 describe('VernaForm', () => {
-  const getSchemaDefault = (): JSONSchema7 => ({
-    description: 'Desc registration form',
-    properties: {
-      testSection: {
-        properties: {
-          champ1: {
-            title: 'Field name 1',
-            type: 'string',
-          },
-        },
-        title: 'Sectiontest',
-        type: 'object',
-      },
-    },
-    title: 'A registration form',
-    type: 'object',
-  });
-
-  async function clickOnLastAddInputButton() {
+  function clickOnLastAddInputButton() {
     _.last(
       screen.queryAllByRole('button', {
         name: 'Add an input',
@@ -31,9 +13,9 @@ describe('VernaForm', () => {
     )?.click();
   }
 
-  it('Should render', async () => {
+  it('Should render a basic form', async () => {
     render(
-      <VernaContextProvider defaultSchema={getSchemaDefault()} isEditor>
+      <VernaContextProvider isEditor defaultSchema={getSchemaDefault()}>
         <VernaForm />
       </VernaContextProvider>,
     );
@@ -46,7 +28,7 @@ describe('VernaForm', () => {
     // - The first section should be displayed
     screen.getByRole('group', { name: 'Sectiontest' });
 
-    const $field1 = document.getElementById('root_testSection_champ1') as HTMLInputElement;
+    const $field1 = document.getElementById('root_testSection_field1') as HTMLInputElement;
 
     expect($field1).toBeInstanceOf(HTMLInputElement);
     expect($field1.type).toBe('text');
@@ -54,7 +36,7 @@ describe('VernaForm', () => {
 
   it('Should be able to add or remove sections and fields', async () => {
     render(
-      <VernaContextProvider defaultSchema={getSchemaDefault()} isEditor>
+      <VernaContextProvider isEditor defaultSchema={getSchemaDefault()}>
         <VernaForm />
       </VernaContextProvider>,
     );
@@ -86,7 +68,7 @@ describe('VernaForm', () => {
       name: 'Add a section',
     });
     expect($addSectionButtons).toHaveLength(3);
-    screen.getByRole('button', { name: 'Save' });
+    screen.getByRole('button', { name: 'Submit' });
 
     // Delete every elements from top to bottom
     _.forEach(
@@ -113,9 +95,9 @@ describe('VernaForm', () => {
   it('Should use selector parameter to query sub schema and render it', async () => {
     render(
       <VernaContextProvider
+        isEditor
         defaultSchema={getSchemaDefault()}
         defaultSelector="testSection"
-        isEditor
       >
         <VernaForm />
       </VernaContextProvider>,
@@ -131,7 +113,7 @@ describe('VernaForm', () => {
     expect(screen.queryAllByRole('group', { name: 'Sectiontest' })).toHaveLength(1);
 
     // - A required text input First name should be displayed inside the only section
-    const $field1 = document.getElementById('root_champ1') as HTMLInputElement;
+    const $field1 = document.getElementById('root_field1') as HTMLInputElement;
     expect($field1).toBeInstanceOf(HTMLInputElement);
     expect($field1.type).toBe('text');
   });
@@ -139,9 +121,9 @@ describe('VernaForm', () => {
   it('Should use selector parameter to query sub schema and add or remove fields on it', async () => {
     render(
       <VernaContextProvider
+        isEditor
         defaultSchema={getSchemaDefault()}
         defaultSelector="testSection"
-        isEditor
       >
         <VernaForm />
       </VernaContextProvider>,
@@ -188,7 +170,7 @@ describe('VernaForm', () => {
     // - The first section should be displayed
     screen.getByRole('group', { name: 'Sectiontest' });
 
-    const $field1 = document.getElementById('root_testSection_champ1') as HTMLInputElement;
+    const $field1 = document.getElementById('root_testSection_field1') as HTMLInputElement;
 
     expect($field1).toBeInstanceOf(HTMLInputElement);
     expect($field1.type).toBe('text');

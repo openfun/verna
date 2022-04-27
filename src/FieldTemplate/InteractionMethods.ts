@@ -1,7 +1,7 @@
 import { JSONSchema7, JSONSchema7TypeName } from 'json-schema';
 import { getCurrentField, getCurrentSection, makeid } from '../utils';
-import { ObjectFieldTemplateType, VernaContextProps } from './VernaContextProvider';
-import { sectionDefinition, stringDefinition } from '../schemaComponents/templates';
+import { ObjectFieldTemplateType, VernaContextProps } from '../context/VernaContextProvider';
+import { sectionDefinition, stringDefinition } from '../templates';
 
 function addItemToUiSchemaWithSelector(
   verna: VernaContextProps,
