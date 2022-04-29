@@ -1,86 +1,24 @@
 import { VernaContextProps } from '../../context/VernaContextProvider';
 import { RJSF_ID_SEPARATOR } from '../../settings';
+import {
+  updateEnumValidator,
+  updateItemsValidator,
+  updateMaximumValidator,
+  updateMaxLengthValidator,
+  updateMinimumValidator,
+  updateRequiredValidator,
+} from './WidgetParameterModifierMethods';
 
 type Maybe<T> = T | undefined;
-type Parameters = {
+export type Parameters = {
   items: Maybe<string[]>;
+  enum: Maybe<string[]>;
   required: Maybe<boolean>;
   maxLength: Maybe<number>;
+  maximum: Maybe<number>;
+  minimum: Maybe<number>;
 };
 type ParameterType = Parameters[keyof Parameters];
-
-function updateRequiredValidator(
-  value: Parameters['required'],
-  verna: VernaContextProps,
-  widgetIdParts: string[],
-) {
-  const newSchema = { ...verna.schema };
-  if (verna.selector) {
-    // TODO
-  } else {
-    if (newSchema.properties) {
-      const section = newSchema.properties[widgetIdParts[0]];
-      if (section && typeof section !== 'boolean') {
-        if (value) {
-          section.required = [...(section.required || []), widgetIdParts[1]];
-        } else {
-          section.required = section.required?.filter((e) => e !== widgetIdParts[1]);
-        }
-      }
-    }
-  }
-  verna.setSchema(newSchema);
-}
-
-function updateMaxLengthValidator(
-  value: Parameters['maxLength'],
-  verna: VernaContextProps,
-  widgetIdParts: string[],
-) {
-  const newSchema = { ...verna.schema };
-  if (verna.selector) {
-    // TODO
-  } else {
-    if (newSchema.properties) {
-      const section = newSchema.properties[widgetIdParts[0]];
-      if (section && typeof section !== 'boolean') {
-        const widget = section.properties?.[widgetIdParts[1]];
-        if (widget && typeof widget !== 'boolean') {
-          widget.maxLength = value as number;
-        }
-      }
-    }
-  }
-  verna.setSchema(newSchema);
-}
-
-function updateItemsValidator(
-  value: Parameters['items'],
-  verna: VernaContextProps,
-  widgetIdParts: string[],
-) {
-  const newSchema = verna.schema;
-  if (verna.selector) {
-    // TODO
-  } else {
-    if (newSchema.properties) {
-      const section = newSchema.properties[widgetIdParts[0]];
-      if (section && typeof section !== 'boolean') {
-        const widget = section.properties?.[widgetIdParts[1]];
-        if (widget && typeof widget !== 'boolean') {
-          widget.enum = value as string[];
-        }
-      }
-    }
-  }
-  verna.setSchema(newSchema);
-}
-
-export interface WidgetParameters {
-  items: Maybe<string[]>;
-  required: Maybe<boolean>;
-  maxLength: Maybe<number>;
-}
 
 type WidgetParameterModifier<T> = (
   value: T,
@@ -93,15 +31,16 @@ type ParameterModifier = {
 };
 
 const parametersModifier: ParameterModifier = {
+  enum: updateEnumValidator,
   items: updateItemsValidator,
   maxLength: updateMaxLengthValidator,
+  maximum: updateMaximumValidator,
+  minimum: updateMinimumValidator,
   required: updateRequiredValidator,
-  // maximum:,
-  // minimum:,
 };
 
 export default function WidgetParametersModifier(
-  parameters: WidgetParameters,
+  parameters: Parameters,
   verna: VernaContextProps,
   widgetId: string,
 ) {

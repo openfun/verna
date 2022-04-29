@@ -16,6 +16,15 @@ function App() {
     properties: {
       section: {
         properties: {
+          checkboxes: {
+            items: {
+              enum: ['AAAA', 'BBBB', 'CCCC'],
+              type: 'string',
+            },
+            title: 'LALALALA',
+            type: 'array',
+            uniqueItems: true,
+          },
           select: {
             description: 'description',
             enum: ['aaaaaaa'],
@@ -42,43 +51,28 @@ function App() {
 
   // TODO: Add management for ui:ObjectFieldTemplate saving
   const uiSchema: UiSchema = {
-    'ui:options': {
-      'ui:submitButtonOptions': {
-        submitText: 'Confirm Details',
-        norender: false,
-        props: {
-          disabled: false,
-          className: 'btn btn-info',
-        },
+    section: {
+      select: {
+        'ui:widget': 'SelectWidget',
       },
+      checkboxes: {
+        'ui:widget': 'CheckboxesWidget',
+      },
+      'ui:order': ['select'],
     },
-    // section: {
-    //   select: {
-    //     'ui:widget': 'SelectWidget',
-    //   },
-    //   'ui:order': ['select'],
-    // },
-    // 'ui:submitButtonOptions': {
-    //   norender: true,
-    //   props: {
-    //     className: 'btn btn-info',
-    //     disabled: true,
-    //   },
-    //   submitText: 'Save',
-    // },
+    'ui:submitButtonOptions': {
+      norender: true,
+      props: {
+        className: 'btn btn-info',
+        disabled: true,
+      },
+      submitText: 'Save',
+    },
   };
 
   const configSchema: JSONSchema7 = {
     properties: {
-      NumberFieldWidget: {
-        properties: {
-          required: {
-            type: 'boolean',
-          },
-        },
-        type: 'object',
-      },
-      SelectWidget: {
+      CheckboxWidget: {
         properties: {
           items: {
             additionalItems: {
@@ -87,6 +81,41 @@ function App() {
             items: {
               type: 'string',
             },
+            minItems: 2,
+            type: 'array',
+          },
+          required: {
+            type: 'boolean',
+          },
+        },
+      },
+      CheckboxesWidget: {
+        properties: {
+          items: {
+            additionalItems: {
+              type: 'boolean',
+            },
+            items: {
+              type: 'string',
+            },
+            minItems: 2,
+            type: 'array',
+          },
+          required: {
+            type: 'boolean',
+          },
+        },
+      },
+      SelectWidget: {
+        properties: {
+          enum: {
+            additionalItems: {
+              type: 'boolean',
+            },
+            items: {
+              type: 'string',
+            },
+            minItems: 2,
             type: 'array',
           },
           required: {
@@ -96,6 +125,20 @@ function App() {
       },
       TextareaWidget: {
         properties: {
+          required: {
+            type: 'boolean',
+          },
+        },
+        type: 'object',
+      },
+      numberWidget: {
+        properties: {
+          maximum: {
+            type: 'number',
+          },
+          minimum: {
+            type: 'number',
+          },
           required: {
             type: 'boolean',
           },

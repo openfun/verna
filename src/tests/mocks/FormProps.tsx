@@ -55,13 +55,14 @@ const getWidgetConf = (): JSONSchema7 => ({
   properties: {
     SelectWidget: {
       properties: {
-        items: {
+        enum: {
           additionalItems: {
             type: 'boolean',
           },
           items: {
             type: 'string',
           },
+          minItems: 2,
           type: 'array',
         },
         required: {
