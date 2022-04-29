@@ -13,7 +13,7 @@ describe('VernaForm', () => {
     )?.click();
   }
 
-  it('Should render a basic form', async () => {
+  it('should render a basic form', async () => {
     render(
       <VernaContextProvider isEditor defaultSchema={getSchemaDefault()}>
         <VernaForm />
@@ -34,7 +34,7 @@ describe('VernaForm', () => {
     expect($field1.type).toBe('text');
   });
 
-  it('Should be able to add or remove sections and fields', async () => {
+  it('should be able to add or remove sections and fields', async () => {
     render(
       <VernaContextProvider isEditor defaultSchema={getSchemaDefault()}>
         <VernaForm />
@@ -92,7 +92,7 @@ describe('VernaForm', () => {
     expect($addFieldButtons3).toHaveLength(0);
   });
 
-  it('Should use selector parameter to query sub schema and render it', async () => {
+  it('should use selector parameter to query sub schema and render it', async () => {
     render(
       <VernaContextProvider
         isEditor
@@ -118,7 +118,7 @@ describe('VernaForm', () => {
     expect($field1.type).toBe('text');
   });
 
-  it('Should use selector parameter to query sub schema and add or remove fields on it', async () => {
+  it('should use selector parameter to query sub schema and add or remove fields on it', async () => {
     render(
       <VernaContextProvider
         isEditor
@@ -154,7 +154,7 @@ describe('VernaForm', () => {
     expect($addFieldButtons3).toHaveLength(1);
   });
 
-  it('Should not render add functionalities if isEditor is false', async () => {
+  it('should not render add functionalities if isEditor is false', async () => {
     render(
       <VernaContextProvider defaultSchema={getSchemaDefault()}>
         <VernaForm />

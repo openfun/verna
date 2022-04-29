@@ -2,7 +2,7 @@ import { JSONSchema7, JSONSchema7Definition } from 'json-schema';
 import Form, { type ISubmitEvent, type UiSchema } from '@rjsf/core';
 import { useVerna } from '../../context/VernaContextProvider';
 import { FormEvent } from 'react';
-import WidgetParametersModifier, { WidgetParameters } from './WidgetParametersModifier';
+import WidgetParametersModifier, { Parameters } from './WidgetParametersModifier';
 import { getTemplateWidgetName } from '../../utils';
 import { RJSF_ID_SEPARATOR } from '../../settings';
 
@@ -20,7 +20,7 @@ export default function WidgetParametersConfiguration({
 
   function handleSubmit(event: ISubmitEvent<unknown>, nativeEvent: FormEvent<HTMLFormElement>) {
     nativeEvent.preventDefault();
-    WidgetParametersModifier(event.formData as WidgetParameters, verna, widgetId);
+    WidgetParametersModifier(event.formData as Parameters, verna, widgetId);
     onClose();
     return false;
   }
@@ -50,9 +50,12 @@ export default function WidgetParametersConfiguration({
         : (currentSection as JSONSchema7)?.properties?.[widgetIdParts[2]]) as JSONSchema7) || {};
 
     return {
-      items: self.enum,
+      enum: self.enum,
+      items: self.items && (self.items as JSONSchema7).enum,
       maxLength: self.maxLength,
+      maximum: self.maximum,
       minLength: self.minLength,
+      minimum: self.minimum,
       required:
         currentSection.required &&
         (currentSection.required as string[]).includes(currentWidgetName),

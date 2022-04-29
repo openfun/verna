@@ -7,6 +7,7 @@ import TextareaWidget from './widgetToolbarItems/TextareaWidget';
 import NumberWidget from './widgetToolbarItems/NumberWidget';
 import CheckboxWidget from './widgetToolbarItems/CheckboxWidget';
 import SelectWidget from './widgetToolbarItems/SelectWidget';
+import CheckboxesWidget from './widgetToolbarItems/CheckboxesWidget';
 
 interface FormWrapperProps {
   toggleEditorMode: () => void;
@@ -26,6 +27,7 @@ export default function FormWrapper({ toggleEditorMode }: FormWrapperProps) {
             <TextareaWidget type="string" widgetName="TextareaWidget" />
             <NumberWidget type="number" widgetName="numberWidget" />
             <CheckboxWidget type="boolean" widgetName="CheckboxWidget" />
+            <CheckboxesWidget type="array" widgetName="CheckboxesWidget" />
             <SelectWidget type="string" widgetName="SelectWidget" />
           </VernaToolbar>
         </div>

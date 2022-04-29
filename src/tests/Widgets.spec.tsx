@@ -8,8 +8,8 @@ import {
   getWidgets,
 } from './mocks/FormProps';
 
-describe('Tests widget customization', () => {
-  it('Should render a custom widget', async () => {
+describe('tests widget customization', () => {
+  it('should render a custom widget', async () => {
     render(
       <VernaContextProvider
         isEditor
@@ -29,7 +29,7 @@ describe('Tests widget customization', () => {
     expect($select.type).toBe('select-one');
   });
 
-  it('Should modify options of a custom widget and load it', async () => {
+  it('should modify options of a custom widget and load it', async () => {
     render(
       <VernaContextProvider
         isEditor
@@ -44,7 +44,7 @@ describe('Tests widget customization', () => {
 
     // Open edit options
     screen.getByRole('button', { name: 'Edit' }).click();
-    screen.getByRole('group', { name: 'items' });
+    screen.getByRole('group', { name: 'enum' });
 
     // Check required checkbox
     screen.getByRole('checkbox', { name: 'required' }).click();
