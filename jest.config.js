@@ -7,4 +7,5 @@ module.exports = {
   setupFilesAfterEnv: [path.resolve(__dirname, 'jest.setup.js')],
   testEnvironment: 'jsdom',
   testMatch: [path.resolve(__dirname, 'src/**/*.spec.+(ts|tsx)')],
+  transformIgnorePatterns: ['node_modules/(?!(nanoid)/)'],
 };
