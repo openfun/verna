@@ -1,15 +1,22 @@
-import type { WidgetProps } from '@rjsf/core';
+import { TextTemplateWidget } from './templates/TextTemplateWidget';
+import { VernaWidgetProps } from '../../../../src/types/Widgets';
 
-export default function PasswordWidget(props: Partial<WidgetProps>) {
+export default function PasswordWidget(props: VernaWidgetProps) {
   return (
-    <div>
-      <label>{props.label}</label>
-      <input
-        onChange={(event) => props.onChange && props.onChange(event.target.value)}
+    <>
+      <TextTemplateWidget
+        disabled={props.disabled}
+        error={!!props.rawErrors}
+        fieldClasses={['testclass']}
+        id={props.id}
+        label={props.label}
+        onChange={(event) => props.onChange(event.target.value)}
         required={props.required}
         type="password"
         value={props.value}
       />
-    </div>
+      {props.required && '*'}
+      {props.rawErrors}
+    </>
   );
 }

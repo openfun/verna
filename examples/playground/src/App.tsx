@@ -8,6 +8,8 @@ import QuizWidget from './widgets/QuizWidget';
 import './styles/verna.scss';
 import NumberWidget from './widgets/NumberWidget';
 import SelectWidget from './widgets/SelectWidget';
+import TextareaWidget from './widgets/TextareaWidget';
+import CheckboxWidget from './widgets/CheckboxWidget';
 import transformErrors from './ErrorCustom';
 
 function App() {
@@ -33,11 +35,13 @@ function App() {
   const formData = {};
 
   const widgets = {
+    checkboxWidget: CheckboxWidget,
     numberWidget: NumberWidget,
     passwordWidget: PasswordWidget,
     quizWidget: QuizWidget,
     selectWidget: SelectWidget,
     textWidget: TextWidget,
+    textareaWidget: TextareaWidget,
   };
 
   // TODO: Add management for ui:ObjectFieldTemplate saving

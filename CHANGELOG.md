@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Rework playground widgets template
 - Functionality to customize error messages
 - Functionality to customize widget options
 - Functionality to drag and drop custom widgets

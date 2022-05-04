@@ -1,16 +1,30 @@
-import type { WidgetProps } from '@rjsf/core';
+import { TextTemplateWidget } from './templates/TextTemplateWidget';
+import { VernaWidgetProps } from '../../../../src/types/Widgets';
 
-export default function TextWidget(props: Partial<WidgetProps>) {
+export default function TextWidget({
+  disabled,
+  rawErrors,
+  onChange,
+  id,
+  label,
+  required,
+  value,
+}: VernaWidgetProps) {
   return (
-    <label>
-      {props.label}
-      {props.required && '*'}
-      <input
-        onChange={(event) => props.onChange && props.onChange(event.target.value)}
-        required={props.required}
+    <>
+      <TextTemplateWidget
+        disabled={disabled}
+        error={!!rawErrors}
+        fieldClasses={['testclass']}
+        id={id}
+        label={label}
+        onChange={(event) => onChange(event.target.value)}
+        required={required}
         type="text"
-        value={props.value}
+        value={value}
       />
-    </label>
+      {required && '*'}
+      {rawErrors}
+    </>
   );
 }

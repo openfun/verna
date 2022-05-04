@@ -1,7 +1,7 @@
 import { ChangeEvent, useState } from 'react';
-import type { WidgetProps } from '@rjsf/core';
+import { VernaWidgetProps } from '../../../../src/types/Widgets';
 
-export default function QuizWidget(props: Partial<WidgetProps>) {
+export default function QuizWidget(props: VernaWidgetProps) {
   const choices = ['a', 'b', 'c', 'd'] as const;
   const [answers, setAnswers] = useState<Partial<typeof choices[number]>[]>([]);
 
@@ -10,7 +10,7 @@ export default function QuizWidget(props: Partial<WidgetProps>) {
     const checked = event.target.checked;
     const newAnswers = checked ? [...answers, answer] : answers.filter((e) => e !== answer);
     setAnswers(newAnswers);
-    props.onChange && props.onChange(newAnswers);
+    props.onChange(newAnswers);
   }
 
   return (
@@ -18,7 +18,7 @@ export default function QuizWidget(props: Partial<WidgetProps>) {
       <h3>Quiz {props.label}</h3>
       {choices.map((choice) => (
         <label key={choice}>
-          <input onChange={handleChange} type="checkbox" value={choice} />
+          <input id={props.id} onChange={handleChange} type="checkbox" value={choice} />
           Answer {choice}
         </label>
       ))}
