@@ -16,8 +16,9 @@ import {
   getSelectedUiSchema,
 } from './DataProcessingMethods';
 import { defaultObjectFieldTemplate, defaultVernaWidgets } from '../templates';
+import type { AjvError } from '@rjsf/core';
 
-function functionNotSet() {
+function functionNotSet(): any {
   throw new Error('function context not set');
 }
 
@@ -32,6 +33,7 @@ export interface ObjectFieldTemplateType {
 export interface VernaContextProps {
   objectFieldTemplate: ObjectFieldTemplateType;
   configSchema?: JSONSchema7;
+  transformErrors?: (errors: AjvError[]) => AjvError[];
   formData: unknown;
   fullSchema: JSONSchema7;
   fullUiSchema: UiSchema;
@@ -71,6 +73,7 @@ const VernaContext = createContext<VernaContextProps>({
   setSelector: () => functionNotSet(),
   setUiSchema: () => functionNotSet(),
   setWidgets: () => functionNotSet(),
+  transformErrors: () => functionNotSet(),
   uiSchema: {},
   widgets: {},
 });
@@ -91,6 +94,7 @@ interface VernaContextProviderProps {
   defaultWidgets: WidgetsType;
   objectFieldTemplate: ObjectFieldTemplateType;
   defaultSelector?: string;
+  transformErrors?: (errors: AjvError[]) => AjvError[];
   isEditor: boolean;
 }
 
@@ -102,6 +106,7 @@ function VernaContextProvider({
   defaultWidgets,
   objectFieldTemplate,
   defaultSelector,
+  transformErrors,
   isEditor,
   children,
 }: PropsWithChildren<VernaContextProviderProps>) {
@@ -193,6 +198,7 @@ function VernaContextProvider({
         setSelector,
         setUiSchema,
         setWidgets,
+        transformErrors,
         uiSchema,
         widgets,
       }}

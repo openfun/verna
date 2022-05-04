@@ -9,6 +9,7 @@ import QuizWidget from './widgets/QuizWidget';
 import './styles/verna.scss';
 import NumberWidget from './widgets/NumberWidget';
 import SelectWidget from './widgets/SelectWidget';
+import transformErrors from './ErrorCustom';
 
 function App() {
   const schemaDefault: JSONSchema7 = {
@@ -16,19 +17,11 @@ function App() {
     properties: {
       section: {
         properties: {
-          checkboxes: {
-            items: {
-              enum: ['AAAA', 'BBBB', 'CCCC'],
-              type: 'string',
-            },
-            title: 'LALALALA',
-            type: 'array',
-            uniqueItems: true,
-          },
+          onlyNumbersString: { pattern: '^\\d*$', type: 'string' },
           select: {
             description: 'description',
-            enum: ['aaaaaaa'],
-            title: 'TEST select',
+            enum: ['Item 1', 'Item 2', 'Item 3'],
+            title: 'Select items',
             type: 'string',
           },
         },
@@ -52,15 +45,16 @@ function App() {
   // TODO: Add management for ui:ObjectFieldTemplate saving
   const uiSchema: UiSchema = {
     section: {
+      onlyNumbersString: {
+        'ui:widget': 'textWidget',
+      },
       select: {
         'ui:widget': 'SelectWidget',
-      },
-      checkboxes: {
-        'ui:widget': 'CheckboxesWidget',
       },
       'ui:order': ['select'],
     },
     'ui:submitButtonOptions': {
+      // working in the next release
       norender: true,
       props: {
         className: 'btn btn-info',
@@ -74,16 +68,6 @@ function App() {
     properties: {
       CheckboxWidget: {
         properties: {
-          items: {
-            additionalItems: {
-              type: 'boolean',
-            },
-            items: {
-              type: 'string',
-            },
-            minItems: 2,
-            type: 'array',
-          },
           required: {
             type: 'boolean',
           },
@@ -173,6 +157,7 @@ function App() {
         defaultUiSchema={uiSchema}
         defaultWidgets={widgets}
         isEditor={isEditor}
+        transformErrors={transformErrors}
       >
         <FormWrapper toggleEditorMode={toggleEditorMode} />
       </VernaContextProvider>
