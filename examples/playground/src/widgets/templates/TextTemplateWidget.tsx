@@ -1,10 +1,11 @@
 import Field, { FieldProps } from './Field';
 import { InputHTMLAttributes } from 'react';
 
-interface TextTemplateWidgetProps extends InputHTMLAttributes<HTMLInputElement>, FieldProps {
+interface TextTemplateWidgetProps extends InputHTMLAttributes<unknown>, FieldProps {
   id: string;
   label?: string;
   type?:
+    | 'checkbox'
     | 'date'
     | 'datetime-local'
     | 'email'

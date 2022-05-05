@@ -24,11 +24,11 @@ export default function FormWrapper({ toggleEditorMode }: FormWrapperProps) {
             <TextWidget type="string" widgetName="textWidget" />
             <PasswordWidget type="string" widgetName="passwordWidget" />
             <QuizWidget type="string" widgetName="quizWidget" />
-            <TextareaWidget type="string" widgetName="TextareaWidget" />
+            <TextareaWidget type="string" widgetName="textareaWidget" />
             <NumberWidget type="number" widgetName="numberWidget" />
-            <CheckboxWidget type="boolean" widgetName="CheckboxWidget" />
+            <CheckboxWidget type="boolean" widgetName="checkboxWidget" />
             <CheckboxesWidget type="array" widgetName="CheckboxesWidget" />
-            <SelectWidget type="string" widgetName="SelectWidget" />
+            <SelectWidget type="string" widgetName="selectWidget" />
           </VernaToolbar>
         </div>
       )}

@@ -1,7 +1,8 @@
-import { TextTemplateWidget } from './templates/TextTemplateWidget';
 import { VernaWidgetProps } from '../../../../src/types/Widgets';
+import { TextTemplateWidget } from './templates/TextTemplateWidget';
+import { useState } from 'react';
 
-export default function TextWidget({
+export default function CheckboxWidget({
   disabled,
   rawErrors,
   onChange,
@@ -10,21 +11,18 @@ export default function TextWidget({
   required,
   value,
 }: VernaWidgetProps) {
+  const [checked, setChecked] = useState<boolean>(value || false);
   return (
     <>
       <TextTemplateWidget
         disabled={disabled}
         error={!!rawErrors}
-        fieldClasses={['testclass']}
         id={id || ''}
         label={label}
-        onChange={(event) => onChange(event.target.value)}
+        onChange={() => setChecked(!checked) && onChange(checked)}
         required={required}
-        type="text"
-        value={value}
+        type="checkbox"
       />
-      {required && '*'}
-      {rawErrors}
     </>
   );
 }

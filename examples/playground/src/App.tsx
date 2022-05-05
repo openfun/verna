@@ -10,6 +10,8 @@ import './styles/verna.scss';
 import NumberWidget from './widgets/NumberWidget';
 import SelectWidget from './widgets/SelectWidget';
 import transformErrors from './ErrorCustom';
+import TextareaWidget from './widgets/TextareaWidget';
+import CheckboxWidget from './widgets/CheckboxWidget';
 
 function App() {
   const schemaDefault: JSONSchema7 = {
@@ -35,11 +37,13 @@ function App() {
   const formData = {};
 
   const widgets = {
-    SelectWidget: SelectWidget,
+    checkboxWidget: CheckboxWidget,
     numberWidget: NumberWidget,
     passwordWidget: PasswordWidget,
     quizWidget: QuizWidget,
+    selectWidget: SelectWidget,
     textWidget: TextWidget,
+    textareaWidget: TextareaWidget,
   };
 
   // TODO: Add management for ui:ObjectFieldTemplate saving
