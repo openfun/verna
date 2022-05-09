@@ -1,11 +1,12 @@
-import { JSONSchema7Definition, JSONSchema7TypeName } from 'json-schema';
-import Section from './widgets/Section';
+import { JSONSchema7TypeName } from 'json-schema';
+import Section from './components/Fields/Section';
+import VernaJSONSchemaType from './types/rjsf';
 
 const stringDefinition = (
   title: string,
   type: JSONSchema7TypeName = 'string',
-): JSONSchema7Definition => {
-  const def: JSONSchema7Definition = {
+): VernaJSONSchemaType => {
+  const def: VernaJSONSchemaType = {
     title,
     type,
   };
@@ -16,7 +17,7 @@ const stringDefinition = (
   return def;
 };
 
-const sectionDefinition = (title: string): JSONSchema7Definition => ({
+const sectionDefinition = (title: string): VernaJSONSchemaType => ({
   properties: {},
   title: title,
   type: 'object',

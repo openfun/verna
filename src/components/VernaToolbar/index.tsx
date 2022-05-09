@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import ShowCaseWidgetProps from './types/Widgets';
+import ShowCaseWidgetProps from '../../types/Widgets';
 
 interface VernaToolbarProps {
   children: ReactElement[];
@@ -22,13 +22,11 @@ export default function VernaToolbar({ children }: VernaToolbarProps) {
 
   return (
     <>
-      {React.Children.map(children, (child) => {
-        return (
-          <span draggable onDragStart={(e) => onDrag(e, child)} style={{ cursor: 'grab' }}>
-            {child}
-          </span>
-        );
-      })}
+      {React.Children.map(children, (child) => (
+        <span draggable onDragStart={(e) => onDrag(e, child)} style={{ cursor: 'grab' }}>
+          {child}
+        </span>
+      ))}
     </>
   );
 }

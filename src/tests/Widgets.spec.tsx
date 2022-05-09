@@ -1,24 +1,24 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { VernaContextProvider } from '../context/VernaContextProvider';
-import VernaForm from '../index';
+import VernaProvider from '../providers/VernaProvider';
 import {
   getCustomSchemaDefault,
   getUiSchemaDefault,
   getWidgetConf,
   getWidgets,
 } from './mocks/FormProps';
+import VernaForm from '../components/VernaForm';
 
 describe('tests widget customization', () => {
   it('should render a custom widget', async () => {
     render(
-      <VernaContextProvider
+      <VernaProvider
         isEditor
         defaultSchema={getCustomSchemaDefault()}
         defaultUiSchema={getUiSchemaDefault()}
         defaultWidgets={getWidgets()}
       >
         <VernaForm />
-      </VernaContextProvider>,
+      </VernaProvider>,
     );
 
     screen.getByRole('group', { name: 'A registration form' });
@@ -31,7 +31,7 @@ describe('tests widget customization', () => {
 
   it('should modify options of a custom widget and load it', async () => {
     render(
-      <VernaContextProvider
+      <VernaProvider
         isEditor
         configSchema={getWidgetConf()}
         defaultSchema={getCustomSchemaDefault()}
@@ -39,7 +39,7 @@ describe('tests widget customization', () => {
         defaultWidgets={getWidgets()}
       >
         <VernaForm />
-      </VernaContextProvider>,
+      </VernaProvider>,
     );
 
     // Open edit options

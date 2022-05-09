@@ -1,8 +1,8 @@
 import { screen, render } from '@testing-library/react';
-import VernaForm from '../index';
 import _ from 'lodash';
-import { VernaContextProvider } from '../context/VernaContextProvider';
-import { getSchemaDefault } from './mocks/FormProps';
+import VernaProvider from '../../providers/VernaProvider';
+import { getSchemaDefault } from '../../tests/mocks/FormProps';
+import VernaForm from '../VernaForm';
 
 describe('VernaForm', () => {
   function clickOnLastAddInputButton() {
@@ -15,9 +15,9 @@ describe('VernaForm', () => {
 
   it('should render a basic form', async () => {
     render(
-      <VernaContextProvider isEditor defaultSchema={getSchemaDefault()}>
+      <VernaProvider isEditor defaultSchema={getSchemaDefault()}>
         <VernaForm />
-      </VernaContextProvider>,
+      </VernaProvider>,
     );
     // - A fieldset legend should be displayed with form title
     screen.getByRole('group', { name: 'A registration form' });
@@ -36,9 +36,9 @@ describe('VernaForm', () => {
 
   it('should be able to add or remove sections and fields', async () => {
     render(
-      <VernaContextProvider isEditor defaultSchema={getSchemaDefault()}>
+      <VernaProvider isEditor defaultSchema={getSchemaDefault()}>
         <VernaForm />
-      </VernaContextProvider>,
+      </VernaProvider>,
     );
 
     // Add two sections
@@ -94,13 +94,9 @@ describe('VernaForm', () => {
 
   it('should use selector parameter to query sub schema and render it', async () => {
     render(
-      <VernaContextProvider
-        isEditor
-        defaultSchema={getSchemaDefault()}
-        defaultSelector="testSection"
-      >
+      <VernaProvider isEditor defaultSchema={getSchemaDefault()} defaultSelector="testSection">
         <VernaForm />
-      </VernaContextProvider>,
+      </VernaProvider>,
     );
 
     // - A fieldset legend should not be displayed
@@ -118,15 +114,11 @@ describe('VernaForm', () => {
     expect($field1.type).toBe('text');
   });
 
-  it('should use selector parameter to query sub schema and add or remove fields on it', async () => {
+  it('should use a selector to query sub schema and add or remove fields on it', async () => {
     render(
-      <VernaContextProvider
-        isEditor
-        defaultSchema={getSchemaDefault()}
-        defaultSelector="testSection"
-      >
+      <VernaProvider isEditor defaultSchema={getSchemaDefault()} defaultSelector="testSection">
         <VernaForm />
-      </VernaContextProvider>,
+      </VernaProvider>,
     );
 
     // Add two input fields
@@ -156,9 +148,9 @@ describe('VernaForm', () => {
 
   it('should not render add functionalities if isEditor is false', async () => {
     render(
-      <VernaContextProvider defaultSchema={getSchemaDefault()}>
+      <VernaProvider defaultSchema={getSchemaDefault()}>
         <VernaForm />
-      </VernaContextProvider>,
+      </VernaProvider>,
     );
 
     // - A fieldset legend should be displayed with form title

@@ -19,13 +19,14 @@
     "react/prop-types": "off",
     "react/react-in-jsx-scope": "off",
     "sort-keys": ["warn", "asc", {"caseSensitive": true, "natural": true, "minKeys": 2}],
+    "max-len": ["error", 100],
     "react/jsx-sort-props": [1, {
       "callbacksLast": false,
       "shorthandFirst": true,
       "multiline": "last",
       "ignoreCase": false,
       "noSortAlphabetically": false,
-      "reservedFirst": true,
+      "reservedFirst": true
     }]
   },
   "parser": "@typescript-eslint/parser",

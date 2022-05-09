@@ -1,8 +1,8 @@
-import { JSONSchema7 } from 'json-schema';
 import type { UiSchema } from '@rjsf/core';
+import VernaJSONSchemaType from '../../types/rjsf';
 import SelectWidget from './SelectWidget';
 
-const getSchemaDefault = (): JSONSchema7 => ({
+const getSchemaDefault = (): VernaJSONSchemaType => ({
   description: 'Desc registration form',
   properties: {
     testSection: {
@@ -20,7 +20,7 @@ const getSchemaDefault = (): JSONSchema7 => ({
   type: 'object',
 });
 
-const getCustomSchemaDefault = (): JSONSchema7 => ({
+const getCustomSchemaDefault = (): VernaJSONSchemaType => ({
   description: 'Desc registration form',
   properties: {
     testSection: {
@@ -51,7 +51,7 @@ const getWidgets = () => ({
   SelectWidget: SelectWidget,
 });
 
-const getWidgetConf = (): JSONSchema7 => ({
+const getWidgetConf = (): VernaJSONSchemaType => ({
   properties: {
     SelectWidget: {
       properties: {

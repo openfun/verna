@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import type { JSONSchema7 } from 'json-schema';
 import type { UiSchema } from '@rjsf/core';
-import { VernaContextProvider } from '@openfun/verna';
+import VernaProvider, { Section, VernaJSONSchemaType } from '@openfun/verna';
 import FormWrapper from './FormWrapper';
 import TextWidget from './widgets/TextWidget';
 import PasswordWidget from './widgets/PasswordWidget';
@@ -11,24 +10,16 @@ import NumberWidget from './widgets/NumberWidget';
 import SelectWidget from './widgets/SelectWidget';
 
 function App() {
-  const schemaDefault: JSONSchema7 = {
+  const schemaDefault: VernaJSONSchemaType = {
     description: 'Desc registration form',
     properties: {
       section: {
         properties: {
-          checkboxes: {
-            items: {
-              enum: ['AAAA', 'BBBB', 'CCCC'],
-              type: 'string',
-            },
-            title: 'LALALALA',
-            type: 'array',
-            uniqueItems: true,
-          },
+          onlyNumbersString: { pattern: '^\\d*$', type: 'string' },
           select: {
             description: 'description',
-            enum: ['aaaaaaa'],
-            title: 'TEST select',
+            enum: ['Item 1', 'Item 2', 'Item 3'],
+            title: 'Select items',
             type: 'string',
           },
         },
@@ -52,15 +43,18 @@ function App() {
   // TODO: Add management for ui:ObjectFieldTemplate saving
   const uiSchema: UiSchema = {
     section: {
+      onlyNumbersString: {
+        'ui:widget': 'textWidget',
+      },
       select: {
         'ui:widget': 'SelectWidget',
       },
-      checkboxes: {
-        'ui:widget': 'CheckboxesWidget',
-      },
+      // Need to found a clean fix so the ObjectFieldTemplate may be a string
+      'ui:ObjectFieldTemplate': Section,
       'ui:order': ['select'],
     },
     'ui:submitButtonOptions': {
+      // working in the next release
       norender: true,
       props: {
         className: 'btn btn-info',
@@ -70,7 +64,7 @@ function App() {
     },
   };
 
-  const configSchema: JSONSchema7 = {
+  const configSchema: VernaJSONSchemaType = {
     properties: {
       CheckboxWidget: {
         properties: {
@@ -166,7 +160,7 @@ function App() {
 
   return (
     <div style={{ backgroundColor: 'lightgray' }}>
-      <VernaContextProvider
+      <VernaProvider
         configSchema={configSchema}
         defaultFormValues={formData}
         defaultSchema={schemaDefault}
@@ -175,7 +169,7 @@ function App() {
         isEditor={isEditor}
       >
         <FormWrapper toggleEditorMode={toggleEditorMode} />
-      </VernaContextProvider>
+      </VernaProvider>
     </div>
   );
 }

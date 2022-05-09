@@ -1,4 +1,4 @@
-import VernaForm, { useVerna, VernaToolbar } from '@openfun/verna';
+import { VernaForm, useVerna, VernaToolbar } from '@openfun/verna';
 import { JSONSchema7 } from 'json-schema';
 import TextWidget from './widgetToolbarItems/TextWidget';
 import PasswordWidget from './widgetToolbarItems/PasswordWidget';

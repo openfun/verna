@@ -1,24 +1,21 @@
 import React, { useState } from 'react';
 import type { FieldTemplateProps } from '@rjsf/core';
-import { useVerna } from '../context/VernaContextProvider';
-import { makeid } from '../utils';
-import {
-  addItemToSchema,
-  addItemToUiSchema,
-  addSection,
-  removeItem,
-  removeSection,
-} from './InteractionMethods';
-import ShowCaseWidgetProps from '../types/Widgets';
-import DropZone from '../widgets/DropZone';
-import WidgetParametersConfiguration from '../widgets/configuration/WidgetParametersConfiguration';
-import { RJSF_ID_SEPARATOR } from '../settings';
+import { makeid } from '../../utils/utils';
+import ShowCaseWidgetProps from '../../types/Widgets';
+import DropZone from './DropZone';
+import { RJSF_ID_SEPARATOR } from '../../settings';
+import { useVerna } from '../../providers/VernaProvider';
+import { addWidget, addSection } from '../../utils/schema';
+import WidgetPropertiesForm from '../WidgetParametersForm';
+import { removeSection, removeWidget } from '../../utils/schema';
 
-// This component is used to render every field
-// Its purpose here is to add functionality common to every of those such as add or remove
-// It will be used to add drag and drop area later
+/**
+ * This component wraps each form fields.
+ * Its purpose here is to add edition capabilities to every of those
+ * when editor mode is enabled.
+ */
 
-export default function RenderFieldTemplate(props: FieldTemplateProps) {
+export default function EditorFieldTemplate(props: FieldTemplateProps) {
   const { id, schema, children } = props;
   const [isEditing, setIsEditing] = useState(false);
   const verna = useVerna();
@@ -31,8 +28,7 @@ export default function RenderFieldTemplate(props: FieldTemplateProps) {
 
   function addItem(widgetProps?: ShowCaseWidgetProps) {
     const newKey = makeid(10);
-    addItemToSchema(newKey, id, verna, widgetProps?.type);
-    addItemToUiSchema(newKey, id, verna, widgetProps?.widgetName);
+    addWidget(newKey, id, verna, widgetProps);
   }
 
   if (!verna.isEditor) return children;
@@ -43,9 +39,7 @@ export default function RenderFieldTemplate(props: FieldTemplateProps) {
       {!isSection && (!isRoot || verna.selector) && (
         <>
           <button onClick={() => setIsEditing(!isEditing)}> Edit </button>
-          {isEditing && (
-            <WidgetParametersConfiguration onClose={() => setIsEditing(false)} widgetId={id} />
-          )}
+          {isEditing && <WidgetPropertiesForm id={id} onClose={() => setIsEditing(false)} />}
           <DropZone id={id} />
         </>
       )}
@@ -66,7 +60,7 @@ export default function RenderFieldTemplate(props: FieldTemplateProps) {
           </button>
         )}
         {canAddField && (
-          <button onClick={() => removeItem(verna, id)} style={{ width: '20px' }}>
+          <button onClick={() => removeWidget(verna, id)} style={{ width: '20px' }}>
             x
           </button>
         )}

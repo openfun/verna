@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import ShowCaseWidgetProps from '../types/Widgets';
-import { makeid } from '../utils';
-import { addItemToSchema, addItemToUiSchema } from '../FieldTemplate/InteractionMethods';
-import { useVerna } from '../context/VernaContextProvider';
+import ShowCaseWidgetProps from '../../types/Widgets';
+import { makeid } from '../../utils/utils';
+import { addWidget } from '../../utils/schema';
+import { useVerna } from '../../providers/VernaProvider';
 
 interface DropZoneProps {
   id: string;
@@ -15,8 +15,7 @@ export default function DropZone({ id }: DropZoneProps) {
   function addItem(widgetProps?: ShowCaseWidgetProps) {
     if (!id) return;
     const newKey = makeid(10);
-    addItemToSchema(newKey, id, verna, widgetProps?.type);
-    addItemToUiSchema(newKey, id, verna, widgetProps?.widgetName);
+    addWidget(newKey, id, verna, widgetProps);
   }
 
   function onDrop(event: React.DragEvent<HTMLDivElement>) {
