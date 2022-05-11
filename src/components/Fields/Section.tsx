@@ -1,7 +1,6 @@
-import React from 'react';
 import type { ObjectFieldTemplateProps } from '@rjsf/core';
-import DropZone from './DropZone';
-import { useVerna } from '../context/VernaContextProvider';
+import DropZone from '../EditorFieldTemplate/DropZone';
+import { useVerna } from '../../providers/VernaProvider';
 
 export default function Section(props: ObjectFieldTemplateProps) {
   const { isEditor } = useVerna();

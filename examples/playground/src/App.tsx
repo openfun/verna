@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import type { JSONSchema7 } from 'json-schema';
 import type { UiSchema } from '@rjsf/core';
-import { VernaContextProvider } from '@openfun/verna';
+import VernaProvider, { Section, VernaJSONSchemaType } from '@openfun/verna';
 import FormWrapper from './FormWrapper';
 import TextWidget from './widgets/TextWidget';
 import PasswordWidget from './widgets/PasswordWidget';
@@ -11,15 +10,15 @@ import NumberWidget from './widgets/NumberWidget';
 import SelectWidget from './widgets/SelectWidget';
 
 function App() {
-  const schemaDefault: JSONSchema7 = {
+  const schemaDefault: VernaJSONSchemaType = {
     description: 'Desc registration form',
     properties: {
       section: {
         properties: {
           select: {
             description: 'description',
-            enum: ['aaaaaaa'],
-            title: 'TEST select',
+            enum: ['Item 1', 'Item 2', 'Item 3'],
+            title: 'Select items',
             type: 'string',
           },
         },
@@ -33,52 +32,37 @@ function App() {
   const formData = {};
 
   const widgets = {
-    SelectWidget: SelectWidget,
     numberWidget: NumberWidget,
     passwordWidget: PasswordWidget,
     quizWidget: QuizWidget,
+    selectWidget: SelectWidget,
     textWidget: TextWidget,
   };
 
   // TODO: Add management for ui:ObjectFieldTemplate saving
   const uiSchema: UiSchema = {
-    'ui:options': {
-      'ui:submitButtonOptions': {
-        submitText: 'Confirm Details',
-        norender: false,
-        props: {
-          disabled: false,
-          className: 'btn btn-info',
-        },
+    section: {
+      select: {
+        'ui:widget': 'selectWidget',
       },
+      // Need to found a clean fix so the ObjectFieldTemplate may be a string
+      'ui:ObjectFieldTemplate': Section,
+      'ui:order': ['select'],
     },
-    // section: {
-    //   select: {
-    //     'ui:widget': 'SelectWidget',
-    //   },
-    //   'ui:order': ['select'],
-    // },
-    // 'ui:submitButtonOptions': {
-    //   norender: true,
-    //   props: {
-    //     className: 'btn btn-info',
-    //     disabled: true,
-    //   },
-    //   submitText: 'Save',
-    // },
+    'ui:submitButtonOptions': {
+      // working in the next release
+      norender: true,
+      props: {
+        className: 'btn btn-info',
+        disabled: true,
+      },
+      submitText: 'Save',
+    },
   };
 
-  const configSchema: JSONSchema7 = {
+  const configSchema: VernaJSONSchemaType = {
     properties: {
-      NumberFieldWidget: {
-        properties: {
-          required: {
-            type: 'boolean',
-          },
-        },
-        type: 'object',
-      },
-      SelectWidget: {
+      CheckboxWidget: {
         properties: {
           items: {
             additionalItems: {
@@ -87,6 +71,41 @@ function App() {
             items: {
               type: 'string',
             },
+            minItems: 2,
+            type: 'array',
+          },
+          required: {
+            type: 'boolean',
+          },
+        },
+      },
+      CheckboxesWidget: {
+        properties: {
+          items: {
+            additionalItems: {
+              type: 'boolean',
+            },
+            items: {
+              type: 'string',
+            },
+            minItems: 2,
+            type: 'array',
+          },
+          required: {
+            type: 'boolean',
+          },
+        },
+      },
+      selectWidget: {
+        properties: {
+          enum: {
+            additionalItems: {
+              type: 'boolean',
+            },
+            items: {
+              type: 'string',
+            },
+            minItems: 2,
             type: 'array',
           },
           required: {
@@ -96,6 +115,20 @@ function App() {
       },
       TextareaWidget: {
         properties: {
+          required: {
+            type: 'boolean',
+          },
+        },
+        type: 'object',
+      },
+      numberWidget: {
+        properties: {
+          maximum: {
+            type: 'number',
+          },
+          minimum: {
+            type: 'number',
+          },
           required: {
             type: 'boolean',
           },
@@ -123,7 +156,7 @@ function App() {
 
   return (
     <div style={{ backgroundColor: 'lightgray' }}>
-      <VernaContextProvider
+      <VernaProvider
         configSchema={configSchema}
         defaultFormValues={formData}
         defaultSchema={schemaDefault}
@@ -132,7 +165,7 @@ function App() {
         isEditor={isEditor}
       >
         <FormWrapper toggleEditorMode={toggleEditorMode} />
-      </VernaContextProvider>
+      </VernaProvider>
     </div>
   );
 }

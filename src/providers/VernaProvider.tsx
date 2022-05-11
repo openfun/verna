@@ -7,15 +7,15 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import { JSONSchema7 } from 'json-schema';
 import type { ObjectFieldTemplateProps, ISubmitEvent, UiSchema, Widget } from '@rjsf/core';
+import { defaultObjectFieldTemplate, defaultVernaWidgets } from '../templates';
+import VernaJSONSchemaType from '../types/rjsf';
 import {
-  genDefaultUiSchema,
-  getDefaultValues,
+  cleanUiSchema,
+  getSelectedDefaultValues,
   getSelectedSchema,
   getSelectedUiSchema,
-} from './DataProcessingMethods';
-import { defaultObjectFieldTemplate, defaultVernaWidgets } from '../templates';
+} from '../utils/schema';
 
 function functionNotSet() {
   throw new Error('function context not set');
@@ -31,21 +31,21 @@ export interface ObjectFieldTemplateType {
 
 export interface VernaContextProps {
   objectFieldTemplate: ObjectFieldTemplateType;
-  configSchema?: JSONSchema7;
+  configSchema?: VernaJSONSchemaType;
   formData: unknown;
-  fullSchema: JSONSchema7;
+  fullSchema: VernaJSONSchemaType;
   fullUiSchema: UiSchema;
   handleSubmit: <FormData = unknown>(
     callback: (formData: unknown) => void,
   ) => (event: ISubmitEvent<FormData>, nativeEvent: FormEvent<HTMLFormElement>) => void;
   isEditor: boolean;
-  schema: JSONSchema7;
+  schema: VernaJSONSchemaType;
   selectedFormData: unknown;
   selector: string | undefined;
   setFormData: (newDefaultValues: unknown) => void;
-  setFullSchema: (newSchema: JSONSchema7) => void;
+  setFullSchema: (newSchema: VernaJSONSchemaType) => void;
   setFullUiSchema: (newUiSchema: UiSchema) => void;
-  setSchema: (newSchema: JSONSchema7) => void;
+  setSchema: (newSchema: VernaJSONSchemaType) => void;
   setSelector: (selector: string | undefined) => void;
   setUiSchema: (newUiSchema: UiSchema) => void;
   setWidgets: (newWidgets: WidgetsType) => void;
@@ -84,8 +84,8 @@ function useVerna() {
 }
 
 interface VernaContextProviderProps {
-  configSchema?: JSONSchema7;
-  defaultSchema: JSONSchema7;
+  configSchema?: VernaJSONSchemaType;
+  defaultSchema: VernaJSONSchemaType;
   defaultUiSchema: UiSchema;
   defaultFormValues?: any;
   defaultWidgets: WidgetsType;
@@ -94,7 +94,7 @@ interface VernaContextProviderProps {
   isEditor: boolean;
 }
 
-function VernaContextProvider({
+function VernaProvider({
   configSchema,
   defaultSchema,
   defaultUiSchema,
@@ -106,17 +106,19 @@ function VernaContextProvider({
   children,
 }: PropsWithChildren<VernaContextProviderProps>) {
   // The full schemas are not used by the lib itself but may be used for further implementation
-  const [fullSchema, setFullSchema] = useState<JSONSchema7>(defaultSchema);
+  const [fullSchema, setFullSchema] = useState<VernaJSONSchemaType>(defaultSchema);
   const [fullUiSchema, setFullUiSchema] = useState<UiSchema>(
-    genDefaultUiSchema(defaultSchema, defaultUiSchema),
+    cleanUiSchema(defaultSchema, defaultUiSchema),
   );
-  const [schema, _setSchema] = useState<JSONSchema7>(
+  const [schema, _setSchema] = useState<VernaJSONSchemaType>(
     getSelectedSchema(defaultSchema, defaultSelector),
   );
   const [uiSchema, _setUiSchema] = useState<UiSchema>(
     getSelectedUiSchema(defaultUiSchema, defaultSelector),
   );
-  const [formData, setFormData] = useState(getDefaultValues(defaultFormValues, defaultSelector));
+  const [formData, setFormData] = useState(
+    getSelectedDefaultValues(defaultFormValues, defaultSelector),
+  );
   const [widgets, setWidgets] = useState<WidgetsType>({
     ...defaultWidgets,
     ...defaultVernaWidgets,
@@ -124,7 +126,7 @@ function VernaContextProvider({
   const [selector, setSelector] = useState<string | undefined>(defaultSelector);
 
   // Schema and uiSchema target a part of fullSchema and fullUiSchema selected by the selector
-  function setSchema(newSchema: JSONSchema7) {
+  function setSchema(newSchema: VernaJSONSchemaType) {
     if (!selector) {
       setFullSchema(newSchema);
       return;
@@ -151,8 +153,8 @@ function VernaContextProvider({
 
   useEffect(() => {
     if (selector) {
-      if (fullSchema['properties']) setSchema(fullSchema['properties'][selector] as JSONSchema7);
-      if (fullUiSchema) setUiSchema(fullUiSchema[selector]);
+      setSchema(fullSchema.properties?.[selector] || {});
+      setUiSchema(fullUiSchema[selector]);
     } else {
       _setSchema(fullSchema);
       _setUiSchema(fullUiSchema);
@@ -202,7 +204,7 @@ function VernaContextProvider({
   );
 }
 
-VernaContextProvider.defaultProps = {
+VernaProvider.defaultProps = {
   defaultSchema: {},
   defaultUiSchema: {},
   defaultValues: {},
@@ -211,4 +213,5 @@ VernaContextProvider.defaultProps = {
   objectFieldTemplate: {},
 };
 
-export { VernaContextProvider, useVerna };
+export default VernaProvider;
+export { useVerna };
