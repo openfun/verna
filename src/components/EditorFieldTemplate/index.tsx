@@ -8,13 +8,21 @@ import { useVerna } from '../../providers/VernaProvider';
 import { addWidget, addSection } from '../../utils/schema';
 import WidgetPropertiesForm from '../WidgetPropertiesForm';
 import { removeSection, removeWidget } from '../../utils/schema';
+import { defineMessages, FormattedMessage } from 'react-intl';
+
+const messages = defineMessages({
+  parameters: {
+    defaultMessage: 'Parameters',
+    description: 'Label of the button to display the widget properties form',
+    id: 'components.EditorFieldTemplate.parameters',
+  },
+});
 
 /**
  * This component wraps each form fields.
  * Its purpose here is to add edition capabilities to every of those
  * when editor mode is enabled.
  */
-
 export default function EditorFieldTemplate(props: FieldTemplateProps) {
   const { id, schema, children } = props;
   const [isEditing, setIsEditing] = useState(false);
@@ -24,6 +32,7 @@ export default function EditorFieldTemplate(props: FieldTemplateProps) {
   const isSection = path.length === 2 && !verna.selector;
   const ownProperties = Object.keys(schema.properties || {}).length > 0;
   const canAddField = schema.type !== 'object';
+
   const canAddSection = isSection && !isRoot && !verna.selector;
 
   function addItem(widgetProps?: ShowCaseWidgetProps) {
@@ -38,7 +47,9 @@ export default function EditorFieldTemplate(props: FieldTemplateProps) {
       {children}
       {!isSection && (!isRoot || verna.selector) && (
         <>
-          <button onClick={() => setIsEditing(!isEditing)}> Edit </button>
+          <button onClick={() => setIsEditing(!isEditing)}>
+            <FormattedMessage {...messages.parameters} />
+          </button>
           {isEditing && <WidgetPropertiesForm id={id} onClose={() => setIsEditing(false)} />}
           <DropZone id={id} />
         </>

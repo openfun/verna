@@ -15,7 +15,7 @@ describe('VernaForm', () => {
 
   it('should render a basic form', async () => {
     render(
-      <VernaProvider isEditor defaultSchema={getSchemaDefault()}>
+      <VernaProvider isEditor defaultSchema={getSchemaDefault()} locale="en">
         <VernaForm />
       </VernaProvider>,
     );
@@ -36,7 +36,7 @@ describe('VernaForm', () => {
 
   it('should be able to add or remove sections and fields', async () => {
     render(
-      <VernaProvider isEditor defaultSchema={getSchemaDefault()}>
+      <VernaProvider isEditor defaultSchema={getSchemaDefault()} locale="en">
         <VernaForm />
       </VernaProvider>,
     );
@@ -94,7 +94,12 @@ describe('VernaForm', () => {
 
   it('should use selector parameter to query sub schema and render it', async () => {
     render(
-      <VernaProvider isEditor defaultSchema={getSchemaDefault()} defaultSelector="testSection">
+      <VernaProvider
+        isEditor
+        defaultSchema={getSchemaDefault()}
+        defaultSelector="testSection"
+        locale="en"
+      >
         <VernaForm />
       </VernaProvider>,
     );
@@ -116,7 +121,12 @@ describe('VernaForm', () => {
 
   it('should use a selector to query sub schema and add or remove fields on it', async () => {
     render(
-      <VernaProvider isEditor defaultSchema={getSchemaDefault()} defaultSelector="testSection">
+      <VernaProvider
+        isEditor
+        defaultSchema={getSchemaDefault()}
+        defaultSelector="testSection"
+        locale="en"
+      >
         <VernaForm />
       </VernaProvider>,
     );
@@ -148,7 +158,7 @@ describe('VernaForm', () => {
 
   it('should not render add functionalities if isEditor is false', async () => {
     render(
-      <VernaProvider defaultSchema={getSchemaDefault()}>
+      <VernaProvider defaultSchema={getSchemaDefault()} locale="en">
         <VernaForm />
       </VernaProvider>,
     );

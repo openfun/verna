@@ -8,7 +8,7 @@ interface VernaFormProperties {
 }
 
 function VernaForm({ onSubmit }: VernaFormProperties) {
-  const { schema, uiSchema, widgets, selectedFormData, handleSubmit, isEditor, transformErrors } =
+  const { handleSubmit, schema, selectedFormData, transformErrors, uiSchema, widgets, isEditor } =
     useVerna();
 
   return (

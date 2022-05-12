@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Add language management feature
 - Rework playground widgets template
 - Functionality to customize error messages
 - Functionality to customize widget options

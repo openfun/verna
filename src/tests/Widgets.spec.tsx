@@ -16,6 +16,7 @@ describe('widget properties edition', () => {
         defaultSchema={getCustomSchemaDefault()}
         defaultUiSchema={getUiSchemaDefault()}
         defaultWidgets={getWidgets()}
+        locale="en"
       >
         <VernaForm />
       </VernaProvider>,
@@ -37,14 +38,15 @@ describe('widget properties edition', () => {
         defaultSchema={getCustomSchemaDefault()}
         defaultUiSchema={getUiSchemaDefault()}
         defaultWidgets={getWidgets()}
+        locale="en"
       >
         <VernaForm />
       </VernaProvider>,
     );
 
-    // Open edit options
-    screen.getByRole('button', { name: 'Edit' }).click();
-    screen.getByRole('group', { name: 'enum' });
+    // Open parameters
+    screen.getByRole('button', { name: 'Parameters' }).click();
+    screen.getByRole('group', { name: 'Options' });
 
     // Check required checkbox
     screen.getByRole('checkbox', { name: 'required' }).click();
@@ -54,20 +56,20 @@ describe('widget properties edition', () => {
     screen.getByRole('button', { name: 'Add' }).click();
 
     // Set the value of the new field
-    const $newInputs = screen.getAllByRole('textbox', { name: '' });
+    const $newInputs = screen.getAllByRole('textbox', {});
     fireEvent.change($newInputs[0], { target: { value: 'newChoice1' } });
     fireEvent.change($newInputs[1], { target: { value: 'newChoice2' } });
 
     // Save parameters
-    screen.getAllByRole('button', { name: 'Submit' })[0].click();
+    screen.getAllByRole('button', { name: 'save' })[0].click();
 
-    // Open edit options again
-    screen.getByRole('button', { name: 'Edit' }).click();
+    // Open parameters again
+    screen.getByRole('button', { name: 'Parameters' }).click();
 
     // Check that the previous options are updated correctly
     // Nb: those options are not cached, it's checking defaultSchema & defaultUiSchema
     //     on each opening
-    const $inputs = screen.getAllByRole('textbox', { name: '' });
+    const $inputs = screen.getAllByRole('textbox', {});
     expect($inputs[0]).toHaveValue('newChoice1');
     expect($inputs[1]).toHaveValue('newChoice2');
   });
