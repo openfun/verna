@@ -19,7 +19,7 @@ function App() {
       section: {
         properties: {
           select: {
-            description: 'description',
+            description: 'SELECT DESCRIPTION',
             enum: ['Item 1', 'Item 2', 'Item 3'],
             title: 'Select items',
             type: 'string',
@@ -158,6 +158,8 @@ function App() {
 
   const toggleEditorMode = () => setIsEditor(!isEditor);
 
+  const locale = navigator.language.split(/[-_]/)[0];
+
   return (
     <div style={{ backgroundColor: 'lightgray' }}>
       <VernaProvider
@@ -167,6 +169,7 @@ function App() {
         defaultUiSchema={uiSchema}
         defaultWidgets={widgets}
         isEditor={isEditor}
+        locale={locale}
         transformErrors={transformErrors}
       >
         <FormWrapper toggleEditorMode={toggleEditorMode} />

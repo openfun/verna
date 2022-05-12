@@ -7,6 +7,7 @@ import React, {
   useMemo,
   useState,
 } from 'react';
+import { IntlProvider, type ResolvedIntlConfig } from 'react-intl';
 import type {
   ObjectFieldTemplateProps,
   ISubmitEvent,
@@ -97,8 +98,11 @@ interface VernaProviderProps extends Pick<FormProps<unknown>, 'transformErrors'>
   defaultFormValues?: any;
   defaultWidgets: WidgetsType;
   objectFieldTemplate: ObjectFieldTemplateType;
+  defaultLocale?: string;
   defaultSelector?: string;
   isEditor: boolean;
+  locale: string;
+  translations?: { [locale: string]: ResolvedIntlConfig['messages'] };
 }
 
 function VernaProvider({
@@ -109,9 +113,12 @@ function VernaProvider({
   defaultFormValues,
   defaultWidgets,
   objectFieldTemplate,
+  defaultLocale = 'en',
   defaultSelector,
   isEditor,
+  locale,
   transformErrors,
+  translations,
 }: PropsWithChildren<VernaProviderProps>) {
   // Both fullSchema & fullUiSchema are not used by the lib itself but may be
   // used for further implementation
@@ -186,32 +193,34 @@ function VernaProvider({
   }
 
   return (
-    <VernaContext.Provider
-      value={{
-        configSchema,
-        formData,
-        fullSchema,
-        fullUiSchema,
-        handleSubmit,
-        isEditor,
-        objectFieldTemplate: { ...defaultObjectFieldTemplate, ...objectFieldTemplate },
-        schema,
-        selectedFormData,
-        selector,
-        setFormData,
-        setFullSchema,
-        setFullUiSchema,
-        setSchema,
-        setSelector,
-        setUiSchema,
-        setWidgets,
-        transformErrors,
-        uiSchema,
-        widgets,
-      }}
-    >
-      {children}
-    </VernaContext.Provider>
+    <IntlProvider defaultLocale={defaultLocale} locale={locale} messages={translations?.[locale]}>
+      <VernaContext.Provider
+        value={{
+          configSchema,
+          formData,
+          fullSchema,
+          fullUiSchema,
+          handleSubmit,
+          isEditor,
+          objectFieldTemplate: { ...defaultObjectFieldTemplate, ...objectFieldTemplate },
+          schema,
+          selectedFormData,
+          selector,
+          setFormData,
+          setFullSchema,
+          setFullUiSchema,
+          setSchema,
+          setSelector,
+          setUiSchema,
+          setWidgets,
+          transformErrors,
+          uiSchema,
+          widgets,
+        }}
+      >
+        {children}
+      </VernaContext.Provider>
+    </IntlProvider>
   );
 }
 
