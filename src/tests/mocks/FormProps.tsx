@@ -41,19 +41,19 @@ const getCustomSchemaDefault = (): VernaJSONSchemaType => ({
 const getUiSchemaDefault = (): UiSchema => ({
   testSection: {
     select: {
-      'ui:widget': 'SelectWidget',
+      'ui:widget': 'selectWidget',
     },
     'ui:order': ['select'],
   },
 });
 
 const getWidgets = () => ({
-  SelectWidget: SelectWidget,
+  selectWidget: SelectWidget,
 });
 
 const getWidgetConf = (): VernaJSONSchemaType => ({
   properties: {
-    SelectWidget: {
+    selectWidget: {
       properties: {
         enum: {
           additionalItems: {

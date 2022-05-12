@@ -1,11 +1,11 @@
 import Form, { type ISubmitEvent, type UiSchema } from '@rjsf/core';
 import { useVerna } from '../../providers/VernaProvider';
-import { FormEvent } from 'react';
+import { FormEvent, useMemo } from 'react';
 import { getUiWidgetName } from '../../utils/utils';
 import { RJSF_ID_SEPARATOR } from '../../settings';
 import type VernaJSONSchemaType from '../../types/rjsf';
 import { Properties, updateWidgetProperties } from '../../utils/schema';
-
+import { useIntl } from 'react-intl';
 interface WidgetPropertiesFormProps {
   onClose: () => void;
   id: string;
@@ -18,6 +18,7 @@ interface WidgetPropertiesFormProps {
  */
 export default function WidgetPropertiesForm({ id, onClose }: WidgetPropertiesFormProps) {
   const verna = useVerna();
+  const { formatMessage } = useIntl();
   const templateName = getUiWidgetName(id, verna.uiSchema);
 
   function handleSubmit(event: ISubmitEvent<unknown>, nativeEvent: FormEvent<HTMLFormElement>) {
@@ -27,6 +28,18 @@ export default function WidgetPropertiesForm({ id, onClose }: WidgetPropertiesFo
     return false;
   }
 
+  const schema = useMemo(() => {
+    const translatedSchema =
+      verna.configSchema?.properties?.[templateName] || ({} as VernaJSONSchemaType);
+
+    if (translatedSchema.properties) {
+      for (const [key, value] of Object.entries(translatedSchema.properties)) {
+        value.title = formatMessage({ id: key });
+      }
+    }
+    return translatedSchema;
+  }, [verna.configSchema?.properties?.[templateName]]);
+
   const uiSchema: UiSchema = {
     SelectWidget: {
       items: {
@@ -35,6 +48,13 @@ export default function WidgetPropertiesForm({ id, onClose }: WidgetPropertiesFo
           orderable: true,
         },
       },
+    },
+    'ui:submitButtonOptions': {
+      norender: false,
+      props: {
+        className: 'btn btn-save-parameters',
+      },
+      submitText: formatMessage({ id: 'saveParameters' }),
     },
   };
 
@@ -63,7 +83,7 @@ export default function WidgetPropertiesForm({ id, onClose }: WidgetPropertiesFo
       formData={getDefaultValues()}
       idSeparator={RJSF_ID_SEPARATOR}
       onSubmit={handleSubmit}
-      schema={verna.configSchema?.properties?.[templateName] || {}}
+      schema={schema}
       showErrorList={false}
       uiSchema={uiSchema}
     />

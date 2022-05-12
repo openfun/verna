@@ -16,6 +16,7 @@ import {
   getSelectedSchema,
   getSelectedUiSchema,
 } from '../utils/schema';
+import type { MessageFormatElement } from '@formatjs/icu-messageformat-parser';
 
 function functionNotSet() {
   throw new Error('function context not set');
@@ -49,6 +50,7 @@ export interface VernaContextProps {
   setSelector: (selector: string | undefined) => void;
   setUiSchema: (newUiSchema: UiSchema) => void;
   setWidgets: (newWidgets: WidgetsType) => void;
+  translations?: Record<MessageIds, string> | Record<MessageIds, MessageFormatElement[]>;
   uiSchema: UiSchema;
   widgets: WidgetsType;
 }
@@ -71,6 +73,7 @@ const VernaContext = createContext<VernaContextProps>({
   setSelector: () => functionNotSet(),
   setUiSchema: () => functionNotSet(),
   setWidgets: () => functionNotSet(),
+  translations: {},
   uiSchema: {},
   widgets: {},
 });
@@ -83,6 +86,16 @@ function useVerna() {
   return context;
 }
 
+namespace FormatjsIntl {
+  export interface Message {}
+}
+
+declare type MessageIds = FormatjsIntl.Message extends {
+  ids: string;
+}
+  ? FormatjsIntl.Message['ids']
+  : string;
+
 interface VernaContextProviderProps {
   configSchema?: VernaJSONSchemaType;
   defaultSchema: VernaJSONSchemaType;
@@ -92,6 +105,7 @@ interface VernaContextProviderProps {
   objectFieldTemplate: ObjectFieldTemplateType;
   defaultSelector?: string;
   isEditor: boolean;
+  translations?: Record<MessageIds, string> | Record<MessageIds, MessageFormatElement[]>;
 }
 
 function VernaProvider({
@@ -104,6 +118,7 @@ function VernaProvider({
   defaultSelector,
   isEditor,
   children,
+  translations,
 }: PropsWithChildren<VernaContextProviderProps>) {
   // The full schemas are not used by the lib itself but may be used for further implementation
   const [fullSchema, setFullSchema] = useState<VernaJSONSchemaType>(defaultSchema);
@@ -195,6 +210,7 @@ function VernaProvider({
         setSelector,
         setUiSchema,
         setWidgets,
+        translations,
         uiSchema,
         widgets,
       }}

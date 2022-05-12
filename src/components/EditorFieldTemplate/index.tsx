@@ -8,6 +8,7 @@ import { useVerna } from '../../providers/VernaProvider';
 import { addWidget, addSection } from '../../utils/schema';
 import WidgetPropertiesForm from '../WidgetParametersForm';
 import { removeSection, removeWidget } from '../../utils/schema';
+import { FormattedMessage } from 'react-intl';
 
 /**
  * This component wraps each form fields.
@@ -38,7 +39,9 @@ export default function EditorFieldTemplate(props: FieldTemplateProps) {
       {children}
       {!isSection && (!isRoot || verna.selector) && (
         <>
-          <button onClick={() => setIsEditing(!isEditing)}> Edit </button>
+          <button onClick={() => setIsEditing(!isEditing)}>
+            <FormattedMessage defaultMessage="Parameters" id="widgetParameters" />
+          </button>
           {isEditing && <WidgetPropertiesForm id={id} onClose={() => setIsEditing(false)} />}
           <DropZone id={id} />
         </>
