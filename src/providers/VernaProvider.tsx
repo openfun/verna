@@ -7,7 +7,13 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import type { ObjectFieldTemplateProps, ISubmitEvent, UiSchema, Widget } from '@rjsf/core';
+import type {
+  ObjectFieldTemplateProps,
+  ISubmitEvent,
+  UiSchema,
+  Widget,
+  FormProps,
+} from '@rjsf/core';
 import { defaultObjectFieldTemplate, defaultVernaWidgets } from '../templates';
 import VernaJSONSchemaType from '../types/rjsf';
 import {
@@ -29,7 +35,7 @@ export interface ObjectFieldTemplateType {
   [name: string]: React.FunctionComponent<ObjectFieldTemplateProps>;
 }
 
-export interface VernaContextProps {
+export interface VernaContextProps extends Pick<FormProps<unknown>, 'transformErrors'> {
   objectFieldTemplate: ObjectFieldTemplateType;
   configSchema?: VernaJSONSchemaType;
   formData: unknown;
@@ -71,6 +77,7 @@ const VernaContext = createContext<VernaContextProps>({
   setSelector: () => functionNotSet(),
   setUiSchema: () => functionNotSet(),
   setWidgets: () => functionNotSet(),
+  transformErrors: undefined,
   uiSchema: {},
   widgets: {},
 });
@@ -83,7 +90,7 @@ function useVerna() {
   return context;
 }
 
-interface VernaContextProviderProps {
+interface VernaProviderProps extends Pick<FormProps<unknown>, 'transformErrors'> {
   configSchema?: VernaJSONSchemaType;
   defaultSchema: VernaJSONSchemaType;
   defaultUiSchema: UiSchema;
@@ -96,6 +103,7 @@ interface VernaContextProviderProps {
 
 function VernaProvider({
   configSchema,
+  children,
   defaultSchema,
   defaultUiSchema,
   defaultFormValues,
@@ -103,13 +111,15 @@ function VernaProvider({
   objectFieldTemplate,
   defaultSelector,
   isEditor,
-  children,
-}: PropsWithChildren<VernaContextProviderProps>) {
-  // The full schemas are not used by the lib itself but may be used for further implementation
+  transformErrors,
+}: PropsWithChildren<VernaProviderProps>) {
+  // Both fullSchema & fullUiSchema are not used by the lib itself but may be
+  // used for further implementation
   const [fullSchema, setFullSchema] = useState<VernaJSONSchemaType>(defaultSchema);
   const [fullUiSchema, setFullUiSchema] = useState<UiSchema>(
     cleanUiSchema(defaultSchema, defaultUiSchema),
   );
+
   const [schema, _setSchema] = useState<VernaJSONSchemaType>(
     getSelectedSchema(defaultSchema, defaultSelector),
   );
@@ -195,6 +205,7 @@ function VernaProvider({
         setSelector,
         setUiSchema,
         setWidgets,
+        transformErrors,
         uiSchema,
         widgets,
       }}

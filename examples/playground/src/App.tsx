@@ -8,6 +8,7 @@ import QuizWidget from './widgets/QuizWidget';
 import './styles/verna.scss';
 import NumberWidget from './widgets/NumberWidget';
 import SelectWidget from './widgets/SelectWidget';
+import transformErrors from './ErrorCustom';
 
 function App() {
   const schemaDefault: VernaJSONSchemaType = {
@@ -51,10 +52,10 @@ function App() {
     },
     'ui:submitButtonOptions': {
       // working in the next release
-      norender: true,
+      norender: false,
       props: {
         className: 'btn btn-info',
-        disabled: true,
+        disabled: false,
       },
       submitText: 'Save',
     },
@@ -96,23 +97,6 @@ function App() {
           },
         },
       },
-      selectWidget: {
-        properties: {
-          enum: {
-            additionalItems: {
-              type: 'boolean',
-            },
-            items: {
-              type: 'string',
-            },
-            minItems: 2,
-            type: 'array',
-          },
-          required: {
-            type: 'boolean',
-          },
-        },
-      },
       TextareaWidget: {
         properties: {
           required: {
@@ -134,6 +118,23 @@ function App() {
           },
         },
         type: 'object',
+      },
+      selectWidget: {
+        properties: {
+          enum: {
+            additionalItems: {
+              type: 'boolean',
+            },
+            items: {
+              type: 'string',
+            },
+            minItems: 2,
+            type: 'array',
+          },
+          required: {
+            type: 'boolean',
+          },
+        },
       },
       textWidget: {
         properties: {
@@ -163,6 +164,7 @@ function App() {
         defaultUiSchema={uiSchema}
         defaultWidgets={widgets}
         isEditor={isEditor}
+        transformErrors={transformErrors}
       >
         <FormWrapper toggleEditorMode={toggleEditorMode} />
       </VernaProvider>
