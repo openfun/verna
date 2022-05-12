@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Add language management feature
 - Functionality to customize widget options
 - Functionality to drag and drop custom widgets
 - Functionality to select and display only a section of the schema

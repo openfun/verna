@@ -51,7 +51,7 @@ function App() {
     },
     'ui:submitButtonOptions': {
       // working in the next release
-      norender: true,
+      norender: false,
       props: {
         className: 'btn btn-info',
         disabled: true,
@@ -154,6 +154,17 @@ function App() {
 
   const toggleEditorMode = () => setIsEditor(!isEditor);
 
+  const frenchTranslations = {
+    enum: 'Options',
+    maxLength: 'Longueur maximum',
+    maximum: 'maximum',
+    minLength: 'Longueur minimum',
+    minimum: 'minimum',
+    required: 'requis',
+    saveParameters: 'Valider',
+    widgetParameters: 'Paramètres',
+  };
+
   return (
     <div style={{ backgroundColor: 'lightgray' }}>
       <VernaProvider
@@ -163,6 +174,7 @@ function App() {
         defaultUiSchema={uiSchema}
         defaultWidgets={widgets}
         isEditor={isEditor}
+        translations={frenchTranslations}
       >
         <FormWrapper toggleEditorMode={toggleEditorMode} />
       </VernaProvider>

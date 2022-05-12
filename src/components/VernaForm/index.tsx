@@ -1,5 +1,6 @@
-import Form from '@rjsf/core';
+import { IntlProvider } from 'react-intl';
 import { useVerna } from '../../providers/VernaProvider';
+import Form from '@rjsf/core';
 import EditorFieldTemplate from '../EditorFieldTemplate';
 import { RJSF_ID_SEPARATOR } from '../../settings';
 
@@ -8,23 +9,26 @@ interface VernaFormProperties {
 }
 
 function VernaForm({ onSubmit }: VernaFormProperties) {
-  const { schema, uiSchema, widgets, selectedFormData, handleSubmit, isEditor } = useVerna();
+  const { schema, uiSchema, widgets, selectedFormData, handleSubmit, isEditor, translations } =
+    useVerna();
 
   return (
-    <Form
-      FieldTemplate={EditorFieldTemplate}
-      className="form"
-      disabled={isEditor}
-      formData={selectedFormData}
-      idSeparator={RJSF_ID_SEPARATOR}
-      liveValidate={!isEditor}
-      onSubmit={handleSubmit(onSubmit)}
-      schema={schema}
-      showErrorList={false}
-      tagName={isEditor ? 'div' : undefined}
-      uiSchema={uiSchema}
-      widgets={widgets}
-    />
+    <IntlProvider defaultLocale="fr" locale="fr" messages={translations}>
+      <Form
+        FieldTemplate={EditorFieldTemplate}
+        className="form"
+        disabled={isEditor}
+        formData={selectedFormData}
+        idSeparator={RJSF_ID_SEPARATOR}
+        liveValidate={!isEditor}
+        onSubmit={handleSubmit(onSubmit)}
+        schema={schema}
+        showErrorList={false}
+        tagName={isEditor ? 'div' : undefined}
+        uiSchema={uiSchema}
+        widgets={widgets}
+      />
+    </IntlProvider>
   );
 }
 
