@@ -51,7 +51,6 @@ function App() {
       'ui:order': ['select'],
     },
     'ui:submitButtonOptions': {
-      // working in the next release
       norender: false,
       props: {
         className: 'btn btn-info',
