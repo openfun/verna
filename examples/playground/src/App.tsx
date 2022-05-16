@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { UiSchema } from '@rjsf/core';
-import VernaProvider, { Section, VernaJSONSchemaType } from '@openfun/verna';
+import { VernaProvider, Section, VernaJSONSchemaType } from '@openfun/verna';
 import FormWrapper from './FormWrapper';
 import TextWidget from './widgets/TextWidget';
 import PasswordWidget from './widgets/PasswordWidget';

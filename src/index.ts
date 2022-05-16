@@ -4,6 +4,5 @@ import VernaToolbar from './components/VernaToolbar';
 import type VernaJSONSchemaType from './types/rjsf';
 import Section from './components/Fields/Section';
 
-export default VernaProvider;
-export { VernaForm, useVerna, VernaToolbar, Section };
+export { VernaForm, VernaProvider, useVerna, VernaToolbar, Section };
 export type { VernaJSONSchemaType };

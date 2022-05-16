@@ -5,12 +5,11 @@ import typescript from '@rollup/plugin-typescript';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
   build: {
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
-      name: 'index',
       fileName: (format) => `verna.${format}.js`,
+      name: 'index',
     },
     rollupOptions: {
       external: ['react'],
@@ -21,15 +20,16 @@ export default defineConfig({
       },
       plugins: [
         typescript({
-          target: 'ESNext',
-          rootDir: resolve(__dirname, './src'),
+          allowSyntheticDefaultImports: true,
           declaration: true,
           declarationDir: resolve(__dirname, './dist/types'),
           exclude: resolve(__dirname, './node_modules/**'),
-          allowSyntheticDefaultImports: true,
           noEmitOnError: true,
+          rootDir: resolve(__dirname, './src'),
+          target: 'ESNext',
         }),
       ],
     },
   },
+  plugins: [react()],
 });
