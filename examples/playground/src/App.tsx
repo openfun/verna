@@ -17,8 +17,12 @@ function App() {
         properties: {
           select: {
             description: 'SELECT DESCRIPTION',
-            enum: ['Item 1', 'Item 2', 'Item 3'],
-            title: 'Select items',
+            enum: [
+              'root_section_select_enum_1',
+              'root_section_select_enum_2',
+              'root_section_select_enum_3',
+            ],
+            title: 'root_section_select_title',
             type: 'string',
           },
         },
@@ -197,6 +201,10 @@ function App() {
       required: 'required',
       saveParameters: 'save',
       widgetParameters: 'parameters',
+      root_section_select_enum_1: 'EN 1',
+      root_section_select_enum_2: 'EN 2',
+      root_section_select_enum_3: 'EN 3',
+      root_section_select_title: 'EN Title',
     },
     fr: {
       enum: 'Options',
@@ -207,6 +215,10 @@ function App() {
       required: 'requis',
       saveParameters: 'Valider',
       widgetParameters: 'Paramètres',
+      root_section_select_enum_1: 'FR 1',
+      root_section_select_enum_2: 'FR 2',
+      root_section_select_enum_3: 'FR 3',
+      root_section_select_title: 'FR Title',
     },
   };
 

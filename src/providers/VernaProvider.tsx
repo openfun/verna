@@ -17,7 +17,6 @@ import {
   getSelectedSchema,
   getSelectedUiSchema,
 } from '../utils/schema';
-import { IntlConfig } from 'react-intl/src/types';
 
 function functionNotSet() {
   throw new Error('function context not set');

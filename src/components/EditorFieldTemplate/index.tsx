@@ -9,13 +9,13 @@ import { addWidget, addSection } from '../../utils/schema';
 import WidgetPropertiesForm from '../WidgetPropertiesForm';
 import { removeSection, removeWidget } from '../../utils/schema';
 import { FormattedMessage } from 'react-intl';
+import translateWidget from '../../utils/translation';
 
 /**
  * This component wraps each form fields.
  * Its purpose here is to add edition capabilities to every of those
  * when editor mode is enabled.
  */
-
 export default function EditorFieldTemplate(props: FieldTemplateProps) {
   const { id, schema, children } = props;
   const [isEditing, setIsEditing] = useState(false);
@@ -26,17 +26,21 @@ export default function EditorFieldTemplate(props: FieldTemplateProps) {
   const ownProperties = Object.keys(schema.properties || {}).length > 0;
   const canAddField = schema.type !== 'object';
   const canAddSection = isSection && !isRoot && !verna.selector;
+  let widget = children;
 
   function addItem(widgetProps?: ShowCaseWidgetProps) {
     const newKey = makeid(10);
     addWidget(newKey, id, verna, widgetProps);
   }
 
-  if (!verna.isEditor) return children;
+  console.log(widget);
+  widget = translateWidget(widget);
+
+  if (!verna.isEditor) return widget;
 
   return (
     <div>
-      {children}
+      {widget}
       {!isSection && (!isRoot || verna.selector) && (
         <>
           <button onClick={() => setIsEditing(!isEditing)}>

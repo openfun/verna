@@ -21,7 +21,7 @@ function VernaForm({ onSubmit }: VernaFormProperties) {
   } = useVerna();
 
   return (
-    <IntlProvider defaultLocale="fr" locale={language} messages={translations?.[language]}>
+    <IntlProvider locale={language} messages={translations?.[language]}>
       <Form
         FieldTemplate={EditorFieldTemplate}
         className="form"
