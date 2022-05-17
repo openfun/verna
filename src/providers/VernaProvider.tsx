@@ -7,6 +7,7 @@ import React, {
   useMemo,
   useState,
 } from 'react';
+import type { ResolvedIntlConfig } from 'react-intl';
 import type { ObjectFieldTemplateProps, ISubmitEvent, UiSchema, Widget } from '@rjsf/core';
 import { defaultObjectFieldTemplate, defaultVernaWidgets } from '../templates';
 import VernaJSONSchemaType from '../types/rjsf';
@@ -16,7 +17,7 @@ import {
   getSelectedSchema,
   getSelectedUiSchema,
 } from '../utils/schema';
-import type { MessageFormatElement } from '@formatjs/icu-messageformat-parser';
+import { IntlConfig } from 'react-intl/src/types';
 
 function functionNotSet() {
   throw new Error('function context not set');
@@ -40,6 +41,7 @@ export interface VernaContextProps {
     callback: (formData: unknown) => void,
   ) => (event: ISubmitEvent<FormData>, nativeEvent: FormEvent<HTMLFormElement>) => void;
   isEditor: boolean;
+  language: string;
   schema: VernaJSONSchemaType;
   selectedFormData: unknown;
   selector: string | undefined;
@@ -50,7 +52,7 @@ export interface VernaContextProps {
   setSelector: (selector: string | undefined) => void;
   setUiSchema: (newUiSchema: UiSchema) => void;
   setWidgets: (newWidgets: WidgetsType) => void;
-  translations?: Record<MessageIds, string> | Record<MessageIds, MessageFormatElement[]>;
+  translations: ResolvedIntlConfig['messages'];
   uiSchema: UiSchema;
   widgets: WidgetsType;
 }
@@ -62,6 +64,7 @@ const VernaContext = createContext<VernaContextProps>({
   fullUiSchema: {},
   handleSubmit: () => () => functionNotSet(),
   isEditor: false,
+  language: '',
   objectFieldTemplate: {},
   schema: {},
   selectedFormData: {},
@@ -86,16 +89,6 @@ function useVerna() {
   return context;
 }
 
-namespace FormatjsIntl {
-  export interface Message {}
-}
-
-declare type MessageIds = FormatjsIntl.Message extends {
-  ids: string;
-}
-  ? FormatjsIntl.Message['ids']
-  : string;
-
 interface VernaContextProviderProps {
   configSchema?: VernaJSONSchemaType;
   defaultSchema: VernaJSONSchemaType;
@@ -105,7 +98,8 @@ interface VernaContextProviderProps {
   objectFieldTemplate: ObjectFieldTemplateType;
   defaultSelector?: string;
   isEditor: boolean;
-  translations?: Record<MessageIds, string> | Record<MessageIds, MessageFormatElement[]>;
+  language: string;
+  translations: ResolvedIntlConfig['messages'];
 }
 
 function VernaProvider({
@@ -116,6 +110,7 @@ function VernaProvider({
   defaultWidgets,
   objectFieldTemplate,
   defaultSelector,
+  language,
   isEditor,
   children,
   translations,
@@ -199,6 +194,7 @@ function VernaProvider({
         fullUiSchema,
         handleSubmit,
         isEditor,
+        language,
         objectFieldTemplate: { ...defaultObjectFieldTemplate, ...objectFieldTemplate },
         schema,
         selectedFormData,

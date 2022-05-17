@@ -16,7 +16,7 @@ function App() {
       section: {
         properties: {
           select: {
-            description: 'description',
+            description: 'SELECT DESCRIPTION',
             enum: ['Item 1', 'Item 2', 'Item 3'],
             title: 'Select items',
             type: 'string',
@@ -28,6 +28,15 @@ function App() {
     title: 'A registration form',
     type: 'object',
   };
+
+  // const translations = {
+  //   'EN-gb': {
+  //     root_section_select_title: 'title in english',
+  //   },
+  //   'FR-fr': {
+  //     root_section_select_title: 'titre en francais',
+  //   },
+  // };
 
   const formData = {};
 
@@ -154,15 +163,51 @@ function App() {
 
   const toggleEditorMode = () => setIsEditor(!isEditor);
 
-  const frenchTranslations = {
-    enum: 'Options',
-    maxLength: 'Longueur maximum',
-    maximum: 'maximum',
-    minLength: 'Longueur minimum',
-    minimum: 'minimum',
-    required: 'requis',
-    saveParameters: 'Valider',
-    widgetParameters: 'Paramètres',
+  const language = navigator.language.split(/[-_]/)[0];
+
+  // const translations = {
+  //   en: {
+  //     enum: 'Options',
+  //     maxLength: 'maximum length',
+  //     maximum: 'maximum',
+  //     minLength: 'minimum length',
+  //     minimum: 'minimum',
+  //     required: 'required',
+  //     saveParameters: 'save',
+  //     widgetParameters: 'parameters',
+  //   },
+  //   fr: {
+  //     enum: 'Options',
+  //     maxLength: 'Longueur maximum',
+  //     maximum: 'maximum',
+  //     minLength: 'Longueur minimum',
+  //     minimum: 'minimum',
+  //     required: 'requis',
+  //     saveParameters: 'Valider',
+  //     widgetParameters: 'Paramètres',
+  //   },
+  // };
+  const translations = {
+    en: {
+      enum: 'Options',
+      maxLength: 'maximum length',
+      maximum: 'maximum',
+      minLength: 'minimum length',
+      minimum: 'minimum',
+      required: 'required',
+      saveParameters: 'save',
+      widgetParameters: 'parameters',
+    },
+    fr: {
+      enum: 'Options',
+      maxLength: 'Longueur maximum',
+      maximum: 'maximum',
+      minLength: 'Longueur minimum',
+      minimum: 'minimum',
+      required: 'requis',
+      saveParameters: 'Valider',
+      widgetParameters: 'Paramètres',
+    },
   };
 
   return (
@@ -174,7 +219,8 @@ function App() {
         defaultUiSchema={uiSchema}
         defaultWidgets={widgets}
         isEditor={isEditor}
-        translations={frenchTranslations}
+        language={language}
+        translations={translations}
       >
         <FormWrapper toggleEditorMode={toggleEditorMode} />
       </VernaProvider>

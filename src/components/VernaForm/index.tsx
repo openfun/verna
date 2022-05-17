@@ -9,11 +9,19 @@ interface VernaFormProperties {
 }
 
 function VernaForm({ onSubmit }: VernaFormProperties) {
-  const { schema, uiSchema, widgets, selectedFormData, handleSubmit, isEditor, translations } =
-    useVerna();
+  const {
+    schema,
+    uiSchema,
+    widgets,
+    selectedFormData,
+    handleSubmit,
+    isEditor,
+    translations,
+    language,
+  } = useVerna();
 
   return (
-    <IntlProvider defaultLocale="fr" locale="fr" messages={translations}>
+    <IntlProvider defaultLocale="fr" locale={language} messages={translations?.[language]}>
       <Form
         FieldTemplate={EditorFieldTemplate}
         className="form"
