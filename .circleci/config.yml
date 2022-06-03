@@ -84,7 +84,7 @@ jobs:
   # ---- Front-end jobs ----
   build:
     docker:
-      - image: circleci/node:14
+      - image: cimg/node:16.15
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
@@ -107,7 +107,7 @@ jobs:
 
   lint:
     docker:
-      - image: circleci/node:14
+      - image: cimg/node:16.15
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
@@ -120,7 +120,7 @@ jobs:
           command: yarn lint
   test:
     docker:
-      - image: circleci/node:14
+      - image: cimg/node:16.15
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
@@ -137,7 +137,7 @@ jobs:
   # environment variables in CircleCI UI.
   publish:
     docker:
-      - image: circleci/node:14
+      - image: cimg/node:16.15
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
