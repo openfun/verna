@@ -1,14 +1,24 @@
 import VernaJSONSchemaType from '../../types/rjsf';
 import type { UiSchema } from '@rjsf/core';
+import Section from '../../components/Fields/Section';
 
 /**
- * Verify & return a UiSchema with a specified order object so it doesn't stop the workflow of the
+ * Verify & return a UiSchema with a specified order object, so it doesn't stop the workflow of the
  * drag and drop feature
  *
  * @param schema
  * @param dirtyUiSchema
  */
 function cleanUiSchema(schema: VernaJSONSchemaType, dirtyUiSchema: UiSchema) {
+  // Add an overload on ui:ObjectFieldTemplate for every sections so it loads the custom section
+  // render of Verna
+  Object.keys(schema.properties || {}).forEach(([key]) => {
+    dirtyUiSchema[key] = {
+      ...dirtyUiSchema[key],
+      'ui:ObjectFieldTemplate': Section,
+    };
+  });
+
   // If uiSchema looks valid, skip the data generation
   if (dirtyUiSchema['ui:order']) return dirtyUiSchema;
 

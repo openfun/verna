@@ -23,8 +23,7 @@ const messages = defineMessages({
  * Its purpose here is to add edition capabilities to every of those
  * when editor mode is enabled.
  */
-export default function EditorFieldTemplate(props: FieldTemplateProps) {
-  const { id, schema, children } = props;
+export default function EditorFieldTemplate({ id, schema, children }: FieldTemplateProps) {
   const [isEditing, setIsEditing] = useState(false);
   const verna = useVerna();
   const path = id.split(RJSF_ID_SEPARATOR);
@@ -32,7 +31,6 @@ export default function EditorFieldTemplate(props: FieldTemplateProps) {
   const isSection = path.length === 2 && !verna.selector;
   const ownProperties = Object.keys(schema.properties || {}).length > 0;
   const canAddField = schema.type !== 'object';
-
   const canAddSection = isSection && !isRoot && !verna.selector;
 
   function addItem(widgetProps?: ShowCaseWidgetProps) {

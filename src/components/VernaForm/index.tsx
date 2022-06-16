@@ -1,15 +1,31 @@
 import Form from '@rjsf/core';
+import { useIntl } from 'react-intl';
+import { useMemo } from 'react';
 import { useVerna } from '../../providers/VernaProvider';
 import EditorFieldTemplate from '../EditorFieldTemplate';
 import { RJSF_ID_SEPARATOR } from '../../settings';
+import { translateSchema } from '../../utils/translation';
 
 interface VernaFormProperties {
   onSubmit: (formData: unknown) => void;
 }
 
 function VernaForm({ onSubmit }: VernaFormProperties) {
-  const { handleSubmit, schema, selectedFormData, transformErrors, uiSchema, widgets, isEditor } =
-    useVerna();
+  const {
+    handleSubmit,
+    isEditor,
+    schema,
+    selectedFormData,
+    selector,
+    transformErrors,
+    uiSchema,
+    widgets,
+  } = useVerna();
+  const { locale, formatMessage } = useIntl();
+  const formSchema = useMemo(
+    () => translateSchema(schema, formatMessage, selector),
+    [locale, schema],
+  );
 
   return (
     <Form
@@ -20,7 +36,7 @@ function VernaForm({ onSubmit }: VernaFormProperties) {
       idSeparator={RJSF_ID_SEPARATOR}
       liveValidate={!isEditor}
       onSubmit={handleSubmit(onSubmit)}
-      schema={schema}
+      schema={formSchema}
       showErrorList={false}
       tagName={isEditor ? 'div' : undefined}
       transformErrors={transformErrors}

@@ -23,6 +23,7 @@ import {
   getSelectedSchema,
   getSelectedUiSchema,
 } from '../utils/schema';
+import { TranslationType } from '../types/translations';
 
 function functionNotSet() {
   throw new Error('function context not set');
@@ -53,9 +54,11 @@ export interface VernaContextProps extends Pick<FormProps<unknown>, 'transformEr
   setFullSchema: (newSchema: VernaJSONSchemaType) => void;
   setFullUiSchema: (newUiSchema: UiSchema) => void;
   setSchema: (newSchema: VernaJSONSchemaType) => void;
+  setSchemaTranslations: (newSchemaTranslations: TranslationType) => void;
   setSelector: (selector: string | undefined) => void;
   setUiSchema: (newUiSchema: UiSchema) => void;
   setWidgets: (newWidgets: WidgetsType) => void;
+  schemaTranslations: TranslationType;
   uiSchema: UiSchema;
   widgets: WidgetsType;
 }
@@ -69,12 +72,14 @@ const VernaContext = createContext<VernaContextProps>({
   isEditor: false,
   objectFieldTemplate: {},
   schema: {},
+  schemaTranslations: {},
   selectedFormData: {},
   selector: undefined,
   setFormData: () => functionNotSet(),
   setFullSchema: () => functionNotSet(),
   setFullUiSchema: () => functionNotSet(),
   setSchema: () => functionNotSet(),
+  setSchemaTranslations: () => functionNotSet(),
   setSelector: () => functionNotSet(),
   setUiSchema: () => functionNotSet(),
   setWidgets: () => functionNotSet(),
@@ -102,7 +107,8 @@ interface VernaProviderProps extends Pick<FormProps<unknown>, 'transformErrors'>
   defaultSelector?: string;
   isEditor: boolean;
   locale: string;
-  translations?: { [locale: string]: ResolvedIntlConfig['messages'] };
+  translationUi?: ResolvedIntlConfig['messages'];
+  translations: TranslationType;
 }
 
 function VernaProvider({
@@ -118,6 +124,7 @@ function VernaProvider({
   isEditor,
   locale,
   transformErrors,
+  translationUi,
   translations,
 }: PropsWithChildren<VernaProviderProps>) {
   // Both fullSchema & fullUiSchema are not used by the lib itself but may be
@@ -133,6 +140,8 @@ function VernaProvider({
   const [uiSchema, _setUiSchema] = useState<UiSchema>(
     getSelectedUiSchema(defaultUiSchema, defaultSelector),
   );
+  const [schemaTranslations, setSchemaTranslations] = useState<TranslationType>(translations);
+
   const [formData, setFormData] = useState(
     getSelectedDefaultValues(defaultFormValues, defaultSelector),
   );
@@ -142,8 +151,22 @@ function VernaProvider({
   });
   const [selector, setSelector] = useState<string | undefined>(defaultSelector);
 
+  const selectedFormData = useMemo(() => {
+    return selector && formData ? formData[selector] : formData;
+  }, [formData, selector]);
+
+  const intlMessages = useMemo(
+    () =>
+      ({
+        ...translationUi,
+        ...schemaTranslations?.[locale],
+      } as ResolvedIntlConfig['messages']),
+    [locale, schemaTranslations],
+  );
+
   // Schema and uiSchema target a part of fullSchema and fullUiSchema selected by the selector
   function setSchema(newSchema: VernaJSONSchemaType) {
+    _setSchema(newSchema);
     if (!selector) {
       setFullSchema(newSchema);
       return;
@@ -151,7 +174,6 @@ function VernaProvider({
     const newFullSchema = { ...fullSchema };
     if (newFullSchema['properties']) {
       newFullSchema.properties[selector] = newSchema;
-      _setSchema(newSchema);
     }
     setFullSchema(newFullSchema);
   }
@@ -168,20 +190,6 @@ function VernaProvider({
     setFullUiSchema(newFullUiSchema);
   }
 
-  useEffect(() => {
-    if (selector) {
-      setSchema(fullSchema.properties?.[selector] || {});
-      setUiSchema(fullUiSchema[selector]);
-    } else {
-      _setSchema(fullSchema);
-      _setUiSchema(fullUiSchema);
-    }
-  }, [selector]);
-
-  const selectedFormData = useMemo(() => {
-    return selector && formData ? formData[selector] : formData;
-  }, [formData, selector]);
-
   function handleSubmit<FormData = unknown>(callback?: (formData: unknown) => void) {
     return (event: ISubmitEvent<FormData>, nativeEvent: FormEvent<HTMLFormElement>) => {
       const newFormData = selector ? { ...formData, [selector]: event.formData } : event.formData;
@@ -192,8 +200,18 @@ function VernaProvider({
     };
   }
 
+  useEffect(() => {
+    if (selector) {
+      setSchema(fullSchema.properties?.[selector] || {});
+      setUiSchema(fullUiSchema[selector]);
+    } else {
+      _setSchema(fullSchema);
+      _setUiSchema(fullUiSchema);
+    }
+  }, [selector]);
+
   return (
-    <IntlProvider defaultLocale={defaultLocale} locale={locale} messages={translations?.[locale]}>
+    <IntlProvider defaultLocale={defaultLocale} locale={locale} messages={intlMessages}>
       <VernaContext.Provider
         value={{
           configSchema,
@@ -204,12 +222,14 @@ function VernaProvider({
           isEditor,
           objectFieldTemplate: { ...defaultObjectFieldTemplate, ...objectFieldTemplate },
           schema,
+          schemaTranslations: schemaTranslations,
           selectedFormData,
           selector,
           setFormData,
           setFullSchema,
           setFullUiSchema,
           setSchema,
+          setSchemaTranslations,
           setSelector,
           setUiSchema,
           setWidgets,
@@ -231,6 +251,7 @@ VernaProvider.defaultProps = {
   defaultWidgets: {},
   isEditor: false,
   objectFieldTemplate: {},
+  translations: {},
 };
 
 export default VernaProvider;

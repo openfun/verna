@@ -8,10 +8,11 @@ import {
   updateMinimum,
   updateRequired,
 } from './widgetPropertyUpdaters';
+import VernaJSONSchemaType from '../../types/rjsf';
 
 type Maybe<T> = T | undefined;
 export type Properties = {
-  items: Maybe<string[]>;
+  items: Maybe<VernaJSONSchemaType>;
   enum: Maybe<string[]>;
   required: Maybe<boolean>;
   maxLength: Maybe<number>;
@@ -24,7 +25,12 @@ type PropertyName = Properties[keyof Properties];
  * The PropertyUpdater type is the prototype used to apply any
  * parameter set in the parametersModifier
  */
-type PropertyUpdater<T> = (value: T, verna: VernaContextProps, widgetPath: string[]) => void;
+type PropertyUpdater<T> = (
+  value: T,
+  verna: VernaContextProps,
+  widgetPath: string[],
+  locale: string,
+) => void;
 
 type PropertyUpdaters = {
   [key in keyof Properties]: PropertyUpdater<Properties[key]>;
@@ -48,15 +54,16 @@ export function updateWidgetProperties(
   properties: Properties,
   verna: VernaContextProps,
   id: string,
+  widgetPropsKeys: string[],
+  locale: string,
 ) {
-  const [, ...widgetPath] = id.split(RJSF_ID_SEPARATOR);
+  const widgetPath = id.split(RJSF_ID_SEPARATOR);
 
   const updateProperty = (key: keyof Properties) => {
     const updater = propertyUpdaters[key] as PropertyUpdater<PropertyName>;
     const value = properties[key];
-    updater(value, verna, widgetPath);
+    updater(value, verna, widgetPath, locale);
   };
 
-  const params = Object.keys(propertyUpdaters);
-  params.forEach((key) => updateProperty(key as keyof Properties));
+  widgetPropsKeys.forEach((key) => updateProperty(key as keyof Properties));
 }

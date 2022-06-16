@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { UiSchema } from '@rjsf/core';
-import { VernaProvider, Section, VernaJSONSchemaType } from '@openfun/verna';
+import { VernaProvider, VernaJSONSchemaType } from '@openfun/verna';
 import FormWrapper from './FormWrapper';
 import TextWidget from './widgets/TextWidget';
 import PasswordWidget from './widgets/PasswordWidget';
@@ -13,22 +13,41 @@ import CheckboxWidget from './widgets/CheckboxWidget';
 import transformErrors from './ErrorCustom';
 
 function App() {
+  const [locale, setLocale] = useState('en');
   const schemaDefault: VernaJSONSchemaType = {
-    description: 'Desc registration form',
+    description: 'root_description',
     properties: {
       section: {
         properties: {
+          checkboxes: {
+            description: 'root_section_checkboxes_description',
+            items: {
+              enum: [
+                'root_section_checkboxes_items_0',
+                'root_section_checkboxes_items_1',
+                'root_section_checkboxes_items_2',
+              ],
+              type: 'object',
+            },
+            title: 'root_section_checkboxes_title',
+            type: 'array',
+            uniqueItems: true,
+          },
           select: {
-            description: 'SELECT DESCRIPTION',
-            enum: ['Item 1', 'Item 2', 'Item 3'],
-            title: 'Select items',
+            description: 'root_section_select_description',
+            enum: [
+              'root_section_select_enum_0',
+              'root_section_select_enum_1',
+              'root_section_select_enum_2',
+            ],
+            title: 'root_section_select_title',
             type: 'string',
           },
         },
         type: 'object',
       },
     },
-    title: 'A registration form',
+    title: 'root_title',
     type: 'object',
   };
 
@@ -47,11 +66,12 @@ function App() {
   // TODO: Add management for ui:ObjectFieldTemplate saving
   const uiSchema: UiSchema = {
     section: {
+      checkboxes: {
+        'ui:widget': 'CheckboxesWidget',
+      },
       select: {
         'ui:widget': 'selectWidget',
       },
-      // Need to found a clean fix so the ObjectFieldTemplate may be a string
-      'ui:ObjectFieldTemplate': Section,
       'ui:order': ['select'],
     },
     'ui:submitButtonOptions': {
@@ -158,21 +178,65 @@ function App() {
 
   const toggleEditorMode = () => setIsEditor(!isEditor);
 
-  const locale = navigator.language.split(/[-_]/)[0];
+  const translations = {
+    en: {
+      root_description: 'Desc registration form',
+      root_section_checkboxes_description: 'Checkboxes description',
+      root_section_checkboxes_items_0: 'item 0 en',
+      root_section_checkboxes_items_1: 'item 1 en',
+      root_section_checkboxes_items_2: 'item 2 en',
+      root_section_checkboxes_title: 'Checkboxes title',
+      root_section_select_description: 'Description select',
+      root_section_select_enum_0: 'enum 0 en',
+      root_section_select_enum_1: 'enum 1 en',
+      root_section_select_enum_2: 'enum 2 en',
+      root_section_select_title: 'Select title',
+      root_title: 'A registration form',
+    },
+    fr: {
+      root_description: "Description formulaire d'inscription",
+      root_section_checkboxes_description: 'Description checkboxes',
+      root_section_checkboxes_items_0: 'item 0 fr',
+      root_section_checkboxes_items_1: 'item 1 fr',
+      root_section_checkboxes_items_2: 'item 2 fr',
+      root_section_checkboxes_title: 'Titre checkboxes',
+      root_section_select_description: 'Description select',
+      root_section_select_enum_0: 'enum 0 fr',
+      root_section_select_enum_1: 'enum 1 fr',
+      root_section_select_enum_2: 'enum 2 fr',
+      root_section_select_title: 'Titre select',
+      root_title: 'Formulaire',
+    },
+  };
+
+  const translationUi = {
+    'components.EditorFieldTemplate.parameters': 'Paramètres',
+    'components.WidgetPropertiesForm.enum': 'Options',
+    'components.WidgetPropertiesForm.items': 'Options avancées',
+    'components.WidgetPropertiesForm.maxLength': 'Longueur maximum',
+    'components.WidgetPropertiesForm.maximum': 'Maximum',
+    'components.WidgetPropertiesForm.minLength': 'Longueur minimum',
+    'components.WidgetPropertiesForm.minimum': 'Minimum',
+    'components.WidgetPropertiesForm.required': 'Requis',
+    'components.WidgetPropertiesForm.submitWidgetParameter': 'Sauvegarder',
+  };
 
   return (
     <div style={{ backgroundColor: 'lightgray' }}>
       <VernaProvider
         configSchema={configSchema}
         defaultFormValues={formData}
+        defaultLocale={locale}
         defaultSchema={schemaDefault}
         defaultUiSchema={uiSchema}
         defaultWidgets={widgets}
         isEditor={isEditor}
         locale={locale}
         transformErrors={transformErrors}
+        translationUi={locale === 'fr' ? translationUi : undefined}
+        translations={translations}
       >
-        <FormWrapper toggleEditorMode={toggleEditorMode} />
+        <FormWrapper setLocale={setLocale} toggleEditorMode={toggleEditorMode} />
       </VernaProvider>
     </div>
   );

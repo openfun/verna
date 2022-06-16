@@ -1,5 +1,6 @@
 import { VernaForm, useVerna, VernaToolbar } from '@openfun/verna';
 import { JSONSchema7 } from 'json-schema';
+import { useIntl } from 'react-intl';
 import TextWidget from './widgetToolbarItems/TextWidget';
 import PasswordWidget from './widgetToolbarItems/PasswordWidget';
 import QuizWidget from './widgetToolbarItems/QuizWidget';
@@ -11,10 +12,12 @@ import CheckboxesWidget from './widgetToolbarItems/CheckboxesWidget';
 
 interface FormWrapperProps {
   toggleEditorMode: () => void;
+  setLocale: (locale: string) => void;
 }
 
-export default function FormWrapper({ toggleEditorMode }: FormWrapperProps) {
-  const { schema, uiSchema, setSelector, isEditor, selector } = useVerna();
+export default function FormWrapper({ toggleEditorMode, setLocale }: FormWrapperProps) {
+  const { schema, uiSchema, setSelector, isEditor, selector, schemaTranslations } = useVerna();
+  const { locale } = useIntl();
 
   return (
     <div className="verna-wrapper">
@@ -34,10 +37,6 @@ export default function FormWrapper({ toggleEditorMode }: FormWrapperProps) {
       )}
       <VernaForm onSubmit={(formData) => console.log(formData)} />
       <div className="buttons-wrapper">
-        <button onClick={toggleEditorMode}>Switch editor mode</button>
-        <button onClick={() => console.log('Schema:', { schema: schema, uiSchema: uiSchema })}>
-          save form
-        </button>
         <fieldset>
           <legend>Select a section</legend>
           {!selector &&
@@ -47,6 +46,28 @@ export default function FormWrapper({ toggleEditorMode }: FormWrapperProps) {
               </button>
             ))}
           <button onClick={() => setSelector(undefined)}>Root</button>
+        </fieldset>
+        <fieldset>
+          <legend>Language</legend>
+          <select onChange={(e) => setLocale(e.target.value)} value={locale}>
+            <option>fr</option>
+            <option>en</option>
+          </select>
+        </fieldset>
+        <fieldset style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+          <legend>Editor options</legend>
+          <button onClick={toggleEditorMode}>Switch editor mode</button>
+          <button
+            onClick={() =>
+              console.log('FormData:', {
+                schema: schema,
+                translations: schemaTranslations,
+                uiSchema: uiSchema,
+              })
+            }
+          >
+            save form
+          </button>
         </fieldset>
       </div>
     </div>

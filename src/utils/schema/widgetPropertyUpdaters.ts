@@ -1,6 +1,130 @@
 import { VernaContextProps } from '../../providers/VernaProvider';
 import VernaJSONSchemaType from '../../types/rjsf';
 import type { Properties } from './updateWidgetProperties';
+import { RJSF_ID_SEPARATOR } from '../../settings';
+import { Maybe } from '../../types/utils';
+
+/**
+ * Generate the translation key based on those parameters
+ * The key is built on the id of the widget (cd: "root_section_widget") with the name of
+ * the property translated
+ *
+ * @param widgetPath is the decomposed id of the widget
+ * @param propertyKey is the name of the property we are generating a key for
+ * @param selector is the name of the selected section if there is one
+ */
+function getTranslationKey(widgetPath: string[], propertyKey: string, selector: Maybe<string>) {
+  if (selector) {
+    const translationKeyParts = [widgetPath.shift(), selector, ...widgetPath, propertyKey];
+    return translationKeyParts.join(RJSF_ID_SEPARATOR);
+  } else {
+    return [...widgetPath, propertyKey].join(RJSF_ID_SEPARATOR);
+  }
+}
+
+/**
+ * Destroy old translation values of the propertyKey element
+ *
+ * @param propertyKey The key of the property which translations have to be removed
+ * @param verna Verna context
+ * @param translationKey the key of translation used for this element
+ * @param locale Current locale
+ */
+function removePropertyTranslations(
+  propertyKey: keyof VernaJSONSchemaType,
+  verna: VernaContextProps,
+  translationKey: string,
+  locale: string,
+) {
+  translationKey.replace(`_${propertyKey}`, '');
+  const oldKeys = Object.keys(verna.schemaTranslations[locale]).filter((key) =>
+    key.includes(translationKey),
+  );
+  oldKeys.forEach((key) => {
+    delete verna.schemaTranslations[locale][key];
+  });
+}
+
+function updateItemsTranslations(widget: VernaJSONSchemaType, translationKeys: string[]) {
+  if (Array.isArray(widget.items)) {
+    // TODO: add other properties management & matching between those and translation keys
+    widget.items = translationKeys.map((key: string) => {
+      return {
+        enum: [key],
+      };
+    });
+  } else {
+    widget.items!.enum = translationKeys;
+  }
+}
+
+/**
+ * Update the translations for an enum
+ * Each value has a unique translation key
+ *
+ * @param propertyKey The key of the property to modify
+ * @param widget The schema part representing the current widget
+ * @param verna The verna context, used to update the rendered schema and the translations
+ * @param values The value is a list of strings that we set to this key
+ * @param translationKey the corresponding key used in the translation object
+ * @param locale The current locale loaded
+ */
+function updateEnumTranslations(
+  propertyKey: keyof VernaJSONSchemaType,
+  widget: VernaJSONSchemaType,
+  verna: VernaContextProps,
+  values: string[],
+  translationKey: string,
+  locale: string,
+) {
+  removePropertyTranslations(propertyKey, verna, translationKey, locale);
+
+  // Create translation values
+  let newTranslationKeys: string[] = [];
+  values.forEach((e, index) => {
+    const key = translationKey.concat(`_${index.toString()}`);
+    newTranslationKeys.push(key);
+    if (locale) {
+      verna.schemaTranslations[locale][key] = e;
+    }
+  });
+  verna.setSchemaTranslations({
+    ...verna.schemaTranslations,
+  });
+  if (propertyKey === 'enum') {
+    widget.enum = newTranslationKeys;
+  } else if (propertyKey === 'items') {
+    updateItemsTranslations(widget, newTranslationKeys);
+  }
+}
+
+/**
+ * Update the translation object and the corresponding widget to add the translated value
+ *
+ * @param propertyKey The key of the property to modify
+ * @param widget The schema part representing the current widget
+ * @param verna The verna context, used to update the rendered schema and the translations
+ * @param value The string value set to this key
+ * @param translationKey the corresponding key used in the translation object
+ * @param locale The current locale loaded
+ */
+function updateStringTranslation(
+  propertyKey: keyof VernaJSONSchemaType,
+  widget: VernaJSONSchemaType,
+  verna: VernaContextProps,
+  value: string,
+  translationKey: string,
+  locale: string,
+) {
+  if (!widget[propertyKey]) {
+    // @ts-ignore
+    widget[propertyKey] = translationKey;
+  }
+  verna.schemaTranslations[locale][translationKey] = value;
+  verna.setSchemaTranslations({
+    ...verna.schemaTranslations,
+  });
+}
 
 /**
  * Update the schema to update a widget property
@@ -9,26 +133,35 @@ import type { Properties } from './updateWidgetProperties';
  * @param value The value to set to this key
  * @param verna The verna context, used to update the rendered schema
  * @param widgetPath The decomposed id for the corresponding widget
+ * @param locale The current locale loaded
  */
 function updateProperty(
   propertyKey: keyof VernaJSONSchemaType,
   value: unknown,
   verna: VernaContextProps,
   widgetPath: string[],
+  locale: string,
 ) {
   const newSchema = verna.schema;
-  let widget;
+  let widget: VernaJSONSchemaType | undefined;
 
   if (verna.selector) {
-    widget = newSchema.properties?.[widgetPath[0]];
+    widget = newSchema.properties?.[widgetPath[1]];
   } else {
-    const section = newSchema.properties?.[widgetPath[0]];
-    widget = section?.properties?.[widgetPath[1]];
+    const section = newSchema.properties?.[widgetPath[1]];
+    widget = section?.properties?.[widgetPath[2]];
   }
 
   if (widget) {
-    // @ts-ignore
-    widget[propertyKey] = value as number;
+    const translationKey = getTranslationKey(widgetPath, propertyKey, verna.selector);
+    if (typeof value === 'string' && locale) {
+      updateStringTranslation(propertyKey, widget, verna, value, translationKey, locale);
+    } else if (Array.isArray(value) && locale) {
+      updateEnumTranslations(propertyKey, widget, verna, value, translationKey, locale);
+    } else {
+      // @ts-ignore
+      widget[propertyKey] = value;
+    }
     verna.setSchema(newSchema);
   }
 }
@@ -51,10 +184,10 @@ function updateRequired(
 
   if (verna.selector) {
     section = newSchema;
-    widgetName = widgetPath[0];
-  } else {
-    section = newSchema.properties?.[widgetPath[0]];
     widgetName = widgetPath[1];
+  } else {
+    section = newSchema.properties?.[widgetPath[1]];
+    widgetName = widgetPath[2];
   }
   if (section) {
     if (value) {
@@ -76,49 +209,51 @@ function updateRequired(
  * @param value The value to add or removed from required property
  * @param verna The verna context, used to update the rendered schema
  * @param widgetPath The decomposed id for the corresponding widget
+ * @param locale The current locale loaded
  */
-function updateItems(value: Properties['items'], verna: VernaContextProps, widgetPath: string[]) {
-  const newSchema = verna.schema;
-  let widget;
-  if (verna.selector) {
-    widget = newSchema.properties?.[widgetPath[0]];
-  } else {
-    const section = newSchema.properties?.[widgetPath[0]];
-    widget = section?.properties?.[widgetPath[1]];
-  }
-
-  if (widget?.items) {
-    (widget.items as VernaJSONSchemaType).enum = value as string[];
-    verna.setSchema(newSchema);
-  }
+function updateItems(
+  value: Properties['items'],
+  verna: VernaContextProps,
+  widgetPath: string[],
+  locale: string,
+) {
+  updateProperty('items', value, verna, widgetPath, locale);
 }
 
 function updateMaxLength(
   value: Properties['maxLength'],
   verna: VernaContextProps,
   widgetPath: string[],
+  locale: string,
 ) {
-  updateProperty('maxLength', value, verna, widgetPath);
+  updateProperty('maxLength', value, verna, widgetPath, locale);
 }
 
-function updateEnum(value: Properties['items'], verna: VernaContextProps, widgetPath: string[]) {
-  updateProperty('enum', value, verna, widgetPath);
+function updateEnum(
+  value: Properties['enum'],
+  verna: VernaContextProps,
+  widgetPath: string[],
+  locale: string,
+) {
+  updateProperty('enum', value, verna, widgetPath, locale);
 }
 
 function updateMaximum(
   value: Properties['maximum'],
   verna: VernaContextProps,
   widgetPath: string[],
+  locale: string,
 ) {
-  updateProperty('maximum', value, verna, widgetPath);
+  updateProperty('maximum', value, verna, widgetPath, locale);
 }
 
 function updateMinimum(
   value: Properties['maximum'],
   verna: VernaContextProps,
   widgetPath: string[],
+  locale: string,
 ) {
-  updateProperty('minimum', value, verna, widgetPath);
+  updateProperty('minimum', value, verna, widgetPath, locale);
 }
 
 export {

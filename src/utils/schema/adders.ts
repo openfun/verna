@@ -63,14 +63,16 @@ function addWidget(
   // First update the schema
   const currentSection = getSectionName(id);
   const newSchema = { ...verna.schema };
-  if (!currentSection) return;
+
   if (verna.selector) {
     if (newSchema.properties) {
       newSchema.properties[newKey] = stringDefinition(widgetInfos?.type);
     }
   } else {
-    const section = newSchema.properties?.[currentSection] || {};
-    if (section.properties) {
+    if (!currentSection) return;
+    const section = newSchema.properties?.[currentSection];
+
+    if (section?.properties) {
       section.properties[newKey] = stringDefinition(widgetInfos?.type);
     }
   }
