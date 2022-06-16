@@ -10,7 +10,6 @@
   "plugins": ["@typescript-eslint","react","import","jsx-a11y"],
   "rules": {
     "@typescript-eslint/no-unused-vars": "error",
-    "indent": ["error", 2],
     "linebreak-style": "warn",
     "no-console": ["error"],
     "no-unused-vars": "off",
