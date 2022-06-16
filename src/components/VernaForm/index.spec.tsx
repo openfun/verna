@@ -1,32 +1,40 @@
-import { screen, render } from '@testing-library/react';
+import { screen, render, waitFor } from '@testing-library/react';
 import _ from 'lodash';
+import userEvent from '@testing-library/user-event';
 import VernaProvider from '../../providers/VernaProvider';
-import { getSchemaDefault } from '../../tests/mocks/FormProps';
+import { schemaFactory, translationsFactory } from '../../tests/mocks/factories';
 import VernaForm from '../VernaForm';
+import { resolvePromisesOneByOne } from '../../tests/utils';
 
 describe('VernaForm', () => {
-  function clickOnLastAddInputButton() {
-    _.last(
-      screen.queryAllByRole('button', {
-        name: 'Add an input',
-      }) as HTMLElement[],
-    )?.click();
+  async function clickOnLastAddInputButton() {
+    const buttons = await screen.findAllByRole('button', {
+      name: 'Add an input',
+    });
+    await userEvent.click(_.last(buttons)!);
   }
 
   it('should render a basic form', async () => {
+    const translations = translationsFactory();
+
     render(
-      <VernaProvider isEditor defaultSchema={getSchemaDefault()} locale="en">
+      <VernaProvider
+        isEditor
+        defaultSchema={schemaFactory()}
+        locale="en"
+        translations={translations}
+      >
         <VernaForm />
       </VernaProvider>,
     );
     // - A fieldset legend should be displayed with form title
-    screen.getByRole('group', { name: 'A registration form' });
+    screen.getByRole('group', { name: translations.en.root_title });
 
     // - A paragraph with form description should be displayed
-    screen.getByText('Desc registration form');
+    screen.getByText(translations.en.root_description);
 
     // - The first section should be displayed
-    screen.getByRole('group', { name: 'Sectiontest' });
+    screen.getByRole('group', { name: translations.en.root_testSection_title });
 
     const $field1 = document.getElementById('root_testSection_field1') as HTMLInputElement;
 
@@ -36,33 +44,41 @@ describe('VernaForm', () => {
 
   it('should be able to add or remove sections and fields', async () => {
     render(
-      <VernaProvider isEditor defaultSchema={getSchemaDefault()} locale="en">
+      <VernaProvider
+        isEditor
+        defaultSchema={schemaFactory()}
+        locale="en"
+        translations={translationsFactory()}
+      >
         <VernaForm />
       </VernaProvider>,
     );
 
     // Add two sections
-    screen.getByRole('button', { name: 'Add a section' }).click();
+    await userEvent.click(screen.getByRole('button', { name: 'Add a section' }));
+    await userEvent.click(
+      _.last(
+        screen.getAllByRole('button', {
+          name: 'Add a section',
+        }) as HTMLElement[],
+      )!,
+    );
 
-    _.last(
-      screen.queryAllByRole('button', {
-        name: 'Add a section',
-      }) as HTMLElement[],
-    )?.click();
-
-    const $addFieldButtons1 = screen.queryAllByRole('button', {
-      name: 'Add an input',
+    await waitFor(() => {
+      const $addFieldButtons = screen.queryAllByRole('button', {
+        name: 'Add an input',
+      });
+      expect($addFieldButtons).toHaveLength(3);
     });
-    expect($addFieldButtons1).toHaveLength(3);
 
     // Add two input fields
-    clickOnLastAddInputButton();
-    clickOnLastAddInputButton();
+    await clickOnLastAddInputButton();
+    await clickOnLastAddInputButton();
 
-    const $addFieldButtons2 = screen.queryAllByRole('button', {
-      name: 'Add an input',
+    const $parametersButton = await screen.findAllByRole('button', {
+      name: 'Parameters',
     });
-    expect($addFieldButtons2).toHaveLength(4);
+    expect($parametersButton).toHaveLength(3);
 
     const $addSectionButtons = screen.queryAllByRole('button', {
       name: 'Add a section',
@@ -70,12 +86,12 @@ describe('VernaForm', () => {
     expect($addSectionButtons).toHaveLength(3);
     screen.getByRole('button', { name: 'Submit' });
 
-    // Delete every elements from top to bottom
-    _.forEach(
+    // Delete every element from top to bottom
+    await resolvePromisesOneByOne(
       screen.queryAllByRole('button', {
         name: 'x',
-      }) as HTMLElement[],
-      (element) => element.click(),
+      }),
+      (element: HTMLElement) => userEvent.click(element),
     );
 
     const $deleteButtons = screen.queryAllByRole('button', { name: 'x' });
@@ -86,32 +102,37 @@ describe('VernaForm', () => {
     });
     expect($addSectionButtons2).toHaveLength(1);
 
-    const $addFieldButtons3 = screen.queryAllByRole('button', {
+    const $addFieldButtons = screen.queryAllByRole('button', {
       name: 'Add an input',
     });
-    expect($addFieldButtons3).toHaveLength(0);
+    expect($addFieldButtons).toHaveLength(0);
   });
 
   it('should use selector parameter to query sub schema and render it', async () => {
+    const translations = translationsFactory();
+
     render(
       <VernaProvider
         isEditor
-        defaultSchema={getSchemaDefault()}
+        defaultSchema={schemaFactory()}
         defaultSelector="testSection"
         locale="en"
+        translations={translations}
       >
         <VernaForm />
       </VernaProvider>,
     );
 
     // - A fieldset legend should not be displayed
-    expect(screen.queryAllByRole('group', { name: 'A registration form' })).toHaveLength(0);
+    expect(screen.queryAllByRole('group', { name: translations.en.root_title })).toHaveLength(0);
 
     // - The form description should not be displayed
     expect(screen.queryAllByText('Desc registration form')).toHaveLength(0);
 
     // - The first section should be displayed
-    expect(screen.queryAllByRole('group', { name: 'Sectiontest' })).toHaveLength(1);
+    expect(
+      screen.queryAllByRole('group', { name: translations.en.root_testSection_title }),
+    ).toHaveLength(1);
 
     // - A required text input First name should be displayed inside the only section
     const $field1 = document.getElementById('root_field1') as HTMLInputElement;
@@ -120,35 +141,56 @@ describe('VernaForm', () => {
   });
 
   it('should use a selector to query sub schema and add or remove fields on it', async () => {
+    const translations = translationsFactory();
+
     render(
       <VernaProvider
         isEditor
-        defaultSchema={getSchemaDefault()}
+        defaultSchema={schemaFactory()}
         defaultSelector="testSection"
         locale="en"
+        translations={translations}
       >
         <VernaForm />
       </VernaProvider>,
     );
 
     // Add two input fields
-    clickOnLastAddInputButton();
-    clickOnLastAddInputButton();
+    await clickOnLastAddInputButton();
+    await clickOnLastAddInputButton();
 
     const $addFieldButtons = screen.queryAllByRole('button', {
       name: 'Add an input',
     });
     expect($addFieldButtons).toHaveLength(3);
 
-    // Delete every elements from top to bottom
-    _.forEach(
+    // Delete every element from top to bottom
+    // eslint-disable-next-line compat/compat
+    await userEvent.click(
       screen.queryAllByRole('button', {
         name: 'x',
-      }) as HTMLElement[],
-      (element) => element.click(),
+      })[0],
     );
-    const $deleteButtons = screen.queryAllByRole('button', { name: 'x' });
-    expect($deleteButtons).toHaveLength(0);
+    await userEvent.click(
+      screen.queryAllByRole('button', {
+        name: 'x',
+      })[0],
+    );
+    await userEvent.click(
+      screen.queryAllByRole('button', {
+        name: 'x',
+      })[0],
+    );
+    await userEvent.click(
+      screen.queryAllByRole('button', {
+        name: 'x',
+      })[0],
+    );
+
+    await waitFor(() => {
+      const $deleteButtons = screen.queryAllByRole('button', { name: 'x' });
+      expect($deleteButtons).toHaveLength(0);
+    });
 
     const $addFieldButtons3 = screen.queryAllByRole('button', {
       name: 'Add an input',
@@ -157,20 +199,22 @@ describe('VernaForm', () => {
   });
 
   it('should not render add functionalities if isEditor is false', async () => {
+    const translations = translationsFactory();
+
     render(
-      <VernaProvider defaultSchema={getSchemaDefault()} locale="en">
+      <VernaProvider defaultSchema={schemaFactory()} locale="en" translations={translations}>
         <VernaForm />
       </VernaProvider>,
     );
 
     // - A fieldset legend should be displayed with form title
-    screen.getByRole('group', { name: 'A registration form' });
+    screen.getByRole('group', { name: translations.en.root_title });
 
     // - A paragraph with form description should be displayed
-    screen.getByText('Desc registration form');
+    screen.getByText(translations.en.root_description);
 
     // - The first section should be displayed
-    screen.getByRole('group', { name: 'Sectiontest' });
+    screen.getByRole('group', { name: translations.en.root_testSection_title });
 
     const $field1 = document.getElementById('root_testSection_field1') as HTMLInputElement;
 
