@@ -9,6 +9,7 @@ import type VernaJSONSchemaType from '../../types/rjsf';
 import { Properties, updateWidgetProperties } from '../../utils/schema';
 import { DEFAULT_PROPERTY_TRANSLATION } from '../../utils/translation';
 import { Maybe } from '../../types/utils';
+import { defaultWidgetProps } from '../../templates';
 
 interface WidgetPropertiesFormProps {
   onClose: () => void;
@@ -16,6 +17,11 @@ interface WidgetPropertiesFormProps {
 }
 
 const messages = defineMessages({
+  description: {
+    defaultMessage: 'description',
+    description: 'Description of the field',
+    id: 'components.WidgetPropertiesForm.description',
+  },
   enum: {
     defaultMessage: 'Options',
     description: 'Fieldset label to add/remove options of a widget using an array of strings',
@@ -56,6 +62,11 @@ const messages = defineMessages({
     description: 'Label of submit input',
     id: 'components.WidgetPropertiesForm.submitWidgetParameter',
   },
+  title: {
+    defaultMessage: 'title',
+    description: 'Name of the field',
+    id: 'components.WidgetPropertiesForm.title',
+  },
 });
 
 /**
@@ -74,7 +85,12 @@ export default function WidgetPropertiesForm({ id, onClose }: WidgetPropertiesFo
       event.formData as Properties,
       verna,
       id,
-      Object.keys(verna.configSchema?.properties?.[templateName]?.properties || {}),
+      Object.keys(
+        {
+          ...verna.configSchema?.properties?.[templateName]?.properties,
+          ...defaultWidgetProps,
+        } || {},
+      ),
       locale,
     );
     onClose();
@@ -83,7 +99,12 @@ export default function WidgetPropertiesForm({ id, onClose }: WidgetPropertiesFo
 
   function translateSchema() {
     // Get the schema corresponding to the configuration of this widget and clone it
-    const widgetSchema = _.cloneDeep(verna.configSchema?.properties?.[templateName]);
+    const widgetSchema = {
+      properties: {
+        ..._.cloneDeep(verna.configSchema?.properties?.[templateName].properties),
+        ...defaultWidgetProps,
+      },
+    };
 
     const isMessageKey = (key: PropertyKey): key is keyof typeof messages => {
       return key in messages;
@@ -136,14 +157,9 @@ export default function WidgetPropertiesForm({ id, onClose }: WidgetPropertiesFo
   }
 
   const uiSchema: UiSchema = {
-    SelectWidget: {
-      items: {
-        'ui:options': {
-          addable: true,
-          orderable: true,
-        },
-      },
-    },
+    'ui:order': ['title', 'description'].concat(
+      Object.keys(verna.configSchema?.properties?.[templateName]?.properties || {}),
+    ),
     'ui:submitButtonOptions': {
       norender: false,
       props: {
@@ -161,6 +177,12 @@ export default function WidgetPropertiesForm({ id, onClose }: WidgetPropertiesFo
     const self = currentSection?.properties?.[widgetName] || {};
 
     return {
+      description:
+        self.description &&
+        formatMessage({
+          defaultMessage: DEFAULT_PROPERTY_TRANSLATION,
+          id: self.description,
+        }),
       enum: translateEnum(self.enum || []),
       items: translateItems(self.items),
       maxLength: self.maxLength,
@@ -169,6 +191,12 @@ export default function WidgetPropertiesForm({ id, onClose }: WidgetPropertiesFo
       minimum: self.minimum,
       required:
         currentSection.required && (currentSection.required as string[]).includes(widgetName),
+      title:
+        self.title &&
+        formatMessage({
+          defaultMessage: DEFAULT_PROPERTY_TRANSLATION,
+          id: self.title,
+        }),
     };
   }
 

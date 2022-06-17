@@ -58,14 +58,19 @@ describe('widget properties edition', () => {
     // Check required checkbox
     await userEvent.click(screen.getByRole('checkbox', { name: 'required' }));
 
+    // Set the field name and description
+    const $fieldInputs = screen.getAllByRole('textbox', {});
+    fireEvent.change($fieldInputs[0], { target: { value: 'title' } });
+    fireEvent.change($fieldInputs[1], { target: { value: 'description' } });
+
     // Add two inputs in the list of choices
     await userEvent.click(screen.getByRole('button', { name: 'Add' }));
     await userEvent.click(screen.getByRole('button', { name: 'Add' }));
 
     // Set the value of the new field
     const $newInputs = screen.getAllByRole('textbox', {});
-    fireEvent.change($newInputs[2], { target: { value: 'newChoice1' } });
-    fireEvent.change($newInputs[3], { target: { value: 'newChoice2' } });
+    fireEvent.change($newInputs[4], { target: { value: 'newChoice1' } });
+    fireEvent.change($newInputs[5], { target: { value: 'newChoice2' } });
 
     // Save parameters
     await userEvent.click(screen.getByRole('button', { name: 'save' }));
@@ -76,10 +81,12 @@ describe('widget properties edition', () => {
     // Check that the previous options are updated correctly
     // Nb: those options are not cached, it's checking defaultSchema & defaultUiSchema
     //     on each opening
-    const $inputs = screen.queryAllByRole('textbox', {});
-    expect($inputs[0]).toHaveValue(translations.en.root_testSection_select_enum_0);
-    expect($inputs[1]).toHaveValue(translations.en.root_testSection_select_enum_1);
-    expect($inputs[2]).toHaveValue('newChoice1');
-    expect($inputs[3]).toHaveValue('newChoice2');
+    const $inputs = screen.getAllByRole('textbox', {});
+    expect($inputs[0]).toHaveValue('title');
+    expect($inputs[1]).toHaveValue('description');
+    expect($inputs[2]).toHaveValue(translations.en.root_testSection_select_enum_0);
+    expect($inputs[3]).toHaveValue(translations.en.root_testSection_select_enum_1);
+    expect($inputs[4]).toHaveValue('newChoice1');
+    expect($inputs[5]).toHaveValue('newChoice2');
   });
 });

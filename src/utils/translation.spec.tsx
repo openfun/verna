@@ -1,6 +1,5 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import _ from 'lodash';
 import VernaProvider from '../providers/VernaProvider';
 import VernaForm from '../components/VernaForm';
 import {
@@ -101,12 +100,12 @@ describe('schema translations', () => {
     // change the value of the first enum
     const newEnum0Value = 'edit enum 0';
     const $newInputs = screen.getAllByRole('textbox', {});
-    fireEvent.change($newInputs[0], { target: { value: newEnum0Value } });
+    fireEvent.change($newInputs[2], { target: { value: newEnum0Value } });
 
     await userEvent.click(screen.getByRole('button', { name: 'Add' }));
 
     const enum2Value = 'edit enum 2';
-    fireEvent.change(_.last(screen.getAllByRole('textbox', {}))!, {
+    fireEvent.change(screen.getAllByRole('textbox', {})[4], {
       target: { value: enum2Value },
     });
 
@@ -120,9 +119,9 @@ describe('schema translations', () => {
     // Nb: those options are not cached, it's checking defaultSchema & defaultUiSchema
     //     on each opening
     const $inputs = await screen.findAllByRole('textbox', {});
-    expect($inputs[0]).toHaveValue(newEnum0Value);
-    expect($inputs[1]).toHaveValue(translations.en.root_testSection_select_enum_1);
-    expect($inputs[2]).toHaveValue(enum2Value);
+    expect($inputs[2]).toHaveValue(newEnum0Value);
+    expect($inputs[3]).toHaveValue(translations.en.root_testSection_select_enum_1);
+    expect($inputs[4]).toHaveValue(enum2Value);
   });
 
   it('should translate the "items" option in en', async () => {
@@ -164,12 +163,12 @@ describe('schema translations', () => {
     // change the value of the first item
     const newItem0Value = 'edit item 0';
     const $newInputs = screen.getAllByRole('textbox', {});
-    fireEvent.change($newInputs[0], { target: { value: newItem0Value } });
+    fireEvent.change($newInputs[2], { target: { value: newItem0Value } });
 
     await userEvent.click(screen.getByRole('button', { name: 'Add' }));
 
     const item2Value = 'edit item 2';
-    fireEvent.change(_.last(screen.getAllByRole('textbox', {}))!, {
+    fireEvent.change(screen.getAllByRole('textbox', {})[4], {
       target: { value: item2Value },
     });
 
@@ -183,9 +182,9 @@ describe('schema translations', () => {
     // Nb: those options are not cached, it's checking defaultSchema & defaultUiSchema
     //     on each opening
     const $inputs = await screen.findAllByRole('textbox', {});
-    expect($inputs[0]).toHaveValue(newItem0Value);
-    expect($inputs[1]).toHaveValue(translations.en.root_testSection_checkboxes_items_1);
-    expect($inputs[2]).toHaveValue(item2Value);
+    expect($inputs[2]).toHaveValue(newItem0Value);
+    expect($inputs[3]).toHaveValue(translations.en.root_testSection_checkboxes_items_1);
+    expect($inputs[4]).toHaveValue(item2Value);
   });
 
   it('should translate the "items" option in fr', async () => {
@@ -235,12 +234,12 @@ describe('schema translations', () => {
     // change the value of the first item
     const newItem0Value = 'edit item 0 fr';
     const $newInputs = screen.getAllByRole('textbox', {});
-    fireEvent.change($newInputs[0], { target: { value: newItem0Value } });
+    fireEvent.change($newInputs[2], { target: { value: newItem0Value } });
 
     await userEvent.click(screen.getByRole('button', { name: 'Add' }));
 
     const item2Value = 'edit item 2 fr';
-    fireEvent.change(_.last(screen.getAllByRole('textbox', {}))!, {
+    fireEvent.change(screen.getAllByRole('textbox', {})[4], {
       target: { value: item2Value },
     });
 
@@ -260,8 +259,8 @@ describe('schema translations', () => {
     // Nb: those options are not cached, it's checking defaultSchema & defaultUiSchema
     //     on each opening
     const $inputs = await screen.findAllByRole('textbox', {});
-    expect($inputs[0]).toHaveValue(newItem0Value);
-    expect($inputs[1]).toHaveValue(translations.fr.root_testSection_checkboxes_items_1);
-    expect($inputs[2]).toHaveValue(item2Value);
+    expect($inputs[2]).toHaveValue(newItem0Value);
+    expect($inputs[3]).toHaveValue(translations.fr.root_testSection_checkboxes_items_1);
+    expect($inputs[4]).toHaveValue(item2Value);
   });
 });

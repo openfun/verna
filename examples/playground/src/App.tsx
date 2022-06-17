@@ -211,6 +211,7 @@ function App() {
 
   const translationUi = {
     'components.EditorFieldTemplate.parameters': 'Paramètres',
+    'components.WidgetPropertiesForm.description': 'Description',
     'components.WidgetPropertiesForm.enum': 'Options',
     'components.WidgetPropertiesForm.items': 'Options avancées',
     'components.WidgetPropertiesForm.maxLength': 'Longueur maximum',
@@ -219,6 +220,7 @@ function App() {
     'components.WidgetPropertiesForm.minimum': 'Minimum',
     'components.WidgetPropertiesForm.required': 'Requis',
     'components.WidgetPropertiesForm.submitWidgetParameter': 'Sauvegarder',
+    'components.WidgetPropertiesForm.title': 'Nom',
   };
 
   return (
