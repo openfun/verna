@@ -1,23 +1,19 @@
 import { VernaContextProps } from '../../providers/VernaProvider';
 import { RJSF_ID_SEPARATOR } from '../../settings';
-import {
-  updateEnum,
-  updateItems,
-  updateMaximum,
-  updateMaxLength,
-  updateMinimum,
-  updateRequired,
-} from './widgetPropertyUpdaters';
+import { updateProperty, updateRequired } from './widgetPropertyUpdaters';
 import VernaJSONSchemaType from '../../types/rjsf';
+import _ from 'lodash';
 
 type Maybe<T> = T | undefined;
 export type Properties = {
-  items: Maybe<VernaJSONSchemaType>;
+  description: Maybe<string>;
   enum: Maybe<string[]>;
-  required: Maybe<boolean>;
+  items: Maybe<VernaJSONSchemaType>;
   maxLength: Maybe<number>;
   maximum: Maybe<number>;
   minimum: Maybe<number>;
+  required: Maybe<boolean>;
+  title: Maybe<string>;
 };
 type PropertyName = Properties[keyof Properties];
 
@@ -30,6 +26,7 @@ type PropertyUpdater<T> = (
   verna: VernaContextProps,
   widgetPath: string[],
   locale: string,
+  newSchema: VernaJSONSchemaType,
 ) => void;
 
 type PropertyUpdaters = {
@@ -37,12 +34,21 @@ type PropertyUpdaters = {
 };
 
 const propertyUpdaters: PropertyUpdaters = {
-  enum: updateEnum,
-  items: updateItems,
-  maxLength: updateMaxLength,
-  maximum: updateMaximum,
-  minimum: updateMinimum,
+  description: (value, verna, widgetPath, locale, newSchema) =>
+    updateProperty('description', value, verna, widgetPath, locale, newSchema),
+  enum: (value, verna, widgetPath, locale, newSchema) =>
+    updateProperty('enum', value, verna, widgetPath, locale, newSchema),
+  items: (value, verna, widgetPath, locale, newSchema) =>
+    updateProperty('items', value, verna, widgetPath, locale, newSchema),
+  maxLength: (value, verna, widgetPath, locale, newSchema) =>
+    updateProperty('maxLength', value, verna, widgetPath, locale, newSchema),
+  maximum: (value, verna, widgetPath, locale, newSchema) =>
+    updateProperty('maximum', value, verna, widgetPath, locale, newSchema),
+  minimum: (value, verna, widgetPath, locale, newSchema) =>
+    updateProperty('minimum', value, verna, widgetPath, locale, newSchema),
   required: updateRequired,
+  title: (value, verna, widgetPath, locale, newSchema) =>
+    updateProperty('title', value, verna, widgetPath, locale, newSchema),
 };
 
 /**
@@ -58,12 +64,14 @@ export function updateWidgetProperties(
   locale: string,
 ) {
   const widgetPath = id.split(RJSF_ID_SEPARATOR);
+  const newSchema = _.cloneDeep(verna.schema);
 
   const updateProperty = (key: keyof Properties) => {
     const updater = propertyUpdaters[key] as PropertyUpdater<PropertyName>;
     const value = properties[key];
-    updater(value, verna, widgetPath, locale);
+    updater(value, verna, widgetPath, locale, newSchema);
   };
 
   widgetPropsKeys.forEach((key) => updateProperty(key as keyof Properties));
+  verna.setSchema(newSchema);
 }

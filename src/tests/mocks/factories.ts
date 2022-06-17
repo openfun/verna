@@ -165,6 +165,7 @@ const translationsFactory = (translations?: TranslationType) => {
 
 const translationUiFactory = () => ({
   'components.EditorFieldTemplate.parameters': 'Paramètres',
+  'components.WidgetPropertiesForm.description': 'Description',
   'components.WidgetPropertiesForm.enum': 'Options',
   'components.WidgetPropertiesForm.items': 'Options avancées',
   'components.WidgetPropertiesForm.maxLength': 'Longueur maximum',
@@ -173,6 +174,7 @@ const translationUiFactory = () => ({
   'components.WidgetPropertiesForm.minimum': 'Minimum',
   'components.WidgetPropertiesForm.required': 'Requis',
   'components.WidgetPropertiesForm.submitWidgetParameter': 'Sauvegarder',
+  'components.WidgetPropertiesForm.title': 'Nom du champ',
 });
 
 export {

@@ -15,7 +15,8 @@ import { Maybe } from '../../types/utils';
  */
 function getTranslationKey(widgetPath: string[], propertyKey: string, selector: Maybe<string>) {
   if (selector) {
-    const translationKeyParts = [widgetPath.shift(), selector, ...widgetPath, propertyKey];
+    const [root, ...path] = widgetPath;
+    const translationKeyParts = [root, selector, path, propertyKey];
     return translationKeyParts.join(RJSF_ID_SEPARATOR);
   } else {
     return [...widgetPath, propertyKey].join(RJSF_ID_SEPARATOR);
@@ -134,6 +135,7 @@ function updateStringTranslation(
  * @param verna The verna context, used to update the rendered schema
  * @param widgetPath The decomposed id for the corresponding widget
  * @param locale The current locale loaded
+ * @param newSchema New Schema that will update render once set
  */
 function updateProperty(
   propertyKey: keyof VernaJSONSchemaType,
@@ -141,8 +143,8 @@ function updateProperty(
   verna: VernaContextProps,
   widgetPath: string[],
   locale: string,
+  newSchema: VernaJSONSchemaType,
 ) {
-  const newSchema = verna.schema;
   let widget: VernaJSONSchemaType | undefined;
 
   if (verna.selector) {
@@ -162,7 +164,6 @@ function updateProperty(
       // @ts-ignore
       widget[propertyKey] = value;
     }
-    verna.setSchema(newSchema);
   }
 }
 
@@ -172,13 +173,16 @@ function updateProperty(
  * @param value The value to add or removed from required property
  * @param verna The verna context, used to update the rendered schema
  * @param widgetPath The decomposed id for the corresponding widget
+ * @param locale The current locale loaded
+ * @param newSchema New Schema that will update render once set
  */
 function updateRequired(
   value: Properties['required'],
   verna: VernaContextProps,
   widgetPath: string[],
+  locale: string,
+  newSchema: VernaJSONSchemaType,
 ) {
-  const newSchema = { ...verna.schema };
   let section;
   let widgetName: string;
 
@@ -198,70 +202,6 @@ function updateRequired(
       section.required = section.required?.filter((e: string) => e !== widgetName);
     }
   }
-  verna.setSchema(newSchema);
 }
 
-/**
- * Add or remove items from a widget.
- * The items array is the list of props displayed in the widget
- * (e.g: a Select field)
- *
- * @param value The value to add or removed from required property
- * @param verna The verna context, used to update the rendered schema
- * @param widgetPath The decomposed id for the corresponding widget
- * @param locale The current locale loaded
- */
-function updateItems(
-  value: Properties['items'],
-  verna: VernaContextProps,
-  widgetPath: string[],
-  locale: string,
-) {
-  updateProperty('items', value, verna, widgetPath, locale);
-}
-
-function updateMaxLength(
-  value: Properties['maxLength'],
-  verna: VernaContextProps,
-  widgetPath: string[],
-  locale: string,
-) {
-  updateProperty('maxLength', value, verna, widgetPath, locale);
-}
-
-function updateEnum(
-  value: Properties['enum'],
-  verna: VernaContextProps,
-  widgetPath: string[],
-  locale: string,
-) {
-  updateProperty('enum', value, verna, widgetPath, locale);
-}
-
-function updateMaximum(
-  value: Properties['maximum'],
-  verna: VernaContextProps,
-  widgetPath: string[],
-  locale: string,
-) {
-  updateProperty('maximum', value, verna, widgetPath, locale);
-}
-
-function updateMinimum(
-  value: Properties['maximum'],
-  verna: VernaContextProps,
-  widgetPath: string[],
-  locale: string,
-) {
-  updateProperty('minimum', value, verna, widgetPath, locale);
-}
-
-export {
-  updateItems,
-  updateRequired,
-  updateProperty,
-  updateEnum,
-  updateMaximum,
-  updateMinimum,
-  updateMaxLength,
-};
+export { updateRequired, updateProperty };
