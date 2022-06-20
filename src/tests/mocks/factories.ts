@@ -1,6 +1,7 @@
 import type { UiSchema } from '@rjsf/core';
 import VernaJSONSchemaType from '../../types/rjsf';
 import SelectWidget from './SelectWidget';
+import NumberWidget from './NumberWidget';
 import { TranslationType } from '../../types/translations';
 
 const schemaFactory = (): VernaJSONSchemaType => ({
@@ -9,8 +10,10 @@ const schemaFactory = (): VernaJSONSchemaType => ({
     testSection: {
       properties: {
         field1: {
+          maximum: 10,
+          minimum: 5,
           title: 'root_testSection_field1',
-          type: 'string',
+          type: 'number',
         },
       },
       title: 'root_testSection_title',
@@ -19,6 +22,15 @@ const schemaFactory = (): VernaJSONSchemaType => ({
   },
   title: 'root_title',
   type: 'object',
+});
+
+const uiSchemaFactory = (): UiSchema => ({
+  testSection: {
+    field1: {
+      'ui:widget': 'numberWidget',
+    },
+    'ui:order': ['field1'],
+  },
 });
 
 const selectSchemaFactory = (): VernaJSONSchemaType => ({
@@ -40,7 +52,7 @@ const selectSchemaFactory = (): VernaJSONSchemaType => ({
   type: 'object',
 });
 
-const uiSchemaFactory = (): UiSchema => ({
+const selectUiSchemaFactory = (): UiSchema => ({
   testSection: {
     select: {
       'ui:widget': 'selectWidget',
@@ -83,6 +95,7 @@ const checkBoxesUiSchemaFactory = (): UiSchema => ({
 });
 
 const widgetsFactory = () => ({
+  numberWidget: NumberWidget,
   selectWidget: SelectWidget,
 });
 
@@ -180,11 +193,12 @@ const translationUiFactory = () => ({
 export {
   checkBoxesSchemaFactory,
   checkBoxesUiSchemaFactory,
+  confSchemaFactory,
   schemaFactory,
-  uiSchemaFactory,
+  selectUiSchemaFactory,
   selectSchemaFactory,
   widgetsFactory,
-  confSchemaFactory,
+  uiSchemaFactory,
   translationsFactory,
   translationUiFactory,
 };

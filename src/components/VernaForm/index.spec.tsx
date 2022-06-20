@@ -2,7 +2,12 @@ import { screen, render, waitFor } from '@testing-library/react';
 import _ from 'lodash';
 import userEvent from '@testing-library/user-event';
 import VernaProvider from '../../providers/VernaProvider';
-import { schemaFactory, translationsFactory } from '../../tests/mocks/factories';
+import {
+  schemaFactory,
+  translationsFactory,
+  uiSchemaFactory,
+  widgetsFactory,
+} from '../../tests/mocks/factories';
 import VernaForm from '../VernaForm';
 import { resolvePromisesOneByOne } from '../../tests/utils';
 
@@ -21,6 +26,8 @@ describe('VernaForm', () => {
       <VernaProvider
         isEditor
         defaultSchema={schemaFactory()}
+        defaultUiSchema={uiSchemaFactory()}
+        defaultWidgets={widgetsFactory()}
         locale="en"
         translations={translations}
       >
@@ -39,7 +46,7 @@ describe('VernaForm', () => {
     const $field1 = document.getElementById('root_testSection_field1') as HTMLInputElement;
 
     expect($field1).toBeInstanceOf(HTMLInputElement);
-    expect($field1.type).toBe('text');
+    expect($field1.type).toBe('number');
   });
 
   it('should be able to add or remove sections and fields', async () => {
@@ -116,6 +123,8 @@ describe('VernaForm', () => {
         isEditor
         defaultSchema={schemaFactory()}
         defaultSelector="testSection"
+        defaultUiSchema={uiSchemaFactory()}
+        defaultWidgets={widgetsFactory()}
         locale="en"
         translations={translations}
       >
@@ -137,7 +146,7 @@ describe('VernaForm', () => {
     // - A required text input First name should be displayed inside the only section
     const $field1 = document.getElementById('root_field1') as HTMLInputElement;
     expect($field1).toBeInstanceOf(HTMLInputElement);
-    expect($field1.type).toBe('text');
+    expect($field1.type).toBe('number');
   });
 
   it('should use a selector to query sub schema and add or remove fields on it', async () => {
@@ -148,6 +157,8 @@ describe('VernaForm', () => {
         isEditor
         defaultSchema={schemaFactory()}
         defaultSelector="testSection"
+        defaultUiSchema={uiSchemaFactory()}
+        defaultWidgets={widgetsFactory()}
         locale="en"
         translations={translations}
       >
@@ -164,7 +175,7 @@ describe('VernaForm', () => {
     });
     expect($addFieldButtons).toHaveLength(3);
 
-    // Delete every element from top to bottom
+    // Delete every elements from top to bottom
     // eslint-disable-next-line compat/compat
     await userEvent.click(
       screen.queryAllByRole('button', {
@@ -202,7 +213,13 @@ describe('VernaForm', () => {
     const translations = translationsFactory();
 
     render(
-      <VernaProvider defaultSchema={schemaFactory()} locale="en" translations={translations}>
+      <VernaProvider
+        defaultSchema={schemaFactory()}
+        defaultUiSchema={uiSchemaFactory()}
+        defaultWidgets={widgetsFactory()}
+        locale="en"
+        translations={translations}
+      >
         <VernaForm />
       </VernaProvider>,
     );
@@ -219,7 +236,7 @@ describe('VernaForm', () => {
     const $field1 = document.getElementById('root_testSection_field1') as HTMLInputElement;
 
     expect($field1).toBeInstanceOf(HTMLInputElement);
-    expect($field1.type).toBe('text');
+    expect($field1.type).toBe('number');
 
     const $addFieldButtons = screen.queryAllByRole('button', {
       name: 'Add an input',

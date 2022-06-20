@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Add tests on custom error feature
 - Add title and description edition for fields
 - Add translations on fields properties
 - Add uuid generation for component naming
