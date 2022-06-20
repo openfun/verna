@@ -1,6 +1,7 @@
-import type { UiSchema } from '@rjsf/core';
+import type { AjvError, UiSchema } from '@rjsf/core';
 import VernaJSONSchemaType from '../../types/rjsf';
 import SelectWidget from './SelectWidget';
+import NumberWidget from './NumberWidget';
 import { TranslationType } from '../../types/translations';
 
 const schemaFactory = (): VernaJSONSchemaType => ({
@@ -9,8 +10,10 @@ const schemaFactory = (): VernaJSONSchemaType => ({
     testSection: {
       properties: {
         field1: {
+          maximum: 10,
+          minimum: 5,
           title: 'root_testSection_field1',
-          type: 'string',
+          type: 'number',
         },
       },
       title: 'root_testSection_title',
@@ -19,6 +22,15 @@ const schemaFactory = (): VernaJSONSchemaType => ({
   },
   title: 'root_title',
   type: 'object',
+});
+
+const uiSchemaFactory = (): UiSchema => ({
+  testSection: {
+    field1: {
+      'ui:widget': 'numberWidget',
+    },
+    'ui:order': ['select'],
+  },
 });
 
 const selectSchemaFactory = (): VernaJSONSchemaType => ({
@@ -40,7 +52,7 @@ const selectSchemaFactory = (): VernaJSONSchemaType => ({
   type: 'object',
 });
 
-const uiSchemaFactory = (): UiSchema => ({
+const selectUiSchemaFactory = (): UiSchema => ({
   testSection: {
     select: {
       'ui:widget': 'selectWidget',
@@ -83,6 +95,7 @@ const checkBoxesUiSchemaFactory = (): UiSchema => ({
 });
 
 const widgetsFactory = () => ({
+  numberWidget: NumberWidget,
   selectWidget: SelectWidget,
 });
 
@@ -177,14 +190,28 @@ const translationUiFactory = () => ({
   'components.WidgetPropertiesForm.title': 'Nom du champ',
 });
 
+function transformErrors(errors: AjvError[]): AjvError[] {
+  return errors.map((error) => {
+    if (error.name === 'minimum') {
+      error.message = `The value must be ${error.params.comparison} to ${error.params.limit}`;
+    }
+    if (error.name === 'maximum') {
+      error.message = 'Your value exceeds the maximum';
+    }
+    return error;
+  });
+}
+
 export {
   checkBoxesSchemaFactory,
   checkBoxesUiSchemaFactory,
+  confSchemaFactory,
   schemaFactory,
-  uiSchemaFactory,
+  selectUiSchemaFactory,
   selectSchemaFactory,
   widgetsFactory,
-  confSchemaFactory,
+  uiSchemaFactory,
+  transformErrors,
   translationsFactory,
   translationUiFactory,
 };

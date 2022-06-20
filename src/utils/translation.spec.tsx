@@ -7,7 +7,7 @@ import {
   checkBoxesUiSchemaFactory,
   selectSchemaFactory,
   translationsFactory,
-  uiSchemaFactory,
+  selectUiSchemaFactory,
   confSchemaFactory,
   widgetsFactory,
   translationUiFactory,
@@ -21,7 +21,7 @@ describe('schema translations', () => {
       <VernaProvider
         isEditor
         defaultSchema={selectSchemaFactory()}
-        defaultUiSchema={uiSchemaFactory()}
+        defaultUiSchema={selectUiSchemaFactory()}
         defaultWidgets={widgetsFactory()}
         locale="en"
         translations={translations}
@@ -46,7 +46,7 @@ describe('schema translations', () => {
       <VernaProvider
         isEditor
         defaultSchema={selectSchemaFactory()}
-        defaultUiSchema={uiSchemaFactory()}
+        defaultUiSchema={selectUiSchemaFactory()}
         defaultWidgets={widgetsFactory()}
         locale="fr"
         translationUi={translationUiFactory()}
@@ -72,7 +72,7 @@ describe('schema translations', () => {
         isEditor
         configSchema={confSchemaFactory()}
         defaultSchema={selectSchemaFactory()}
-        defaultUiSchema={uiSchemaFactory()}
+        defaultUiSchema={selectUiSchemaFactory()}
         defaultWidgets={widgetsFactory()}
         locale="en"
         translations={translations}

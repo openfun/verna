@@ -4,7 +4,7 @@ import VernaProvider from '../providers/VernaProvider';
 import {
   selectSchemaFactory,
   translationsFactory,
-  uiSchemaFactory,
+  selectUiSchemaFactory,
   confSchemaFactory,
   widgetsFactory,
 } from './mocks/factories';
@@ -17,7 +17,7 @@ describe('widget properties edition', () => {
       <VernaProvider
         isEditor
         defaultSchema={selectSchemaFactory()}
-        defaultUiSchema={uiSchemaFactory()}
+        defaultUiSchema={selectUiSchemaFactory()}
         defaultWidgets={widgetsFactory()}
         locale="en"
         translations={translations}
@@ -42,7 +42,7 @@ describe('widget properties edition', () => {
         isEditor
         configSchema={confSchemaFactory()}
         defaultSchema={selectSchemaFactory()}
-        defaultUiSchema={uiSchemaFactory()}
+        defaultUiSchema={selectUiSchemaFactory()}
         defaultWidgets={widgetsFactory()}
         locale="en"
         translations={translations}
