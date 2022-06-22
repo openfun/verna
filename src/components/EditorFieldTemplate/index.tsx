@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import type { FieldTemplateProps } from '@rjsf/core';
-import { makeid } from '../../utils/utils';
+import { defineMessages, FormattedMessage } from 'react-intl';
+import { v4 as uuidv4 } from 'uuid';
 import ShowCaseWidgetProps from '../../types/Widgets';
 import DropZone from './DropZone';
 import { RJSF_ID_SEPARATOR } from '../../settings';
@@ -8,7 +9,6 @@ import { useVerna } from '../../providers/VernaProvider';
 import { addWidget, addSection } from '../../utils/schema';
 import WidgetPropertiesForm from '../WidgetPropertiesForm';
 import { removeSection, removeWidget } from '../../utils/schema';
-import { defineMessages, FormattedMessage } from 'react-intl';
 
 const messages = defineMessages({
   parameters: {
@@ -36,7 +36,7 @@ export default function EditorFieldTemplate(props: FieldTemplateProps) {
   const canAddSection = isSection && !isRoot && !verna.selector;
 
   function addItem(widgetProps?: ShowCaseWidgetProps) {
-    const newKey = makeid(10);
+    const newKey = uuidv4();
     addWidget(newKey, id, verna, widgetProps);
   }
 

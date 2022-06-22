@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import ShowCaseWidgetProps from '../../types/Widgets';
-import { makeid } from '../../utils/utils';
 import { addWidget } from '../../utils/schema';
 import { useVerna } from '../../providers/VernaProvider';
 
@@ -14,7 +14,7 @@ export default function DropZone({ id }: DropZoneProps) {
 
   function addItem(widgetProps?: ShowCaseWidgetProps) {
     if (!id) return;
-    const newKey = makeid(10);
+    const newKey = uuidv4();
     addWidget(newKey, id, verna, widgetProps);
   }
 

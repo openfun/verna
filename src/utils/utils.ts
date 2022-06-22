@@ -2,16 +2,6 @@ import type { UiSchema } from '@rjsf/core';
 import { RJSF_ID_SEPARATOR } from '../settings';
 import { Maybe } from '../types/utils';
 
-function makeid(length: number) {
-  let result = '';
-  let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let charactersLength = characters.length;
-  for (let i = 0; i < length; i++) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength));
-  }
-  return result;
-}
-
 /**
  * Retrieve the section name from the provided id.
  *
@@ -57,4 +47,4 @@ function getUiWidgetName(id: string, uiSchema: UiSchema) {
   return secondId ? section?.[secondId]?.['ui:widget'] || '' : section?.['ui:widget'] || '';
 }
 
-export { makeid, getSectionName, getWidgetName, getUiWidgetName };
+export { getSectionName, getWidgetName, getUiWidgetName };

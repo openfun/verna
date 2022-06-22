@@ -2,12 +2,8 @@ import { JSONSchema7TypeName } from 'json-schema';
 import Section from './components/Fields/Section';
 import VernaJSONSchemaType from './types/rjsf';
 
-const stringDefinition = (
-  title: string,
-  type: JSONSchema7TypeName = 'string',
-): VernaJSONSchemaType => {
+const stringDefinition = (type: JSONSchema7TypeName = 'string'): VernaJSONSchemaType => {
   const def: VernaJSONSchemaType = {
-    title,
     type,
   };
   if (type === 'array') {
@@ -17,9 +13,8 @@ const stringDefinition = (
   return def;
 };
 
-const sectionDefinition = (title: string): VernaJSONSchemaType => ({
+const sectionDefinition = (): VernaJSONSchemaType => ({
   properties: {},
-  title: title,
   type: 'object',
 });
 

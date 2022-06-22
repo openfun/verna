@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Add uuid generation for component naming
 - Add language management feature
 - Rework playground widgets template
 - Functionality to customize error messages

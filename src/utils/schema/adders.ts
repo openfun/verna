@@ -1,4 +1,5 @@
-import { getWidgetName, getSectionName, makeid } from '../utils';
+import { v4 as uuidv4 } from 'uuid';
+import { getWidgetName, getSectionName } from '../utils';
 import { ObjectFieldTemplateType, VernaContextProps } from '../../providers/VernaProvider';
 import { sectionDefinition, stringDefinition } from '../../templates';
 import ShowCaseWidgetProps from '../../types/Widgets';
@@ -65,12 +66,12 @@ function addWidget(
   if (!currentSection) return;
   if (verna.selector) {
     if (newSchema.properties) {
-      newSchema.properties[newKey] = stringDefinition(newKey, widgetInfos?.type);
+      newSchema.properties[newKey] = stringDefinition(widgetInfos?.type);
     }
   } else {
     const section = newSchema.properties?.[currentSection] || {};
     if (section.properties) {
-      section.properties[newKey] = stringDefinition(newKey, widgetInfos?.type);
+      section.properties[newKey] = stringDefinition(widgetInfos?.type);
     }
   }
   verna.setSchema(newSchema);
@@ -89,9 +90,9 @@ function addSection(
   objectFieldTemplate: ObjectFieldTemplateType,
 ) {
   const newSchema = { ...verna.schema };
-  const newKey = makeid(10);
+  const newKey = uuidv4();
   if (newSchema.properties) {
-    newSchema.properties[newKey] = sectionDefinition(newKey);
+    newSchema.properties[newKey] = sectionDefinition();
   }
   verna.setSchema(newSchema);
   const currentSection = getSectionName(id);
