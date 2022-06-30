@@ -9,6 +9,7 @@ import { useVerna } from '../../providers/VernaProvider';
 import { addWidget, addSection } from '../../utils/schema';
 import WidgetPropertiesForm from '../WidgetPropertiesForm';
 import { removeSection, removeWidget } from '../../utils/schema';
+import { Box } from 'grommet';
 
 const messages = defineMessages({
   parameters: {
@@ -45,37 +46,38 @@ export default function EditorFieldTemplate({ id, schema, children }: FieldTempl
       {children}
       {!isSection && (!isRoot || verna.selector) && (
         <>
-          <button onClick={() => setIsEditing(!isEditing)}>
-            <FormattedMessage {...messages.parameters} />
-          </button>
+          <div style={{ display: 'flex', gap: '5px' }}>
+            <button onClick={() => setIsEditing(!isEditing)}>
+              <FormattedMessage {...messages.parameters} />
+            </button>
+            {canAddField && (
+              <button
+                onClick={() => removeWidget(verna, id)}
+                style={{ width: '24px', height: '24px' }}
+              >
+                x
+              </button>
+            )}
+            {canAddSection && (
+              <button
+                onClick={() => removeSection(verna, id)}
+                style={{ width: '24px', height: '24px' }}
+              >
+                x
+              </button>
+            )}
+          </div>
           {isEditing && <WidgetPropertiesForm id={id} onClose={() => setIsEditing(false)} />}
           <DropZone id={id} />
         </>
       )}
       <div style={{ display: 'flex', flexDirection: 'row' }}>
-        {(canAddField ||
-          (!ownProperties && isSection && !isRoot) ||
-          (verna.selector && !ownProperties)) && (
-          <button onClick={() => addItem()} style={{ width: '100%' }}>
-            Add an input
-          </button>
-        )}
         {(canAddSection || (isRoot && !ownProperties && !verna.selector)) && (
           <button
             onClick={() => addSection(verna, id, verna.objectFieldTemplate)}
             style={{ width: '100%' }}
           >
             Add a section
-          </button>
-        )}
-        {canAddField && (
-          <button onClick={() => removeWidget(verna, id)} style={{ width: '20px' }}>
-            x
-          </button>
-        )}
-        {canAddSection && (
-          <button onClick={() => removeSection(verna, id)} style={{ width: '20px' }}>
-            x
           </button>
         )}
       </div>

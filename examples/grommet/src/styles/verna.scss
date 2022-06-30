@@ -1,3 +1,55 @@
+body {
+  padding: 0;
+  margin: 0;
+}
+
+.verna-wrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  background-color: #f0f5f7;
+  min-height: 700px;
+  padding: 20px;
+}
+
+.form_toolbar {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  gap: 20px;
+}
+
+.form_toolbar_item {
+  border: rgba(125, 76, 219, 0.45) dashed 2px;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.form_language {
+  display: flex;
+  align-items: flex-end;
+  flex-direction: column;
+  gap: 10px;
+
+  legend {
+    float: right;
+  }
+
+  button {
+    width: 100px;
+  }
+}
+
+.form_sections_list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.form_goback_button {
+  width: 200px;
+}
+
 .array-item-move-down {
   height: 30px;
   width: 30px;
@@ -114,13 +166,6 @@
   height: 30px;
 }
 
-.widget-wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  margin: 5px 0 0 5px;
-}
-
 .widget-parameters-wrapper {
   background-color: #b9b9b9;
   border: solid 1px gray;
@@ -134,4 +179,12 @@
     flex-direction: row;
     justify-content: space-between;
   }
+}
+
+.sidebar {
+  gap: 5px;
+}
+
+fieldset {
+  border: none;
 }

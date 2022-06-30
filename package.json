@@ -5,6 +5,7 @@
   "description": "An extensible form builder based on React JSON Schema Form.",
   "scripts": {
     "dev": "cd examples/playground && yarn start",
+    "dev-grommet": "cd examples/grommet && yarn start",
     "build": "tsc && vite build",
     "lint": "eslint 'src/**/*.{ts,tsx}'",
     "test": "jest"

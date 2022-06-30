@@ -87,7 +87,7 @@ export default function WidgetPropertiesForm({ id, onClose }: WidgetPropertiesFo
       id,
       Object.keys(
         {
-          ...verna.configSchema?.properties?.[templateName]?.properties,
+          ...(verna.configSchema?.properties?.[templateName]?.properties || {}),
           ...defaultWidgetProps,
         } || {},
       ),
