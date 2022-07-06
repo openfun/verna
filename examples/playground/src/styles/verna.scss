@@ -1,9 +1,40 @@
+// Placeholders
+%arrow {
+  border: solid black;
+  border-width: 0 3px 3px 0;
+  display: inline-block;
+  padding: 3px;
+}
+
+%cross-after {
+  background-color: white;
+  content: " ";
+  height: 3px;
+  left: 5px;
+  margin-top: -2px;
+  position: absolute;
+  right: 5px;
+  top: 50%;
+}
+
+%cross-before {
+  background-color: white;
+  bottom: 5px;
+  content: " ";
+  left: 50%;
+  margin-left: -2px;
+  position: absolute;
+  top: 5px;
+  width: 3px;
+}
+
+// Styles
 .array-item-move-down {
   height: 30px;
   width: 30px;
 
   .glyphicon-arrow-down {
-    @extend .arrow;
+    @extend %arrow;
 
     transform: rotate(45deg);
   }
@@ -14,7 +45,7 @@
   width: 30px;
 
   .glyphicon-arrow-up {
-    @extend .arrow;
+    @extend %arrow;
 
     transform: rotate(-135deg);
   }
@@ -27,24 +58,17 @@
 }
 
 .array-item-remove::after {
-  @extend .cross-before;
+  @extend %cross-before;
 
   background-color: black;
   transform: rotate(-45deg);
 }
 
 .array-item-remove::before {
-  @extend .cross-before;
+  @extend %cross-before;
 
   background-color: black;
   transform: rotate(45deg);
-}
-
-.arrow {
-  border: solid black;
-  border-width: 0 3px 3px 0;
-  display: inline-block;
-  padding: 3px;
 }
 
 .btn-add {
@@ -56,38 +80,16 @@
 }
 
 .btn-add::after {
-  @extend .cross-after;
+  @extend %cross-after;
 }
 
 .btn-add::before {
-  @extend .cross-before;
+  @extend %cross-before;
 }
 
 .buttons-wrapper {
   display: flex;
   flex-direction: column;
-}
-
-.cross-after {
-  background-color: white;
-  content: " ";
-  height: 3px;
-  left: 5px;
-  margin-top: -2px;
-  position: absolute;
-  right: 5px;
-  top: 50%;
-}
-
-.cross-before {
-  background-color: white;
-  bottom: 5px;
-  content: " ";
-  left: 50%;
-  margin-left: -2px;
-  position: absolute;
-  top: 5px;
-  width: 3px;
 }
 
 .drop-zone {
@@ -108,6 +110,7 @@
 }
 
 .drop-zone-drag-over {
+  /* stylelint-disable-next-line scss/at-extend-no-missing-placeholder */
   @extend .drop-zone;
 
   border: 3px dashed #838383;
