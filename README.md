@@ -21,10 +21,32 @@ You can check examples available within the `examples` folder. Take a loot at th
 Soon instructions to install `@openfun/verna` within your project.
 
 To run the project, you have to run :
-1. `yarn` or `npm install` 
-2. `yarn dev` or `npm run dev`
+1. `yarn install` 
+2. `yarn dev`
 
 You should now be able to access the playground example from http://localhost:3000
+
+### Project structure (Yarn workspaces)
+
+This repository is a monorepo based on Yarn workspace to organize code.
+Workspaces are located in two directories `lib` and `examples`. You can get info on all existing
+workspace through `yarn workspaces info` command.
+In `lib`, there is the `@openfun/verna` workspace that is the project itself which will be published
+on npm then the `examples` directory aims to contain all the examples to demonstrate feature of
+Verna.
+
+#### Scripts
+
+Through Yarn workspace, you are able to launch main commands from the root of this repository.
+Here are the available commands:
+
+- `yarn build`: Build the `@openfun/verna` library for production.
+- `yarn dev`: Build and watch `@openfun/verna` library then start development server from the
+  example workspace define through the environment variable `VERNA_EXAMPLE` (by default it uses
+  `verna-examples-playground`, take a look at `examples` directory to see all examples available)
+- `yarn lint`: Lint the code of all workspaces.
+- `yarn test`: Run test suites from `@openfun/verna` workspace.
+
 
 ## Contributing
 

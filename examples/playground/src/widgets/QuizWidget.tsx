@@ -1,5 +1,5 @@
 import { ChangeEvent, useState } from 'react';
-import { VernaWidgetProps } from '../../../../src/types/Widgets';
+import type { VernaWidgetProps } from '@openfun/verna/dist/types/Widgets';
 
 export default function QuizWidget(props: VernaWidgetProps) {
   const choices = ['a', 'b', 'c', 'd'] as const;

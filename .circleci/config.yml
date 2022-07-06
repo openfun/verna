@@ -9,8 +9,8 @@ aliases:
     restore_cache:
       name: Restore node_modules cache
       keys:
-        - v0-front-dependencies-{{ checksum "~/fun/yarn.lock" }}
-        - v0-front-dependencies-
+        - v2-front-dependencies-{{ checksum "~/fun/yarn.lock" }}
+        - v2-front-dependencies-
 
 # Define the jobs we want to run for this project
 jobs:
@@ -99,11 +99,13 @@ jobs:
           command: yarn install --frozen-lockfile
       - run:
           name: Build front-end application for production
-          command: yarn build
+          command: yarn workspace @openfun/verna build
       - save_cache:
           paths:
+            - ./lib/node_modules
+            - ./examples/playground/node_modules
             - ./node_modules
-          key: v0-front-dependencies-{{ checksum "yarn.lock" }}
+          key: v2-front-dependencies-{{ checksum "yarn.lock" }}
 
   lint:
     docker:
@@ -149,7 +151,7 @@ jobs:
           command: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/fun/.npmrc
       - run:
           name: Publish package
-          command: npm publish
+          command: npm publish ./lib/
 
 
 

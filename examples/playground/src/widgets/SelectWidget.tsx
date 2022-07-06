@@ -1,5 +1,5 @@
+import type { VernaWidgetProps } from '@openfun/verna/dist/types/Widgets';
 import Field from './templates/Field';
-import { VernaWidgetProps } from '../../../../src/types/Widgets';
 
 interface option {
   label: string;
