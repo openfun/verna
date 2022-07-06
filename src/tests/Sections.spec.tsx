@@ -10,8 +10,8 @@ import {
 } from './mocks/factories';
 import VernaForm from '../components/VernaForm';
 
-describe('widget properties edition', () => {
-  it('should render a custom widget', async () => {
+describe('section properties edition', () => {
+  it('should render a custom section', async () => {
     const translations = translationsFactory();
     render(
       <VernaProvider
@@ -28,13 +28,17 @@ describe('widget properties edition', () => {
 
     screen.getByRole('group', { name: translations.en.root_title });
 
+    // Check that section title and description are displayed
+    screen.getByRole('group', { name: translations.en.root_testSection_title });
+    screen.getByText(translations.en.root_testSection_description);
+
     const $select = document.getElementById('root_testSection_select') as HTMLSelectElement;
 
     expect($select).toBeInstanceOf(HTMLSelectElement);
     expect($select.type).toBe('select-one');
   });
 
-  it('should modify options of a custom widget and update it', async () => {
+  it('should modify options of a custom section and update it', async () => {
     const translations = translationsFactory();
 
     render(
@@ -54,34 +58,20 @@ describe('widget properties edition', () => {
     // Open parameters
     const $parameterButtons = screen.getAllByRole('button', { name: 'Parameters' });
     expect($parameterButtons).toHaveLength(3);
-    await userEvent.click($parameterButtons[2]);
-
+    await userEvent.click($parameterButtons[1]);
     await screen.findByRole('group', { name: 'Options' });
-
-    // Check required checkbox
-    await userEvent.click(screen.getByRole('checkbox', { name: 'required' }));
 
     // Set the field name and description
     const $fieldInputs = screen.getAllByRole('textbox', {});
     fireEvent.change($fieldInputs[0], { target: { value: 'title' } });
     fireEvent.change($fieldInputs[1], { target: { value: 'description' } });
 
-    // Add two inputs in the list of choices
-    await userEvent.click(screen.getByRole('button', { name: 'Add' }));
-    await userEvent.click(screen.getByRole('button', { name: 'Add' }));
-
-    // Set the value of the new field
-    const $newInputs = screen.getAllByRole('textbox', {});
-    fireEvent.change($newInputs[4], { target: { value: 'newChoice1' } });
-    fireEvent.change($newInputs[5], { target: { value: 'newChoice2' } });
-
     // Save parameters
-    await userEvent.click(screen.getByRole('button', { name: 'save' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Save' }));
 
     // Open parameters again
     const $parameterButtons2 = screen.getAllByRole('button', { name: 'Parameters' });
-    expect($parameterButtons2).toHaveLength(3);
-    await userEvent.click($parameterButtons2[2]);
+    await userEvent.click($parameterButtons2[1]);
 
     // Check that the previous options are updated correctly
     // Nb: those options are not cached, it's checking defaultSchema & defaultUiSchema
@@ -89,9 +79,5 @@ describe('widget properties edition', () => {
     const $inputs = screen.getAllByRole('textbox', {});
     expect($inputs[0]).toHaveValue('title');
     expect($inputs[1]).toHaveValue('description');
-    expect($inputs[2]).toHaveValue(translations.en.root_testSection_select_enum_0);
-    expect($inputs[3]).toHaveValue(translations.en.root_testSection_select_enum_1);
-    expect($inputs[4]).toHaveValue('newChoice1');
-    expect($inputs[5]).toHaveValue('newChoice2');
   });
 });

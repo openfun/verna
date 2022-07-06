@@ -37,6 +37,7 @@ const selectSchemaFactory = (): VernaJSONSchemaType => ({
   description: 'root_description',
   properties: {
     testSection: {
+      description: 'root_testSection_description',
       properties: {
         select: {
           enum: ['root_testSection_select_enum_0', 'root_testSection_select_enum_1'],
@@ -150,6 +151,7 @@ const translationsFactory = (translations?: TranslationType) => {
       root_testSection_checkboxes_items_0: 'item 0 en',
       root_testSection_checkboxes_items_1: 'item 1 en',
       root_testSection_checkboxes_title: 'checkboxes title',
+      root_testSection_description: 'Sectiontest description',
       root_testSection_field1: 'field1 title',
       root_testSection_select_enum_0: 'enum 0 en',
       root_testSection_select_enum_1: 'enum 1 en',
@@ -164,6 +166,7 @@ const translationsFactory = (translations?: TranslationType) => {
       root_testSection_checkboxes_items_0: 'item 0 fr',
       root_testSection_checkboxes_items_1: 'item 1 fr',
       root_testSection_checkboxes_title: 'Titre des checkboxes',
+      root_testSection_description: 'Sectiontest description',
       root_testSection_field1: 'titre du field1',
       root_testSection_select_enum_0: 'enum 0 fr',
       root_testSection_select_enum_1: 'enum 1 fr',
@@ -188,6 +191,7 @@ const translationUiFactory = () => ({
   'components.WidgetPropertiesForm.required': 'Requis',
   'components.WidgetPropertiesForm.submitWidgetParameter': 'Sauvegarder',
   'components.WidgetPropertiesForm.title': 'Nom du champ',
+  'components.fields.section.parameters': 'Paramètres',
 });
 
 export {

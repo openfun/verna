@@ -27,6 +27,20 @@ const defaultWidgetProps: { [key: string]: VernaJSONSchemaType } = {
   },
 };
 
+const sectionParametersSchema = (): VernaJSONSchemaType => ({
+  properties: {
+    description: {
+      title: 'description',
+      type: 'string',
+    },
+    title: {
+      title: 'title',
+      type: 'string',
+    },
+  },
+  type: 'object',
+});
+
 const defaultVernaWidgets = {};
 
 const defaultObjectFieldTemplate = {
@@ -39,4 +53,5 @@ export {
   defaultVernaWidgets,
   defaultObjectFieldTemplate,
   defaultWidgetProps,
+  sectionParametersSchema,
 };

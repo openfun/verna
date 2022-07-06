@@ -12,7 +12,8 @@ import Section from '../../components/Fields/Section';
 function cleanUiSchema(schema: VernaJSONSchemaType, dirtyUiSchema: UiSchema) {
   // Add an overload on ui:ObjectFieldTemplate for every sections so it loads the custom section
   // render of Verna
-  Object.keys(schema.properties || {}).forEach(([key]) => {
+  dirtyUiSchema['ui:ObjectFieldTemplate'] = Section;
+  Object.keys(schema.properties || {}).forEach((key) => {
     dirtyUiSchema[key] = {
       ...dirtyUiSchema[key],
       'ui:ObjectFieldTemplate': Section,

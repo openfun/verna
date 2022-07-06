@@ -7,7 +7,7 @@ import DropZone from './DropZone';
 import { RJSF_ID_SEPARATOR } from '../../settings';
 import { useVerna } from '../../providers/VernaProvider';
 import { addWidget, addSection } from '../../utils/schema';
-import WidgetPropertiesForm from '../WidgetPropertiesForm';
+import WidgetPropertiesForm from '../PropertiesForms/WidgetPropertiesForm';
 import { removeSection, removeWidget } from '../../utils/schema';
 
 const messages = defineMessages({
@@ -49,7 +49,7 @@ export default function EditorFieldTemplate({ id, schema, children }: FieldTempl
             <FormattedMessage {...messages.parameters} />
           </button>
           {isEditing && <WidgetPropertiesForm id={id} onClose={() => setIsEditing(false)} />}
-          <DropZone id={id} />
+          {!(verna.selector && isRoot) && <DropZone id={id} />}
         </>
       )}
       <div style={{ display: 'flex', flexDirection: 'row' }}>

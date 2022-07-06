@@ -99,7 +99,7 @@ export default function WidgetPropertiesForm({ id, onClose }: WidgetPropertiesFo
     // Get the schema corresponding to the configuration of this widget and clone it
     const widgetSchema = {
       properties: {
-        ..._.cloneDeep(verna.configSchema?.properties?.[templateName].properties),
+        ..._.cloneDeep(verna.configSchema?.properties?.[templateName]?.properties),
         ...defaultWidgetProps,
       },
     };

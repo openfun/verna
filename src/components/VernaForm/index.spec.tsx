@@ -85,7 +85,7 @@ describe('VernaForm', () => {
     const $parametersButton = await screen.findAllByRole('button', {
       name: 'Parameters',
     });
-    expect($parametersButton).toHaveLength(3);
+    expect($parametersButton).toHaveLength(7);
 
     const $addSectionButtons = screen.queryAllByRole('button', {
       name: 'Add a section',

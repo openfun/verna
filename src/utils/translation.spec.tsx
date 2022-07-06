@@ -82,7 +82,9 @@ describe('schema translations', () => {
     );
 
     // Open parameters of the Select
-    await userEvent.click(screen.getByRole('button', { name: 'Parameters' }));
+    const $parameterButtons = screen.getAllByRole('button', { name: 'Parameters' });
+    expect($parameterButtons).toHaveLength(3);
+    await userEvent.click($parameterButtons[2]);
 
     // Check that no translation key are displayed
     expect(screen.queryAllByText('/root.*/')).toHaveLength(0);
@@ -113,7 +115,8 @@ describe('schema translations', () => {
     screen.getByRole('button', { name: 'save' }).click();
 
     // Open parameters again
-    screen.getByRole('button', { name: 'Parameters' }).click();
+    const $parameterButtons2 = screen.getAllByRole('button', { name: 'Parameters' });
+    await userEvent.click($parameterButtons2[2]);
 
     // Check that the previous options are updated correctly
     // Nb: those options are not cached, it's checking defaultSchema & defaultUiSchema
@@ -141,7 +144,9 @@ describe('schema translations', () => {
     );
 
     // Open parameters of the Select
-    await userEvent.click(screen.getByRole('button', { name: 'Parameters' }));
+    const $parameterButtons = screen.getAllByRole('button', { name: 'Parameters' });
+    expect($parameterButtons).toHaveLength(3);
+    await userEvent.click($parameterButtons[2]);
 
     // Check that no translation key are displayed
     expect(screen.queryAllByText('/root.*/')).toHaveLength(0);
@@ -176,7 +181,9 @@ describe('schema translations', () => {
     screen.getByRole('button', { name: 'save' }).click();
 
     // Open parameters again
-    screen.getByRole('button', { name: 'Parameters' }).click();
+    const $parameterButtons2 = screen.getAllByRole('button', { name: 'Parameters' });
+    expect($parameterButtons2).toHaveLength(3);
+    await userEvent.click($parameterButtons2[2]);
 
     // Check that the previous options are updated correctly
     // Nb: those options are not cached, it's checking defaultSchema & defaultUiSchema
@@ -206,11 +213,11 @@ describe('schema translations', () => {
     );
 
     // Open parameters of the Select
-    await userEvent.click(
-      screen.getByRole('button', {
-        name: translationUi['components.EditorFieldTemplate.parameters'],
-      }),
-    );
+    const $parameterButtons = screen.getAllByRole('button', {
+      name: translationUi['components.EditorFieldTemplate.parameters'],
+    });
+    expect($parameterButtons).toHaveLength(3);
+    await userEvent.click($parameterButtons[2]);
 
     // Check that no translation key are displayed
     expect(screen.queryAllByText('/root.*/')).toHaveLength(0);
@@ -251,9 +258,11 @@ describe('schema translations', () => {
       .click();
 
     // Open parameters again
-    screen
-      .getByRole('button', { name: translationUi['components.EditorFieldTemplate.parameters'] })
-      .click();
+    const $parameterButtons2 = screen.getAllByRole('button', {
+      name: translationUi['components.EditorFieldTemplate.parameters'],
+    });
+    expect($parameterButtons2).toHaveLength(3);
+    await userEvent.click($parameterButtons2[2]);
 
     // Check that the previous options are updated correctly
     // Nb: those options are not cached, it's checking defaultSchema & defaultUiSchema
