@@ -5,15 +5,20 @@
   "description": "An extensible form builder based on React JSON Schema Form.",
   "scripts": {
     "build": "tsc && vite build",
+    "build:watch": "yarn build --watch",
     "lint": "eslint 'src/**/*.{ts,tsx}'",
     "test": "jest"
   },
-  "main": "./dist/verna.umd.js",
+  "types": "./dist/index.d.ts",
+  "main": "dist/index.js",
   "exports": {
     ".": {
-      "import": "./dist/verna.es.js",
-      "require": "./dist/verna.umd.js"
-    }
+      "default": "./dist/index.js",
+      "import": "./dist/index.js",
+      "require": "./dist/index.umd.js"
+    },
+    "./*": "./*",
+    "./package.json": "./package.json"
   },
   "repository": "https://github.com/openfun/verna",
   "author": {
@@ -40,7 +45,9 @@
     "react-dom": ">=17.0.2<18",
     "react-intl": ">=5.25.1"
   },
-  "types": "./dist/types/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "devDependencies": {
     "@babel/core": "7.18.6",
     "@babel/preset-env": "7.18.6",
