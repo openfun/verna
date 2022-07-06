@@ -1,4 +1,4 @@
-import type { VernaWidgetProps } from '../../../../src/types/Widgets';
+import type { VernaWidgetProps } from '@openfun/verna/dist/types/Widgets';
 import { TextTemplateWidget } from './templates/TextTemplateWidget';
 
 export default function CheckboxWidget({

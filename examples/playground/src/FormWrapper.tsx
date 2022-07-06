@@ -1,4 +1,4 @@
-import { VernaForm, useVerna, VernaToolbar } from '@openfun/verna';
+import { useVerna, VernaForm, VernaToolbar } from '@openfun/verna';
 import { JSONSchema7 } from 'json-schema';
 import { useIntl } from 'react-intl';
 import TextWidget from './widgetToolbarItems/TextWidget';

@@ -1,5 +1,5 @@
+import type { VernaWidgetProps } from '@openfun/verna/dist/types/Widgets';
 import { TextTemplateWidget } from './templates/TextTemplateWidget';
-import { VernaWidgetProps } from '../../../../src/types/Widgets';
 
 export default function TextWidget({
   disabled,
