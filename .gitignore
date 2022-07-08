@@ -31,3 +31,6 @@ dist-ssr
 
 # Extracted i18n strings
 **/i18n/frontend.json
+
+# Crowdin
+env.d/development/crowdin

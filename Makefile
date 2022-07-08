@@ -35,6 +35,7 @@ COMPOSE              = DOCKER_USER=$(DOCKER_USER) docker-compose
 COMPOSE_RUN          = $(COMPOSE) run --rm
 COMPOSE_EXEC         = $(COMPOSE) exec
 COMPOSE_EXEC_NODE    = $(COMPOSE_EXEC) node
+COMPOSE_RUN_CROWDIN  = $(COMPOSE_RUN) crowdin crowdin
 
 # -- Node
 # We must run node with a /home because yarn tries to write to ~/.yarnrc. If the
@@ -68,6 +69,14 @@ test: ## Run tests
 .PHONY: test
 
 # -- Internationalization
+crowdin-download: ## Download translated message from Crowdin
+	@$(COMPOSE_RUN_CROWDIN) download -c crowdin/config.yml
+.PHONY: crowdin-download
+
+crowdin-upload: ## Upload source translations to Crowdin
+	@$(COMPOSE_RUN_CROWDIN) upload sources -c crowdin/config.yml
+.PHONY: crowdin-upload
+
 i18n-compile: ## Compile the translations
 	$(YARN) i18n:compile
 .PHONY: i18n-compile
@@ -75,6 +84,18 @@ i18n-compile: ## Compile the translations
 i18n-extract: ## Extracts the strings from the source code
 	$(YARN) i18n:extract
 .PHONY: i18n-extract
+
+i18n-download-and-compile: ## Download then compile source translations from Crowdin
+i18n-download-and-compile: \
+	crowdin-download \
+	i18n-compile
+.PHONY: i18n-download-and-compile
+
+i18n-extract-and-upload: ## Extract then upload source translations to Crowdin
+i18n-extract-and-upload: \
+	i18n-extract \
+	crowdin-upload
+.PHONY: i18n-extract-and-upload
 
 # -- Help
 
