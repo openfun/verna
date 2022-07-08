@@ -120,6 +120,7 @@ jobs:
       - run:
           name: Lint code with eslint
           command: yarn lint
+
   test:
     docker:
       - image: cimg/node:16.15
@@ -135,6 +136,7 @@ jobs:
           # Circle CI needs the tests to be run sequentially, otherwise it hangs. See Jest docs below:
           # (https://jestjs.io/docs/en/troubleshooting#tests-are-extremely-slow-on-docker-and-or-continuous-integration-ci-server)
           command: yarn test --runInBand
+
   # Publishing to npm requires that you have defined the NPM_TOKEN secret
   # environment variables in CircleCI UI.
   publish:
@@ -153,8 +155,44 @@ jobs:
           name: Publish package
           command: npm publish ./lib/
 
+  # ---- Internationalization jobs ----
+  ## Extract translations strings from all workspaces
+  i18n-extract:
+    docker:
+      - image: cimg/node:16.15
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASS
+    working_directory: ~/fun
+    steps:
+      - *checkout_fun
+      - *restore_node_modules
+      - run:
+          name: extract translation strings
+          command: yarn workspaces run i18n:extract
+      - persist_to_workspace:
+          root: ~/fun
+          paths:
+            - lib/i18n/frontend.json
+            - examples/playground/i18n/frontend.json
 
-
+  # Upload translations strings to crowdin. It requires that you have defined
+  # CROWDIN_API_TOKEN, CROWDIN_PROJECT_ID, CROWDIN_BASE_PATH environment variables
+  # in CircleCI project settings.
+  i18n-upload:
+    docker:
+      - image: crowdin/cli:3.7.9
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASS
+    working_directory: ~/fun
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/fun
+      - run:
+          name: upload files to crowdin
+          command: crowdin upload sources -c crowdin/config.yml
 
 # Orchestrate our job run sequence
 workflows:
@@ -177,6 +215,20 @@ workflows:
           filters:
             tags:
               only: /.*/
+
+      # ---- Internationalization ----
+      - i18n-extract:
+          requires:
+            - build
+          filters:
+            branches:
+              only: main
+      - i18n-upload:
+          requires:
+              - i18n-extract
+          filters:
+            branches:
+              only: main
 
       # ---- Git jobs ----
       - lint-git:
