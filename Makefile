@@ -67,6 +67,15 @@ test: ## Run tests
 	$(YARN) test
 .PHONY: test
 
+# -- Internationalization
+i18n-compile: ## Compile the translations
+	$(YARN) i18n:compile
+.PHONY: i18n-compile
+
+i18n-extract: ## Extracts the strings from the source code
+	$(YARN) i18n:extract
+.PHONY: i18n-extract
+
 # -- Help
 
 help:
