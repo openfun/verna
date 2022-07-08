@@ -23,6 +23,8 @@
     "dev:lib": "yarn workspace @openfun/verna build:dev",
     "dev:example": "yarn workspace ${VERNA_EXAMPLE:-verna-examples-playground} start",
     "dev": "concurrently -kc 'blue,magenta' 'yarn run dev:*'",
+    "i18n:extract": "yarn workspaces run i18n:extract",
+    "i18n:compile": "yarn workspaces run i18n:compile",
     "lint": "yarn workspaces run lint",
     "test": "yarn workspace @openfun/verna run test"
   },

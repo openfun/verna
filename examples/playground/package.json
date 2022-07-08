@@ -5,6 +5,8 @@
   "scripts": {
     "verna:build:check": "yarn workspace @openfun/verna build:check",
     "start": "vite",
+    "i18n:extract": "yarn formatjs extract --id-interpolation-pattern '[sha512:contenthash:base64:6]' --format crowdin './src/**/*.ts*' --out-file ./i18n/frontend.json",
+    "i18n:compile": "yarn formatjs compile-folder --format crowdin ./i18n/locales ./src/translations",
     "lint:stylelint": "stylelint 'src/**/*.scss'",
     "prelint:eslint": "yarn verna:build:check",
     "lint:eslint": "eslint 'src/**/*.{ts,tsx}'",
@@ -17,6 +19,7 @@
     "react-dom": "17.0.2"
   },
   "devDependencies": {
+    "@formatjs/cli": "5.0.2",
     "@types/react": "17.0.45",
     "@types/react-dom": "17.0.17",
     "@typescript-eslint/eslint-plugin": "5.30.6",

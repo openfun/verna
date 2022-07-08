@@ -28,3 +28,6 @@ dist-ssr
 
 # Meld git diff tool
 *.orig
+
+# Extracted i18n strings
+**/i18n/frontend.json
