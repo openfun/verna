@@ -2,21 +2,13 @@
   "extends": [
     "github>openfun/renovate-configuration"
   ],
-  "packageRules": [
-    {
-      "enabled": false,
-      "groupName": "ignored js dependencies",
-      "matchManagers": [
-        "npm"
-      ],
-      "matchPackageNames": [
-        "@testing-library/react",
-        "@types/react",
-        "@types/react-dom",
-        "react",
-        "react-dom",
-        "typescript"
-      ]
-    }
-  ]
+  "ignoreDeps": [
+    "@testing-library/react",
+    "@types/react",
+    "@types/react-dom",
+    "react",
+    "react-dom",
+    "typescript"
+  ],
+  "ignorePaths": ["**/node_modules/**"]
 }
