@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Add customization of verna render components
 - Add title and description edition on sections
 - Add tests on custom error feature
 - Add title and description edition for fields

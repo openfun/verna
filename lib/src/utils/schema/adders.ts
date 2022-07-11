@@ -1,6 +1,8 @@
 import { v4 as uuidv4 } from 'uuid';
+import React from 'react';
+import type { ObjectFieldTemplateProps } from '@rjsf/core';
 import { getWidgetName, getSectionName } from '../utils';
-import { ObjectFieldTemplateType, VernaContextProps } from '../../providers/VernaProvider';
+import { VernaContextProps } from '../../providers/VernaProvider';
 import { sectionDefinition, stringDefinition } from '../../templates';
 import ShowCaseWidgetProps from '../../types/Widgets';
 
@@ -89,7 +91,7 @@ function addWidget(
 function addSection(
   verna: VernaContextProps,
   id: string,
-  objectFieldTemplate: ObjectFieldTemplateType,
+  SectionTemplate: React.FunctionComponent<ObjectFieldTemplateProps>,
 ) {
   const newSchema = { ...verna.schema };
   const newKey = uuidv4();
@@ -104,7 +106,7 @@ function addSection(
       newUiSchema['ui:order'].findIndex((key) => key === currentSection) || 0;
     newUiSchema['ui:order'].splice(currentSectionIndex + 1, 0, newKey);
     newUiSchema[newKey] = {
-      'ui:ObjectFieldTemplate': objectFieldTemplate.section,
+      'ui:ObjectFieldTemplate': SectionTemplate,
     };
     verna.setUiSchema(newUiSchema);
   }

@@ -15,15 +15,22 @@ import type {
   Widget,
   FormProps,
 } from '@rjsf/core';
-import { defaultObjectFieldTemplate, defaultVernaWidgets } from '../templates';
-import VernaJSONSchemaType from '../types/rjsf';
+import type { FieldTemplateProps } from '@rjsf/core';
+import { defaultVernaWidgets } from '../../templates';
+import VernaJSONSchemaType from '../../types/rjsf';
 import {
   cleanUiSchema,
   getSelectedDefaultValues,
   getSelectedSchema,
   getSelectedUiSchema,
-} from '../utils/schema';
-import { TranslationType } from '../types/translations';
+} from '../../utils/schema';
+import { default as DefaultSection } from '../../components/Fields/Section';
+import EditorFieldTemplate from '../../components/EditorFieldTemplate';
+import {
+  default as DefaultDropZone,
+  DropZoneProps,
+} from '../../components/EditorFieldTemplate/DropZone';
+import { TranslationType } from '../../types/translations';
 
 function functionNotSet() {
   throw new Error('function context not set');
@@ -33,12 +40,11 @@ export interface WidgetsType {
   [name: string]: Widget;
 }
 
-export interface ObjectFieldTemplateType {
-  [name: string]: React.FunctionComponent<ObjectFieldTemplateProps>;
-}
-
 export interface VernaContextProps extends Pick<FormProps<unknown>, 'transformErrors'> {
-  objectFieldTemplate: ObjectFieldTemplateType;
+  DropZone: React.FunctionComponent<DropZoneProps>;
+  FieldTemplate: React.FunctionComponent<FieldTemplateProps>;
+  Section: React.FunctionComponent<ObjectFieldTemplateProps>;
+  SubmitButton: React.ReactNode;
   configSchema?: VernaJSONSchemaType;
   formData: unknown;
   fullSchema: VernaJSONSchemaType;
@@ -64,13 +70,16 @@ export interface VernaContextProps extends Pick<FormProps<unknown>, 'transformEr
 }
 
 const VernaContext = createContext<VernaContextProps>({
+  DropZone: DefaultDropZone,
+  FieldTemplate: EditorFieldTemplate,
+  Section: DefaultSection,
+  SubmitButton: undefined,
   configSchema: undefined,
   formData: {},
   fullSchema: {},
   fullUiSchema: {},
   handleSubmit: () => () => functionNotSet(),
   isEditor: false,
-  objectFieldTemplate: {},
   schema: {},
   schemaTranslations: {},
   selectedFormData: {},
@@ -97,12 +106,15 @@ function useVerna() {
 }
 
 interface VernaProviderProps extends Pick<FormProps<unknown>, 'transformErrors'> {
+  DropZone: React.FunctionComponent<DropZoneProps>;
+  FieldTemplate: React.FunctionComponent<FieldTemplateProps>;
+  Section: React.FunctionComponent<ObjectFieldTemplateProps>;
+  SubmitButton: React.ReactNode;
   configSchema?: VernaJSONSchemaType;
   defaultSchema: VernaJSONSchemaType;
   defaultUiSchema: UiSchema;
   defaultFormValues?: any;
   defaultWidgets: WidgetsType;
-  objectFieldTemplate: ObjectFieldTemplateType;
   defaultLocale?: string;
   defaultSelector?: string;
   isEditor: boolean;
@@ -111,18 +123,21 @@ interface VernaProviderProps extends Pick<FormProps<unknown>, 'transformErrors'>
   translations: TranslationType;
 }
 
-function VernaProvider({
+function Index({
   configSchema,
   children,
   defaultSchema,
   defaultUiSchema,
   defaultFormValues,
   defaultWidgets,
-  objectFieldTemplate,
   defaultLocale = 'en',
   defaultSelector,
   isEditor,
   locale,
+  SubmitButton,
+  DropZone,
+  FieldTemplate,
+  Section,
   transformErrors,
   translationUi,
   translations,
@@ -131,7 +146,7 @@ function VernaProvider({
   // used for further implementation
   const [fullSchema, setFullSchema] = useState<VernaJSONSchemaType>(defaultSchema);
   const [fullUiSchema, setFullUiSchema] = useState<UiSchema>(
-    cleanUiSchema(defaultSchema, defaultUiSchema),
+    cleanUiSchema(defaultSchema, defaultUiSchema, Section),
   );
 
   const [schema, _setSchema] = useState<VernaJSONSchemaType>(
@@ -214,13 +229,16 @@ function VernaProvider({
     <IntlProvider defaultLocale={defaultLocale} locale={locale} messages={intlMessages}>
       <VernaContext.Provider
         value={{
+          DropZone: DropZone,
+          FieldTemplate: FieldTemplate,
+          Section: Section,
+          SubmitButton: SubmitButton,
           configSchema,
           formData,
           fullSchema,
           fullUiSchema,
           handleSubmit,
           isEditor,
-          objectFieldTemplate: { ...defaultObjectFieldTemplate, ...objectFieldTemplate },
           schema,
           schemaTranslations: schemaTranslations,
           selectedFormData,
@@ -244,7 +262,11 @@ function VernaProvider({
   );
 }
 
-VernaProvider.defaultProps = {
+Index.defaultProps = {
+  DropZone: DefaultDropZone,
+  FieldTemplate: EditorFieldTemplate,
+  Section: DefaultSection,
+  SubmitButton: undefined,
   defaultSchema: {},
   defaultUiSchema: {},
   defaultValues: {},
@@ -254,5 +276,5 @@ VernaProvider.defaultProps = {
   translations: {},
 };
 
-export default VernaProvider;
+export default Index;
 export { useVerna };

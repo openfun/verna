@@ -2,7 +2,6 @@ import Form from '@rjsf/core';
 import { useIntl } from 'react-intl';
 import { useMemo } from 'react';
 import { useVerna } from '../../providers/VernaProvider';
-import EditorFieldTemplate from '../EditorFieldTemplate';
 import { RJSF_ID_SEPARATOR } from '../../settings';
 import { translateSchema } from '../../utils/translation';
 
@@ -12,6 +11,8 @@ interface VernaFormProperties {
 
 function VernaForm({ onSubmit }: VernaFormProperties) {
   const {
+    FieldTemplate,
+    SubmitButton,
     handleSubmit,
     isEditor,
     schema,
@@ -29,7 +30,7 @@ function VernaForm({ onSubmit }: VernaFormProperties) {
 
   return (
     <Form
-      FieldTemplate={EditorFieldTemplate}
+      FieldTemplate={FieldTemplate}
       className="form"
       disabled={isEditor}
       formData={selectedFormData}
@@ -42,7 +43,9 @@ function VernaForm({ onSubmit }: VernaFormProperties) {
       transformErrors={transformErrors}
       uiSchema={uiSchema}
       widgets={widgets}
-    />
+    >
+      {SubmitButton}
+    </Form>
   );
 }
 

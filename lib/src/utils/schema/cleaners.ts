@@ -1,6 +1,8 @@
+import React from 'react';
+import type { ObjectFieldTemplateProps, UiSchema } from '@rjsf/core';
 import VernaJSONSchemaType from '../../types/rjsf';
-import type { UiSchema } from '@rjsf/core';
 import Section from '../../components/Fields/Section';
+import { Maybe } from '../../types/utils';
 
 /**
  * Verify & return a UiSchema with a specified order object, so it doesn't stop the workflow of the
@@ -8,15 +10,20 @@ import Section from '../../components/Fields/Section';
  *
  * @param schema
  * @param dirtyUiSchema
+ * @param SectionTemplate
  */
-function cleanUiSchema(schema: VernaJSONSchemaType, dirtyUiSchema: UiSchema) {
+function cleanUiSchema(
+  schema: VernaJSONSchemaType,
+  dirtyUiSchema: UiSchema,
+  SectionTemplate: Maybe<React.FunctionComponent<ObjectFieldTemplateProps>> = Section,
+) {
   // Add an overload on ui:ObjectFieldTemplate for every sections so it loads the custom section
   // render of Verna
-  dirtyUiSchema['ui:ObjectFieldTemplate'] = Section;
+  dirtyUiSchema['ui:ObjectFieldTemplate'] = SectionTemplate;
   Object.keys(schema.properties || {}).forEach((key) => {
     dirtyUiSchema[key] = {
       ...dirtyUiSchema[key],
-      'ui:ObjectFieldTemplate': Section,
+      'ui:ObjectFieldTemplate': SectionTemplate,
     };
   });
 

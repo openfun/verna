@@ -3,7 +3,6 @@ import type { FieldTemplateProps } from '@rjsf/core';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { v4 as uuidv4 } from 'uuid';
 import ShowCaseWidgetProps from '../../types/Widgets';
-import DropZone from './DropZone';
 import { RJSF_ID_SEPARATOR } from '../../settings';
 import { useVerna } from '../../providers/VernaProvider';
 import { addWidget, addSection } from '../../utils/schema';
@@ -26,6 +25,7 @@ const messages = defineMessages({
 export default function EditorFieldTemplate({ id, schema, children }: FieldTemplateProps) {
   const [isEditing, setIsEditing] = useState(false);
   const verna = useVerna();
+  const DropZone = verna.DropZone;
   const path = id.split(RJSF_ID_SEPARATOR);
   const isRoot = id === 'root';
   const isSection = path.length === 2 && !verna.selector;
@@ -61,10 +61,7 @@ export default function EditorFieldTemplate({ id, schema, children }: FieldTempl
           </button>
         )}
         {(canAddSection || (isRoot && !ownProperties && !verna.selector)) && (
-          <button
-            onClick={() => addSection(verna, id, verna.objectFieldTemplate)}
-            style={{ width: '100%' }}
-          >
+          <button onClick={() => addSection(verna, id, verna.Section)} style={{ width: '100%' }}>
             Add a section
           </button>
         )}

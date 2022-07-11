@@ -1,6 +1,6 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import VernaProvider from '../providers/VernaProvider';
+import VernaProvider from '../providers/VernaProvider/';
 import VernaForm from '../components/VernaForm';
 import {
   checkBoxesSchemaFactory,

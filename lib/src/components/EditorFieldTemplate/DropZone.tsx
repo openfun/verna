@@ -4,7 +4,7 @@ import ShowCaseWidgetProps from '../../types/Widgets';
 import { addWidget } from '../../utils/schema';
 import { useVerna } from '../../providers/VernaProvider';
 
-interface DropZoneProps {
+export interface DropZoneProps {
   id: string;
 }
 

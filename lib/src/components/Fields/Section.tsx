@@ -1,7 +1,6 @@
 import { defineMessages, FormattedMessage } from 'react-intl';
 import type { ObjectFieldTemplateProps } from '@rjsf/core';
 import React, { useState } from 'react';
-import DropZone from '../EditorFieldTemplate/DropZone';
 import { useVerna } from '../../providers/VernaProvider';
 import SectionPropertiesForm from '../PropertiesForms/SectionPropertiesForm';
 
@@ -19,7 +18,7 @@ export default function Section({
   properties,
   description,
 }: ObjectFieldTemplateProps) {
-  const { isEditor, selector } = useVerna();
+  const { isEditor, selector, DropZone } = useVerna();
   const [isEditingParameters, setIsEditingParameters] = useState(false);
   const isRoot = idSchema.$id === 'root';
 
@@ -31,9 +30,11 @@ export default function Section({
     <fieldset>
       <legend>{title}</legend>
       <p>{description}</p>
-      <button onClick={() => setIsEditingParameters(!isEditingParameters)}>
-        <FormattedMessage {...messages.parameters} />
-      </button>
+      {isEditor && (
+        <button onClick={() => setIsEditingParameters(!isEditingParameters)}>
+          <FormattedMessage {...messages.parameters} />
+        </button>
+      )}
       {isEditingParameters && (
         <SectionPropertiesForm id={idSchema.$id} onClose={() => setIsEditingParameters(false)} />
       )}
