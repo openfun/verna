@@ -25,18 +25,15 @@ body {
   padding: 10px;
 }
 
-.form_language {
+.form_options {
   display: flex;
+  justify-content: flex-end;
   align-items: flex-end;
-  flex-direction: column;
+  flex-direction: row;
   gap: 10px;
 
-  legend {
-    float: right;
-  }
-
   button {
-    width: 100px;
+    width: 140px;
   }
 }
 

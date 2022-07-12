@@ -14,8 +14,6 @@ function App() {
 
   const [isEditor, setIsEditor] = useState(true);
 
-  const toggleEditorMode = () => setIsEditor(!isEditor);
-
   return (
     <VernaProvider
       configSchema={configSchema}
@@ -30,7 +28,7 @@ function App() {
       translationUi={locale === 'fr' ? translationUi : undefined}
       translations={translations}
     >
-      <FormWrapper setLocale={setLocale} toggleEditorMode={toggleEditorMode} />
+      <FormWrapper setIsEditor={setIsEditor} setLocale={setLocale} />
     </VernaProvider>
   );
 }

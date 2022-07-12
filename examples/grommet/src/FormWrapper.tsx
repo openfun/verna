@@ -7,19 +7,18 @@ import NumberWidget from './widgetToolbarItems/NumberWidget';
 import CheckboxWidget from './widgetToolbarItems/CheckboxWidget';
 import SelectWidget from './widgetToolbarItems/SelectWidget';
 import CheckboxesWidget from './widgetToolbarItems/CheckboxesWidget';
-import { Box, Button, Card, CardBody, CardHeader, Select, Text } from 'grommet';
-import { FlagFill } from 'grommet-icons';
+import { Button, Card, CardBody, CardHeader, Select, Text } from 'grommet';
 import { useState } from 'react';
 
 interface FormWrapperProps {
-  toggleEditorMode: () => void;
+  setIsEditor: (newValue: boolean) => void;
   setLocale: (locale: string) => void;
 }
 
-export default function FormWrapper({ toggleEditorMode, setLocale }: FormWrapperProps) {
+export default function FormWrapper({ setIsEditor, setLocale }: FormWrapperProps) {
   const { schema, uiSchema, setSelector, isEditor, selector, schemaTranslations, locale } =
     useVerna();
-  const [displayAllSections, setDisplayAllSections] = useState();
+  const [displayAllSections, setDisplayAllSections] = useState<boolean>();
 
   return (
     <div className="verna-wrapper">
@@ -45,15 +44,24 @@ export default function FormWrapper({ toggleEditorMode, setLocale }: FormWrapper
       )}
       <Card>
         <CardBody background="white" pad="10px" width="1000px">
-          <fieldset className="form_language">
-            <legend>Language</legend>
-            <Select
-              icon={<FlagFill />}
-              onChange={(e) => setLocale(e.target.value)}
-              options={['fr', 'en']}
-              value={locale}
-            />
-          </fieldset>
+          <div className="form_options">
+            <fieldset>
+              <Select
+                defaultValue="Editor"
+                onChange={(e) => setIsEditor(e.target.value === 'Editor')}
+                options={['Editor', 'Viewer']}
+                value={isEditor ? 'Editor' : 'Viewer'}
+              />
+            </fieldset>
+            <fieldset className="form_language">
+              <Select
+                defaultValue="en"
+                onChange={(e) => setLocale(e.target.value)}
+                options={['fr', 'en']}
+                value={locale}
+              />
+            </fieldset>
+          </div>
           <fieldset>
             {/* Need to add edit section name */}
             {/* Need to add add section button */}
@@ -80,29 +88,17 @@ export default function FormWrapper({ toggleEditorMode, setLocale }: FormWrapper
           </fieldset>
         </CardBody>
       </Card>
-      {/* Ajouter la selection de la langue */}
-      {/* Ne pas render cette partie*/}
-      <div className="buttons-wrapper">
-        <Card background="white" round="small" width="300px">
-          <CardBody>
-            <fieldset style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-              <legend>Editor options</legend>
-              <Button primary label="Switch editor mode" onClick={toggleEditorMode} />
-              <Button
-                primary
-                label="save form"
-                onClick={() =>
-                  console.log('FormData:', {
-                    schema: schema,
-                    translations: schemaTranslations,
-                    uiSchema: uiSchema,
-                  })
-                }
-              />
-            </fieldset>
-          </CardBody>
-        </Card>
-      </div>
+      <Button
+        primary
+        label="save form"
+        onClick={() =>
+          console.log('FormData:', {
+            schema: schema,
+            translations: schemaTranslations,
+            uiSchema: uiSchema,
+          })
+        }
+      />
     </div>
   );
 }
