@@ -5,7 +5,7 @@
   "description": "An extensible form builder based on React JSON Schema Form.",
   "scripts": {
     "build": "tsc && vite build",
-    "build:check": "if [ ! -d dist ] || [ $(find src -type f -newer dist) ] ; then yarn build ; fi",
+    "build:check": "if [ ! -d dist ] || [ -n \"$(find src -type f -newer dist)\" ] ; then yarn build ; fi",
     "build:dev": "vite build --watch --logLevel warn --mode development",
     "lint": "eslint 'src/**/*.{ts,tsx}'",
     "test": "jest"
