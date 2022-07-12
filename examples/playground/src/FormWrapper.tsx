@@ -1,6 +1,6 @@
 import { useVerna, VernaForm, VernaToolbar } from '@openfun/verna';
 import { JSONSchema7 } from 'json-schema';
-import { useIntl } from 'react-intl';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import TextWidget from './widgetToolbarItems/TextWidget';
 import PasswordWidget from './widgetToolbarItems/PasswordWidget';
 import QuizWidget from './widgetToolbarItems/QuizWidget';
@@ -9,15 +9,53 @@ import NumberWidget from './widgetToolbarItems/NumberWidget';
 import CheckboxWidget from './widgetToolbarItems/CheckboxWidget';
 import SelectWidget from './widgetToolbarItems/SelectWidget';
 import CheckboxesWidget from './widgetToolbarItems/CheckboxesWidget';
+import { useLocale } from './providers/LocaleProvider';
 
 interface FormWrapperProps {
   toggleEditorMode: () => void;
-  setLocale: (locale: string) => void;
 }
 
-export default function FormWrapper({ toggleEditorMode, setLocale }: FormWrapperProps) {
+const messages = defineMessages({
+  editorOptions: {
+    defaultMessage: 'Editor options',
+    description: 'Title of the editor options block',
+    id: 'components.FormWrapper.editorOptions',
+  },
+  language: {
+    defaultMessage: 'Language',
+    description: 'Title of the language selection block',
+    id: 'components.FormWrapper.language',
+  },
+  saveForm: {
+    defaultMessage: 'Save form',
+    description: 'Label of the save button',
+    id: 'components.FormWrapper.saveForm',
+  },
+  sectionName: {
+    defaultMessage: 'Section {name}',
+    description: 'Label of a the button to select a section',
+    id: 'components.FormWrapper.sectionName',
+  },
+  selectSection: {
+    defaultMessage: 'Select a section',
+    description: 'Title of the section selection block',
+    id: 'components.FormWrapper.selectSection',
+  },
+  turnOffEditorMode: {
+    defaultMessage: 'Switch to preview mode',
+    description: 'Label of the button to switch to preview mode',
+    id: 'components.FormWrapper.turnOffEditorMode',
+  },
+  turnOnEditorMode: {
+    defaultMessage: 'Switch to editor mode',
+    description: 'Label of the button to switch to editor mode',
+    id: 'components.FormWrapper.turnOnEditorMode',
+  },
+});
+
+export default function FormWrapper({ toggleEditorMode }: FormWrapperProps) {
   const { schema, uiSchema, setSelector, isEditor, selector, schemaTranslations } = useVerna();
-  const { locale } = useIntl();
+  const [locale, setLocale] = useLocale();
 
   return (
     <div className="verna-wrapper">
@@ -35,28 +73,42 @@ export default function FormWrapper({ toggleEditorMode, setLocale }: FormWrapper
           </VernaToolbar>
         </div>
       )}
-      <VernaForm onSubmit={(formData) => console.log(formData)} />
+      <VernaForm onSubmit={console.log} />
       <div className="buttons-wrapper">
         <fieldset>
-          <legend>Select a section</legend>
+          <legend>
+            <FormattedMessage {...messages.selectSection} />
+          </legend>
           {!selector &&
             Object.keys(schema.properties as JSONSchema7)?.map((key) => (
               <button key={key} onClick={() => setSelector(key)}>
-                Section {key}
+                <FormattedMessage {...messages.sectionName} values={{ name: key }} />
               </button>
             ))}
           <button onClick={() => setSelector(undefined)}>Root</button>
         </fieldset>
         <fieldset>
-          <legend>Language</legend>
-          <select onChange={(e) => setLocale(e.target.value)} value={locale}>
-            <option>fr</option>
-            <option>en</option>
+          <legend>
+            <FormattedMessage {...messages.language} />
+          </legend>
+          <select onChange={(e) => setLocale(e.target.value)}>
+            <option selected={locale === 'en-US'} value="en-US">
+              English
+            </option>
+            <option selected={locale === 'fr-FR'} value="fr-FR">
+              Français
+            </option>
           </select>
         </fieldset>
         <fieldset style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-          <legend>Editor options</legend>
-          <button onClick={toggleEditorMode}>Switch editor mode</button>
+          <legend>
+            <FormattedMessage {...messages.editorOptions} />
+          </legend>
+          <button onClick={toggleEditorMode}>
+            <FormattedMessage
+              {...(isEditor ? messages.turnOffEditorMode : messages.turnOnEditorMode)}
+            />
+          </button>
           <button
             onClick={() =>
               console.log('FormData:', {
@@ -66,7 +118,7 @@ export default function FormWrapper({ toggleEditorMode, setLocale }: FormWrapper
               })
             }
           >
-            save form
+            <FormattedMessage {...messages.saveForm} />
           </button>
         </fieldset>
       </div>
