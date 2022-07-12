@@ -9,6 +9,8 @@ import SelectWidget from './widgetToolbarItems/SelectWidget';
 import CheckboxesWidget from './widgetToolbarItems/CheckboxesWidget';
 import { Button, Card, CardBody, CardHeader, Select, Text } from 'grommet';
 import { useState } from 'react';
+import { useIntl } from 'react-intl';
+import SectionResume from './components/SectionResume';
 
 interface FormWrapperProps {
   setIsEditor: (newValue: boolean) => void;
@@ -16,9 +18,9 @@ interface FormWrapperProps {
 }
 
 export default function FormWrapper({ setIsEditor, setLocale }: FormWrapperProps) {
-  const { schema, uiSchema, setSelector, isEditor, selector, schemaTranslations, locale } =
-    useVerna();
+  const { schema, uiSchema, setSelector, isEditor, selector, schemaTranslations } = useVerna();
   const [displayAllSections, setDisplayAllSections] = useState<boolean>();
+  const { locale } = useIntl();
 
   return (
     <div className="verna-wrapper">
@@ -64,7 +66,7 @@ export default function FormWrapper({ setIsEditor, setLocale }: FormWrapperProps
           </div>
           <fieldset>
             {/* Need to add edit section name */}
-            {/* Need to add add section button */}
+            {/* Need to add section button */}
             {selector || displayAllSections ? (
               <>
                 <Button
@@ -79,8 +81,8 @@ export default function FormWrapper({ setIsEditor, setLocale }: FormWrapperProps
               </>
             ) : (
               <div className="form_sections_list">
-                {Object.keys(schema.properties as JSONSchema7)?.map((key) => (
-                  <Button key={key} primary label={key} onClick={() => setSelector(key)} />
+                {Object.keys(schema.properties as JSONSchema7)?.map((sectionName) => (
+                  <SectionResume section={sectionName} />
                 ))}
                 <Button label="View all sections" onClick={() => setDisplayAllSections(true)} />
               </div>
