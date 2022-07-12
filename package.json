@@ -20,7 +20,7 @@
   "private": true,
   "scripts": {
     "build": "yarn workspace @openfun/verna build",
-    "dev:lib": "yarn workspace @openfun/verna build:watch",
+    "dev:lib": "yarn workspace @openfun/verna build:dev",
     "dev:example": "yarn workspace ${VERNA_EXAMPLE:-verna-examples-playground} start",
     "dev": "concurrently -kc 'blue,magenta' 'yarn run dev:*'",
     "lint": "yarn workspaces run lint",
