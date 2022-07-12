@@ -10,6 +10,16 @@ import WidgetPropertiesForm from '../PropertiesForms/WidgetPropertiesForm';
 import { removeSection, removeWidget } from '../../utils/schema';
 
 const messages = defineMessages({
+  addInput: {
+    defaultMessage: 'Add an input',
+    description: 'Label of the button to add an input',
+    id: 'components.EditorFieldTemplate.addInput',
+  },
+  addSection: {
+    defaultMessage: 'Add a section',
+    description: 'Label of the button to add a section',
+    id: 'components.EditorFieldTemplate.addSection',
+  },
   parameters: {
     defaultMessage: 'Parameters',
     description: 'Label of the button to display the widget properties form',
@@ -56,25 +66,17 @@ export default function EditorFieldTemplate({ id, schema, children }: FieldTempl
         {(canAddField ||
           (!ownProperties && isSection && !isRoot) ||
           (verna.selector && !ownProperties)) && (
-          <button onClick={() => addItem()} style={{ width: '100%' }}>
-            Add an input
+          <button onClick={() => addItem()} style={{ flex: 1 }}>
+            <FormattedMessage {...messages.addInput} />
           </button>
         )}
         {(canAddSection || (isRoot && !ownProperties && !verna.selector)) && (
-          <button onClick={() => addSection(verna, id, verna.Section)} style={{ width: '100%' }}>
-            Add a section
+          <button onClick={() => addSection(verna, id, verna.Section)} style={{ flex: 1 }}>
+            <FormattedMessage {...messages.addSection} />
           </button>
         )}
-        {canAddField && (
-          <button onClick={() => removeWidget(verna, id)} style={{ width: '20px' }}>
-            x
-          </button>
-        )}
-        {canAddSection && (
-          <button onClick={() => removeSection(verna, id)} style={{ width: '20px' }}>
-            x
-          </button>
-        )}
+        {canAddField && <button onClick={() => removeWidget(verna, id)}>x</button>}
+        {canAddSection && <button onClick={() => removeSection(verna, id)}>x</button>}
       </div>
     </div>
   );

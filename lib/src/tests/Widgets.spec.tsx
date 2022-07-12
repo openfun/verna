@@ -1,5 +1,6 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { Suspense } from 'react';
 import VernaProvider from '../providers/VernaProvider';
 import {
   selectSchemaFactory,
@@ -9,24 +10,39 @@ import {
   widgetsFactory,
 } from './mocks/factories';
 import VernaForm from '../components/VernaForm';
+import VernaJSONSchemaType from '../types/rjsf';
 
 describe('widget properties edition', () => {
-  it('should render a custom widget', async () => {
+  const VernaSuspenseWrapper = ({ configSchema }: { configSchema?: VernaJSONSchemaType }) => {
     const translations = translationsFactory();
-    render(
-      <VernaProvider
-        isEditor
-        defaultSchema={selectSchemaFactory()}
-        defaultUiSchema={selectUiSchemaFactory()}
-        defaultWidgets={widgetsFactory()}
-        locale="en"
-        translations={translations}
-      >
-        <VernaForm />
-      </VernaProvider>,
+    return (
+      <Suspense fallback="Loading...">
+        <VernaProvider
+          isEditor
+          configSchema={configSchema}
+          defaultSchema={selectSchemaFactory()}
+          defaultUiSchema={selectUiSchemaFactory()}
+          defaultWidgets={widgetsFactory()}
+          locale="en-US"
+          translations={translations}
+        >
+          <div data-testid="wrapper">
+            <VernaForm />
+          </div>
+        </VernaProvider>
+      </Suspense>
     );
+  };
 
-    screen.getByRole('group', { name: translations.en.root_title });
+  it('should render a custom widget', async () => {
+    render(<VernaSuspenseWrapper />);
+
+    // Wait that the form is rendered...
+    await waitFor(() => {
+      expect(screen.queryByTestId('wrapper')).toBeInTheDocument();
+    });
+
+    screen.getByRole('group', { name: 'A registration form' });
 
     const $select = document.getElementById('root_testSection_select') as HTMLSelectElement;
 
@@ -35,21 +51,12 @@ describe('widget properties edition', () => {
   });
 
   it('should modify options of a custom widget and update it', async () => {
-    const translations = translationsFactory();
+    render(<VernaSuspenseWrapper configSchema={confSchemaFactory()} />);
 
-    render(
-      <VernaProvider
-        isEditor
-        configSchema={confSchemaFactory()}
-        defaultSchema={selectSchemaFactory()}
-        defaultUiSchema={selectUiSchemaFactory()}
-        defaultWidgets={widgetsFactory()}
-        locale="en"
-        translations={translations}
-      >
-        <VernaForm />
-      </VernaProvider>,
-    );
+    // Wait that the form is rendered...
+    await waitFor(() => {
+      expect(screen.queryByTestId('wrapper')).toBeInTheDocument();
+    });
 
     // Open parameters
     const $parameterButtons = screen.getAllByRole('button', { name: 'Parameters' });
@@ -71,9 +78,9 @@ describe('widget properties edition', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Add' }));
 
     // Set the value of the new field
-    const $newInputs = screen.getAllByRole('textbox', {});
-    fireEvent.change($newInputs[4], { target: { value: 'newChoice1' } });
-    fireEvent.change($newInputs[5], { target: { value: 'newChoice2' } });
+    const $newInputs = screen.getAllByRole('textbox');
+    fireEvent.change($newInputs[4], { target: { value: 'Option 2' } });
+    fireEvent.change($newInputs[5], { target: { value: 'Option 3' } });
 
     // Save parameters
     await userEvent.click(screen.getByRole('button', { name: 'save' }));
@@ -89,9 +96,9 @@ describe('widget properties edition', () => {
     const $inputs = screen.getAllByRole('textbox', {});
     expect($inputs[0]).toHaveValue('title');
     expect($inputs[1]).toHaveValue('description');
-    expect($inputs[2]).toHaveValue(translations.en.root_testSection_select_enum_0);
-    expect($inputs[3]).toHaveValue(translations.en.root_testSection_select_enum_1);
-    expect($inputs[4]).toHaveValue('newChoice1');
-    expect($inputs[5]).toHaveValue('newChoice2');
+    expect($inputs[2]).toHaveValue('Option 0');
+    expect($inputs[3]).toHaveValue('Option 1');
+    expect($inputs[4]).toHaveValue('Option 2');
+    expect($inputs[5]).toHaveValue('Option 3');
   });
 });

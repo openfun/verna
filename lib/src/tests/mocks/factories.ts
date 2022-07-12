@@ -1,4 +1,5 @@
 import type { UiSchema } from '@rjsf/core';
+import { merge } from 'lodash';
 import VernaJSONSchemaType from '../../types/rjsf';
 import SelectWidget from './SelectWidget';
 import NumberWidget from './NumberWidget';
@@ -141,42 +142,40 @@ const confSchemaFactory = (): VernaJSONSchemaType => ({
   type: 'object',
 });
 
-const translationsFactory = (translations?: TranslationType) => {
-  const { en, fr, ...other } = translations || {};
-
-  return {
-    en: {
-      root_description: 'Desc registration form',
-      root_testSection_checkboxes_description: 'checkboxes description',
-      root_testSection_checkboxes_items_0: 'item 0 en',
-      root_testSection_checkboxes_items_1: 'item 1 en',
-      root_testSection_checkboxes_title: 'checkboxes title',
-      root_testSection_description: 'Sectiontest description',
-      root_testSection_field1: 'field1 title',
-      root_testSection_select_enum_0: 'enum 0 en',
-      root_testSection_select_enum_1: 'enum 1 en',
-      root_testSection_select_title: 'selectfield',
-      root_testSection_title: 'Sectiontest',
-      root_title: 'A registration form',
-      ...en,
+const translationsFactory = (translations: TranslationType = {}) => {
+  return merge(
+    {
+      'en-US': {
+        root_description: 'Registration form description',
+        root_testSection_checkboxes_description: 'Description of checkboxes widget',
+        root_testSection_checkboxes_items_0: 'Checkbox 0',
+        root_testSection_checkboxes_items_1: 'Checkbox 1',
+        root_testSection_checkboxes_title: 'Checkboxes widget',
+        root_testSection_description: 'Description of the first section',
+        root_testSection_field1: 'First field',
+        root_testSection_select_enum_0: 'Option 0',
+        root_testSection_select_enum_1: 'Option 1',
+        root_testSection_select_title: 'A select widget',
+        root_testSection_title: 'First section',
+        root_title: 'A registration form',
+      },
+      'fr-FR': {
+        root_description: "Description du formulaire d'inscription",
+        root_testSection_checkboxes_description: 'Description du widget cases à cocher',
+        root_testSection_checkboxes_items_0: 'Case à cocher 0',
+        root_testSection_checkboxes_items_1: 'Case à cocher 1',
+        root_testSection_checkboxes_title: 'Un widget cases à cocher',
+        root_testSection_description: 'Description de la première section',
+        root_testSection_field1: 'Premier champ',
+        root_testSection_select_enum_0: 'Choix 0',
+        root_testSection_select_enum_1: 'Choix 1',
+        root_testSection_select_title: 'Un widget menu déroulant',
+        root_testSection_title: 'Première section',
+        root_title: "Un formulaire d'inscription",
+      },
     },
-    fr: {
-      root_description: 'Description',
-      root_testSection_checkboxes_description: 'Description des checkboxes',
-      root_testSection_checkboxes_items_0: 'item 0 fr',
-      root_testSection_checkboxes_items_1: 'item 1 fr',
-      root_testSection_checkboxes_title: 'Titre des checkboxes',
-      root_testSection_description: 'Sectiontest description',
-      root_testSection_field1: 'titre du field1',
-      root_testSection_select_enum_0: 'enum 0 fr',
-      root_testSection_select_enum_1: 'enum 1 fr',
-      root_testSection_select_title: 'titre du select',
-      root_testSection_title: 'titre de la section',
-      root_title: 'formulaire',
-      ...fr,
-    },
-    ...other,
-  };
+    translations,
+  );
 };
 
 const translationUiFactory = () => ({
