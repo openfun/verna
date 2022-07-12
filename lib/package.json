@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc && vite build",
     "build:check": "if [ ! -d dist ] || [ $(find src -type f -newer dist) ] ; then yarn build ; fi",
-    "build:watch": "yarn build --watch",
+    "build:dev": "vite build --watch --logLevel warn --mode development",
     "lint": "eslint 'src/**/*.{ts,tsx}'",
     "test": "jest"
   },
