@@ -1,0 +1,14 @@
+{
+  "components.App.loading": "Chargement...",
+  "components.App.save": "Sauvegarder",
+  "components.App.title": "🧑‍💻 Playground Verna",
+  "components.EditorFieldTemplate.parameters": "Paramètres du champs",
+  "components.FormWrapper.editorOptions": "Options d'édition",
+  "components.FormWrapper.language": "Langue",
+  "components.FormWrapper.saveForm": "Soumettre le formulaire",
+  "components.FormWrapper.sectionName": "Section {name}",
+  "components.FormWrapper.selectSection": "Sélectionner une section",
+  "components.FormWrapper.turnOffEditorMode": "Prévisualiser le formulaire",
+  "components.FormWrapper.turnOnEditorMode": "Éditer le formulaire",
+  "components.fields.section.parameters": "Paramètres de la section"
+}
