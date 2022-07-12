@@ -7,7 +7,7 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import { IntlProvider, type ResolvedIntlConfig } from 'react-intl';
+import { type ResolvedIntlConfig } from 'react-intl';
 import type {
   ObjectFieldTemplateProps,
   ISubmitEvent,
@@ -24,13 +24,14 @@ import {
   getSelectedSchema,
   getSelectedUiSchema,
 } from '../../utils/schema';
+import { TranslationType } from '../../types/translations';
+import TranslationProvider from '../TranslationProvider';
 import { default as DefaultSection } from '../../components/Fields/Section';
 import EditorFieldTemplate from '../../components/EditorFieldTemplate';
 import {
   default as DefaultDropZone,
   DropZoneProps,
 } from '../../components/EditorFieldTemplate/DropZone';
-import { TranslationType } from '../../types/translations';
 
 function functionNotSet() {
   throw new Error('function context not set');
@@ -105,33 +106,34 @@ function useVerna() {
   return context;
 }
 
-interface VernaProviderProps extends Pick<FormProps<unknown>, 'transformErrors'> {
+export interface VernaProviderProps extends Pick<FormProps<unknown>, 'transformErrors'> {
   DropZone: React.FunctionComponent<DropZoneProps>;
   FieldTemplate: React.FunctionComponent<FieldTemplateProps>;
   Section: React.FunctionComponent<ObjectFieldTemplateProps>;
   SubmitButton: React.ReactNode;
   configSchema?: VernaJSONSchemaType;
-  defaultSchema: VernaJSONSchemaType;
-  defaultUiSchema: UiSchema;
   defaultFormValues?: any;
-  defaultWidgets: WidgetsType;
   defaultLocale?: string;
+  defaultSchema: VernaJSONSchemaType;
   defaultSelector?: string;
+  defaultUiSchema: UiSchema;
+  defaultWidgets: WidgetsType;
+  intl?: ResolvedIntlConfig;
   isEditor: boolean;
-  locale: string;
-  translationUi?: ResolvedIntlConfig['messages'];
+  locale?: string;
   translations: TranslationType;
 }
 
-function Index({
-  configSchema,
+function VernaProvider({
   children,
-  defaultSchema,
-  defaultUiSchema,
+  configSchema,
   defaultFormValues,
-  defaultWidgets,
-  defaultLocale = 'en',
+  defaultLocale,
+  defaultSchema,
   defaultSelector,
+  defaultUiSchema,
+  defaultWidgets,
+  intl,
   isEditor,
   locale,
   SubmitButton,
@@ -139,7 +141,6 @@ function Index({
   FieldTemplate,
   Section,
   transformErrors,
-  translationUi,
   translations,
 }: PropsWithChildren<VernaProviderProps>) {
   // Both fullSchema & fullUiSchema are not used by the lib itself but may be
@@ -169,15 +170,6 @@ function Index({
   const selectedFormData = useMemo(() => {
     return selector && formData ? formData[selector] : formData;
   }, [formData, selector]);
-
-  const intlMessages = useMemo(
-    () =>
-      ({
-        ...translationUi,
-        ...schemaTranslations?.[locale],
-      } as ResolvedIntlConfig['messages']),
-    [locale, schemaTranslations],
-  );
 
   // Schema and uiSchema target a part of fullSchema and fullUiSchema selected by the selector
   function setSchema(newSchema: VernaJSONSchemaType) {
@@ -226,7 +218,12 @@ function Index({
   }, [selector]);
 
   return (
-    <IntlProvider defaultLocale={defaultLocale} locale={locale} messages={intlMessages}>
+    <TranslationProvider
+      defaultLocale={defaultLocale}
+      intl={intl}
+      locale={locale}
+      schemaTranslations={schemaTranslations}
+    >
       <VernaContext.Provider
         value={{
           DropZone: DropZone,
@@ -240,7 +237,7 @@ function Index({
           handleSubmit,
           isEditor,
           schema,
-          schemaTranslations: schemaTranslations,
+          schemaTranslations,
           selectedFormData,
           selector,
           setFormData,
@@ -258,11 +255,11 @@ function Index({
       >
         {children}
       </VernaContext.Provider>
-    </IntlProvider>
+    </TranslationProvider>
   );
 }
 
-Index.defaultProps = {
+VernaProvider.defaultProps = {
   DropZone: DefaultDropZone,
   FieldTemplate: EditorFieldTemplate,
   Section: DefaultSection,
@@ -276,5 +273,5 @@ Index.defaultProps = {
   translations: {},
 };
 
-export default Index;
+export default VernaProvider;
 export { useVerna };

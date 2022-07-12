@@ -1,7 +1,9 @@
+import { type UiSchema } from '@rjsf/core';
 import { screen, render, waitFor } from '@testing-library/react';
+import { Suspense } from 'react';
 import _ from 'lodash';
 import userEvent from '@testing-library/user-event';
-import VernaProvider from '../../providers/VernaProvider';
+import VernaProvider, { WidgetsType } from '../../providers/VernaProvider';
 import {
   schemaFactory,
   translationsFactory,
@@ -19,29 +21,51 @@ describe('VernaForm', () => {
     await userEvent.click(_.last(buttons)!);
   }
 
-  it('should render a basic form', async () => {
+  const VernaSuspenseWrapper = ({
+    isEditor,
+    selector,
+    uiSchema,
+    widgets,
+  }: {
+    selector?: string;
+    isEditor?: boolean;
+    uiSchema?: UiSchema;
+    widgets?: WidgetsType;
+  }) => {
     const translations = translationsFactory();
-
-    render(
-      <VernaProvider
-        isEditor
-        defaultSchema={schemaFactory()}
-        defaultUiSchema={uiSchemaFactory()}
-        defaultWidgets={widgetsFactory()}
-        locale="en"
-        translations={translations}
-      >
-        <VernaForm />
-      </VernaProvider>,
+    return (
+      <Suspense fallback="Loading...">
+        <VernaProvider
+          defaultSchema={schemaFactory()}
+          defaultSelector={selector}
+          defaultUiSchema={uiSchema}
+          defaultWidgets={widgets}
+          isEditor={isEditor}
+          translations={translations}
+        >
+          <div data-testid="wrapper">
+            <VernaForm />
+          </div>
+        </VernaProvider>
+      </Suspense>
     );
+  };
+
+  it('should render a basic form', async () => {
+    render(<VernaSuspenseWrapper uiSchema={uiSchemaFactory()} widgets={widgetsFactory()} />);
+    // Wait that the form is rendered...
+    await waitFor(() => {
+      expect(screen.queryByTestId('wrapper')).toBeInTheDocument();
+    });
+
     // - A fieldset legend should be displayed with form title
-    screen.getByRole('group', { name: translations.en.root_title });
+    screen.getByRole('group', { name: 'A registration form' });
 
     // - A paragraph with form description should be displayed
-    screen.getByText(translations.en.root_description);
+    screen.getByText('Registration form description');
 
     // - The first section should be displayed
-    screen.getByRole('group', { name: translations.en.root_testSection_title });
+    screen.getByRole('group', { name: 'First section' });
 
     const $field1 = document.getElementById('root_testSection_field1') as HTMLInputElement;
 
@@ -50,16 +74,12 @@ describe('VernaForm', () => {
   });
 
   it('should be able to add or remove sections and fields', async () => {
-    render(
-      <VernaProvider
-        isEditor
-        defaultSchema={schemaFactory()}
-        locale="en"
-        translations={translationsFactory()}
-      >
-        <VernaForm />
-      </VernaProvider>,
-    );
+    render(<VernaSuspenseWrapper isEditor />);
+
+    // Wait that the form is rendered...
+    await waitFor(() => {
+      expect(screen.queryByTestId('wrapper')).toBeInTheDocument();
+    });
 
     // Add two sections
     await userEvent.click(screen.getByRole('button', { name: 'Add a section' }));
@@ -116,32 +136,30 @@ describe('VernaForm', () => {
   });
 
   it('should use selector parameter to query sub schema and render it', async () => {
-    const translations = translationsFactory();
-
     render(
-      <VernaProvider
+      <VernaSuspenseWrapper
         isEditor
-        defaultSchema={schemaFactory()}
-        defaultSelector="testSection"
-        defaultUiSchema={uiSchemaFactory()}
-        defaultWidgets={widgetsFactory()}
-        locale="en"
-        translations={translations}
-      >
-        <VernaForm />
-      </VernaProvider>,
+        selector="testSection"
+        uiSchema={uiSchemaFactory()}
+        widgets={widgetsFactory()}
+      />,
     );
 
+    // Wait that the form is rendered...
+    await waitFor(() => {
+      expect(screen.queryByTestId('wrapper')).toBeInTheDocument();
+    });
+
     // - A fieldset legend should not be displayed
-    expect(screen.queryAllByRole('group', { name: translations.en.root_title })).toHaveLength(0);
+    expect(
+      screen.queryByRole('group', { name: 'Registration form description' }),
+    ).not.toBeInTheDocument();
 
     // - The form description should not be displayed
-    expect(screen.queryAllByText('Desc registration form')).toHaveLength(0);
+    expect(screen.queryByText('Desc registration form')).not.toBeInTheDocument();
 
     // - The first section should be displayed
-    expect(
-      screen.queryAllByRole('group', { name: translations.en.root_testSection_title }),
-    ).toHaveLength(1);
+    screen.getByRole('group', { name: 'First section' });
 
     // - A required text input First name should be displayed inside the only section
     const $field1 = document.getElementById('root_field1') as HTMLInputElement;
@@ -150,21 +168,19 @@ describe('VernaForm', () => {
   });
 
   it('should use a selector to query sub schema and add or remove fields on it', async () => {
-    const translations = translationsFactory();
-
     render(
-      <VernaProvider
+      <VernaSuspenseWrapper
         isEditor
-        defaultSchema={schemaFactory()}
-        defaultSelector="testSection"
-        defaultUiSchema={uiSchemaFactory()}
-        defaultWidgets={widgetsFactory()}
-        locale="en"
-        translations={translations}
-      >
-        <VernaForm />
-      </VernaProvider>,
+        selector="testSection"
+        uiSchema={uiSchemaFactory()}
+        widgets={widgetsFactory()}
+      />,
     );
+
+    // Wait that the form is rendered...
+    await waitFor(() => {
+      expect(screen.queryByTestId('wrapper')).toBeInTheDocument();
+    });
 
     // Add two input fields
     await clickOnLastAddInputButton();
@@ -175,7 +191,7 @@ describe('VernaForm', () => {
     });
     expect($addFieldButtons).toHaveLength(3);
 
-    // Delete every elements from top to bottom
+    // Delete every element from top to bottom
     // eslint-disable-next-line compat/compat
     await userEvent.click(
       screen.queryAllByRole('button', {
@@ -198,10 +214,8 @@ describe('VernaForm', () => {
       })[0],
     );
 
-    await waitFor(() => {
-      const $deleteButtons = screen.queryAllByRole('button', { name: 'x' });
-      expect($deleteButtons).toHaveLength(0);
-    });
+    // - All delete buttons should have been removed
+    expect(screen.queryByRole('button', { name: 'x' })).not.toBeInTheDocument();
 
     const $addFieldButtons3 = screen.queryAllByRole('button', {
       name: 'Add an input',
@@ -210,28 +224,21 @@ describe('VernaForm', () => {
   });
 
   it('should not render add functionalities if isEditor is false', async () => {
-    const translations = translationsFactory();
+    render(<VernaSuspenseWrapper uiSchema={uiSchemaFactory()} widgets={widgetsFactory()} />);
 
-    render(
-      <VernaProvider
-        defaultSchema={schemaFactory()}
-        defaultUiSchema={uiSchemaFactory()}
-        defaultWidgets={widgetsFactory()}
-        locale="en"
-        translations={translations}
-      >
-        <VernaForm />
-      </VernaProvider>,
-    );
+    // Wait that the form is rendered...
+    await waitFor(() => {
+      expect(screen.queryByTestId('wrapper')).toBeInTheDocument();
+    });
 
     // - A fieldset legend should be displayed with form title
-    screen.getByRole('group', { name: translations.en.root_title });
+    screen.getByRole('group', { name: 'A registration form' });
 
     // - A paragraph with form description should be displayed
-    screen.getByText(translations.en.root_description);
+    screen.getByText('Registration form description');
 
     // - The first section should be displayed
-    screen.getByRole('group', { name: translations.en.root_testSection_title });
+    screen.getByRole('group', { name: 'First section' });
 
     const $field1 = document.getElementById('root_testSection_field1') as HTMLInputElement;
 

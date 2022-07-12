@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Make translation overridable
 - Setup @formatjs to extract/compile translations
 - Add customization of verna render components
 - Add title and description edition on sections

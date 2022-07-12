@@ -17,8 +17,7 @@
   "exports": {
     ".": {
       "default": "./dist/index.js",
-      "import": "./dist/index.js",
-      "require": "./dist/index.umd.js"
+      "import": "./dist/index.js"
     },
     "./*": "./*",
     "./package.json": "./package.json"

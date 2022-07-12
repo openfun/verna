@@ -1,14 +1,15 @@
+import userEvent from '@testing-library/user-event';
+import type { AjvError } from '@rjsf/core';
+import { Suspense } from 'react';
 import {
   schemaFactory,
   translationsFactory,
   uiSchemaFactory,
   widgetsFactory,
 } from './mocks/factories';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import VernaProvider from '../providers/VernaProvider';
 import VernaForm from '../components/VernaForm';
-import userEvent from '@testing-library/user-event';
-import type { AjvError } from '@rjsf/core';
 
 describe('custom errors', () => {
   function transformErrors(errors: AjvError[]): AjvError[] {
@@ -27,24 +28,32 @@ describe('custom errors', () => {
     const translations = translationsFactory();
 
     render(
-      <VernaProvider
-        defaultSchema={schemaFactory()}
-        defaultUiSchema={uiSchemaFactory()}
-        defaultWidgets={widgetsFactory()}
-        isEditor={false}
-        locale="en"
-        transformErrors={transformErrors}
-        translations={translations}
-      >
-        <VernaForm />
-      </VernaProvider>,
+      <Suspense fallback="Loading...">
+        <VernaProvider
+          defaultSchema={schemaFactory()}
+          defaultUiSchema={uiSchemaFactory()}
+          defaultWidgets={widgetsFactory()}
+          locale="en-US"
+          transformErrors={transformErrors}
+          translations={translations}
+        >
+          <div data-testid="wrapper">
+            <VernaForm />
+          </div>
+        </VernaProvider>
+      </Suspense>,
     );
+
+    // Wait that the form is rendered...
+    await waitFor(() => {
+      expect(screen.queryByTestId('wrapper')).toBeInTheDocument();
+    });
 
     // Check that no translation key are displayed
     expect(screen.queryAllByText('/root.*/')).toHaveLength(0);
 
     // Get the number input
-    const $input = screen.getByLabelText(translations.en.root_testSection_field1);
+    const $input = screen.getByLabelText('First field');
 
     // Check that the minimum error message is the custom one
     await userEvent.type($input, '3');

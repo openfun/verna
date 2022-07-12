@@ -113,7 +113,7 @@ export default function WidgetPropertiesForm({ id, onClose }: WidgetPropertiesFo
       if (isMessageKey(key) && widgetSchema?.properties) {
         widgetSchema.properties[key].title = formatMessage({
           defaultMessage:
-            (locale && verna.schemaTranslations[locale][key]) || messages[key].defaultMessage,
+            (locale && verna.schemaTranslations[locale]?.[key]) || messages[key].defaultMessage,
           id: messages[key].id,
         });
       }
