@@ -1,5 +1,17 @@
-const userformdata = {};
+const userformdata = {
+  section: {
+    select: 'Français',
+  },
+};
 
-const statsData = {};
+const statsData = {
+  section: {
+    select: {
+      Français: 35,
+      English: 40,
+      Dutch: 25,
+    },
+  },
+};
 
-export { formdata };
+export { userformdata, statsData };
