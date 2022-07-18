@@ -1,21 +1,25 @@
 const translations = {
   en: {
-    root__description: 'global desc',
-    root__title: 'global title',
-    root_section__description: 'select your language',
-    root_section__title: 'Language',
+    'root_335df376-9357-42ca-baa4-6159faba0534_90c8ba81-7624-4be4-93cd-74b05353b5aa_title': 'Age',
+    'root_335df376-9357-42ca-baa4-6159faba0534_title': 'Indicate your age',
+    root_description: 'global desc',
+    root_section_description: 'select your language',
     root_section_select_enum_0: 'Français',
     root_section_select_enum_1: 'English',
     root_section_select_enum_2: 'Dutch',
+    root_section_title: 'Language',
+    root_title: 'global title',
   },
   fr: {
-    root__description: 'description global',
-    root__title: 'titre global',
-    root_section__description: 'Choisissez votre langue',
-    root_section__title: 'Langage',
+    'root_335df376-9357-42ca-baa4-6159faba0534_90c8ba81-7624-4be4-93cd-74b05353b5aa_title': 'Age',
+    'root_335df376-9357-42ca-baa4-6159faba0534_title': 'Indiquez votre age',
+    root_description: 'description global',
+    root_section_description: 'Choisissez votre langue',
     root_section_select_enum_0: 'Français',
     root_section_select_enum_1: 'English',
     root_section_select_enum_2: 'Dutch',
+    root_section_title: 'Langage',
+    root_title: 'titre global',
   },
 };
 

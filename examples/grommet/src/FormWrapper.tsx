@@ -22,6 +22,10 @@ export default function FormWrapper({ setIsEditor, setLocale }: FormWrapperProps
   const [displayAllSections, setDisplayAllSections] = useState<boolean>();
   const { locale } = useIntl();
 
+  function onSubmit(formData: unknown) {
+    console.log(formData);
+  }
+
   return (
     <div className="verna-wrapper">
       {isEditor && (
@@ -77,12 +81,12 @@ export default function FormWrapper({ setIsEditor, setLocale }: FormWrapperProps
                     setDisplayAllSections(false);
                   }}
                 />
-                <VernaForm onSubmit={(formData) => console.log(formData)} />
+                <VernaForm onSubmit={onSubmit} />
               </>
             ) : (
               <div className="form_sections_list">
                 {Object.keys(schema.properties as JSONSchema7)?.map((sectionName) => (
-                  <SectionResume section={sectionName} />
+                  <SectionResume key={sectionName} section={sectionName} />
                 ))}
                 <Button label="View all sections" onClick={() => setDisplayAllSections(true)} />
               </div>
