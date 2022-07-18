@@ -24,6 +24,23 @@ export default function FormWrapper({ setIsEditor, setLocale }: FormWrapperProps
 
   function onSubmit(formData: unknown) {
     console.log(formData);
+    localStorage.setItem('vernaExampleData-formData', JSON.stringify(formData));
+  }
+
+  function saveForm() {
+    localStorage.setItem(
+      'vernaExampleData-schema',
+      JSON.stringify({
+        schema: schema,
+        schemaTranslations: schemaTranslations,
+        uiSchema: uiSchema,
+      }),
+    );
+    console.log('FormData:', {
+      schema: schema,
+      translations: schemaTranslations,
+      uiSchema: uiSchema,
+    });
   }
 
   return (
@@ -94,17 +111,7 @@ export default function FormWrapper({ setIsEditor, setLocale }: FormWrapperProps
           </fieldset>
         </CardBody>
       </Card>
-      <Button
-        primary
-        label="save form"
-        onClick={() =>
-          console.log('FormData:', {
-            schema: schema,
-            translations: schemaTranslations,
-            uiSchema: uiSchema,
-          })
-        }
-      />
+      <Button primary label="save form" onClick={saveForm} />
     </div>
   );
 }
