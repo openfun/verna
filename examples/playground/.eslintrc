@@ -3,5 +3,10 @@
 {
   "rules": {
     "no-console": "off"
+  },
+  "settings": {
+    "import/resolver": {
+      "typescript": {}
+    }
   }
 }
