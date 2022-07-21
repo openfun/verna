@@ -5,9 +5,8 @@ import { v4 as uuidv4 } from 'uuid';
 import ShowCaseWidgetProps from ':/types/Widgets';
 import { RJSF_ID_SEPARATOR } from ':/settings';
 import { useVerna } from ':/providers/VernaProvider';
-import { addWidget, addSection } from ':/utils/schema';
+import { addWidget, addSection, removeSection, removeWidget } from ':/utils/schema';
 import WidgetPropertiesForm from ':/components/PropertiesForms/WidgetPropertiesForm';
-import { removeSection, removeWidget } from ':/utils/schema';
 
 const messages = defineMessages({
   addInput: {

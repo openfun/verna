@@ -9,13 +9,13 @@ import React, {
 } from 'react';
 import { type ResolvedIntlConfig } from 'react-intl';
 import type {
-  ObjectFieldTemplateProps,
+  FieldTemplateProps,
+  FormProps,
   ISubmitEvent,
+  ObjectFieldTemplateProps,
   UiSchema,
   Widget,
-  FormProps,
 } from '@rjsf/core';
-import type { FieldTemplateProps } from '@rjsf/core';
 import { defaultVernaWidgets } from ':/templates';
 import VernaJSONSchemaType from ':/types/rjsf';
 import {

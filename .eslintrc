@@ -11,6 +11,7 @@
   "rules": {
     "@typescript-eslint/no-unused-vars": "error",
     "linebreak-style": "warn",
+    "no-duplicate-imports": "error",
     "no-console": ["error"],
     "no-unused-vars": "off",
     "react/jsx-curly-brace-presence": ["error", { "props": "never", "children": "never" }],
