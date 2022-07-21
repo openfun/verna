@@ -5,8 +5,8 @@ import {
   translationsFactory,
   uiSchemaFactory,
   widgetsFactory,
-} from '../../tests/mocks/factories';
-import VernaForm from '../../components/VernaForm';
+} from ':/tests/mocks/factories';
+import VernaForm from ':/components/VernaForm';
 import VernaProvider, { type VernaProviderProps } from '.';
 
 describe('custom render components', () => {

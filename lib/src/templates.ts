@@ -1,5 +1,5 @@
 import { JSONSchema7TypeName } from 'json-schema';
-import VernaJSONSchemaType from './types/rjsf';
+import VernaJSONSchemaType from ':/types/rjsf';
 
 const stringDefinition = (type: JSONSchema7TypeName = 'string'): VernaJSONSchemaType => {
   const def: VernaJSONSchemaType = {

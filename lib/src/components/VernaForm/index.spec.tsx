@@ -3,15 +3,15 @@ import { screen, render, waitFor } from '@testing-library/react';
 import { Suspense } from 'react';
 import _ from 'lodash';
 import userEvent from '@testing-library/user-event';
-import VernaProvider, { WidgetsType } from '../../providers/VernaProvider';
+import VernaProvider, { WidgetsType } from ':/providers/VernaProvider';
 import {
   schemaFactory,
   translationsFactory,
   uiSchemaFactory,
   widgetsFactory,
-} from '../../tests/mocks/factories';
-import VernaForm from '../VernaForm';
-import { resolvePromisesOneByOne } from '../../tests/utils';
+} from ':/tests/mocks/factories';
+import VernaForm from ':/components/VernaForm';
+import { resolvePromisesOneByOne } from ':/tests/utils';
 
 describe('VernaForm', () => {
   async function clickOnLastAddInputButton() {

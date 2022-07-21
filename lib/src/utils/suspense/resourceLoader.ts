@@ -1,4 +1,4 @@
-import { Maybe } from '../../types/utils';
+import { Maybe } from ':/types/utils';
 
 export type ResourceLoader<DataType, ErrorType = Error> = {
   read: () => Promise<DataType> | DataType | ErrorType;

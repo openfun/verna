@@ -1,9 +1,9 @@
 import type { UiSchema } from '@rjsf/core';
 import { merge } from 'lodash';
-import VernaJSONSchemaType from '../../types/rjsf';
+import VernaJSONSchemaType from ':/types/rjsf';
+import { TranslationType } from ':/types/translations';
 import SelectWidget from './SelectWidget';
 import NumberWidget from './NumberWidget';
-import { TranslationType } from '../../types/translations';
 
 const schemaFactory = (): VernaJSONSchemaType => ({
   description: 'root_description',

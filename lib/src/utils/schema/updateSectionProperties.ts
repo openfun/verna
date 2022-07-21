@@ -1,5 +1,5 @@
-import { VernaContextProps } from '../../providers/VernaProvider';
-import { RJSF_ID_SEPARATOR } from '../../settings';
+import { VernaContextProps } from ':/providers/VernaProvider';
+import { RJSF_ID_SEPARATOR } from ':/settings';
 
 export interface SectionParameters {
   title?: string;

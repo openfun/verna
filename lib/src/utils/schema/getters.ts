@@ -1,5 +1,5 @@
 import type { UiSchema } from '@rjsf/core';
-import VernaJSONSchemaType from '../../types/rjsf';
+import VernaJSONSchemaType from ':/types/rjsf';
 
 /**
  * Get the JSONSchema used by the library, if there is a selector specified it will return only the

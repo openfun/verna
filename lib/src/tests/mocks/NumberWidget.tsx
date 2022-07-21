@@ -1,5 +1,5 @@
 import { TextTemplateWidget } from './templates/TextTemplateWidget';
-import { VernaWidgetProps } from '../../types/Widgets';
+import { VernaWidgetProps } from ':/types/Widgets';
 
 export default function TextWidget(props: VernaWidgetProps) {
   return (

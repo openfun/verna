@@ -1,16 +1,16 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Suspense } from 'react';
-import VernaProvider from '../providers/VernaProvider';
+import VernaProvider from ':/providers/VernaProvider';
 import {
   selectSchemaFactory,
   translationsFactory,
   selectUiSchemaFactory,
   confSchemaFactory,
   widgetsFactory,
-} from './mocks/factories';
-import VernaForm from '../components/VernaForm';
-import VernaJSONSchemaType from '../types/rjsf';
+} from ':/tests/mocks/factories';
+import VernaForm from ':/components/VernaForm';
+import VernaJSONSchemaType from ':/types/rjsf';
 
 describe('section properties edition', () => {
   const VernaSuspenseWrapper = ({ configSchema }: { configSchema?: VernaJSONSchemaType }) => {

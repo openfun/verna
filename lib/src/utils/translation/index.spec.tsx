@@ -4,8 +4,8 @@ import userEvent from '@testing-library/user-event';
 import { noop } from 'lodash';
 import { Suspense } from 'react';
 import { createIntl, IntlProvider, type ResolvedIntlConfig } from 'react-intl';
-import VernaProvider, { WidgetsType } from '../../providers/VernaProvider';
-import VernaForm from '../../components/VernaForm';
+import VernaProvider, { WidgetsType } from ':/providers/VernaProvider';
+import VernaForm from ':/components/VernaForm';
 import {
   checkBoxesSchemaFactory,
   checkBoxesUiSchemaFactory,
@@ -15,8 +15,8 @@ import {
   confSchemaFactory,
   widgetsFactory,
   translationUiFactory,
-} from '../../tests/mocks/factories';
-import VernaJSONSchemaType from '../../types/rjsf';
+} from ':/tests/mocks/factories';
+import VernaJSONSchemaType from ':/types/rjsf';
 
 describe('schema translations', () => {
   const VernaSuspenseWrapper = ({

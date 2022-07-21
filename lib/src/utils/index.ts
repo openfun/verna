@@ -1,6 +1,6 @@
 import type { UiSchema } from '@rjsf/core';
-import { RJSF_ID_SEPARATOR } from '../settings';
-import { Maybe } from '../types/utils';
+import { RJSF_ID_SEPARATOR } from ':/settings';
+import { Maybe } from ':/types/utils';
 
 /**
  * Retrieve the section name from the provided id.

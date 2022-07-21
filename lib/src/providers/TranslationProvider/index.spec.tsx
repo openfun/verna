@@ -3,7 +3,7 @@ import { Suspense } from 'react';
 import { createIntl, FormattedMessage, type ResolvedIntlConfig } from 'react-intl';
 import TranslationProvider from '.';
 
-jest.mock('../../translations/fr-FR.json', () => ({
+jest.mock(':/translations/fr-FR.json', () => ({
   __esModule: true,
   default: {
     title: 'Un titre',

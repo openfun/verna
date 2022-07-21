@@ -1,8 +1,8 @@
 import React from 'react';
 import type { ObjectFieldTemplateProps, UiSchema } from '@rjsf/core';
-import VernaJSONSchemaType from '../../types/rjsf';
-import Section from '../../components/Fields/Section';
-import { Maybe } from '../../types/utils';
+import VernaJSONSchemaType from ':/types/rjsf';
+import Section from ':/components/Fields/Section';
+import { Maybe } from ':/types/utils';
 
 /**
  * Verify & return a UiSchema with a specified order object, so it doesn't stop the workflow of the
