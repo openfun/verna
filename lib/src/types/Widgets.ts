@@ -1,5 +1,5 @@
-import { JSONSchema7TypeName } from 'json-schema';
 import type { WidgetProps } from '@rjsf/core';
+import { JSONSchema7TypeName } from 'json-schema';
 import { ChangeEventHandler } from 'react';
 
 export default interface ShowCaseWidgetProps {

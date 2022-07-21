@@ -1,6 +1,7 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Suspense } from 'react';
+import VernaForm from ':/components/VernaForm';
 import VernaProvider from ':/providers/VernaProvider';
 import {
   selectSchemaFactory,
@@ -9,7 +10,6 @@ import {
   confSchemaFactory,
   widgetsFactory,
 } from ':/tests/mocks/factories';
-import VernaForm from ':/components/VernaForm';
 import VernaJSONSchemaType from ':/types/rjsf';
 
 describe('section properties edition', () => {

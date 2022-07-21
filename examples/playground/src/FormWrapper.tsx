@@ -1,15 +1,15 @@
 import { useVerna, VernaForm, VernaToolbar } from '@openfun/verna';
 import { JSONSchema7 } from 'json-schema';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import TextWidget from './widgetToolbarItems/TextWidget';
+import { useLocale } from './providers/LocaleProvider';
+import CheckboxesWidget from './widgetToolbarItems/CheckboxesWidget';
+import CheckboxWidget from './widgetToolbarItems/CheckboxWidget';
+import NumberWidget from './widgetToolbarItems/NumberWidget';
 import PasswordWidget from './widgetToolbarItems/PasswordWidget';
 import QuizWidget from './widgetToolbarItems/QuizWidget';
-import TextareaWidget from './widgetToolbarItems/TextareaWidget';
-import NumberWidget from './widgetToolbarItems/NumberWidget';
-import CheckboxWidget from './widgetToolbarItems/CheckboxWidget';
 import SelectWidget from './widgetToolbarItems/SelectWidget';
-import CheckboxesWidget from './widgetToolbarItems/CheckboxesWidget';
-import { useLocale } from './providers/LocaleProvider';
+import TextareaWidget from './widgetToolbarItems/TextareaWidget';
+import TextWidget from './widgetToolbarItems/TextWidget';
 
 interface FormWrapperProps {
   toggleEditorMode: () => void;

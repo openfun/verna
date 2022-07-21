@@ -1,5 +1,5 @@
-import { IntlProvider } from 'react-intl';
 import { PropsWithChildren } from 'react';
+import { IntlProvider } from 'react-intl';
 import { useLocale } from './LocaleProvider';
 import en from ':/translations/en-US.json';
 import fr from ':/translations/fr-FR.json';

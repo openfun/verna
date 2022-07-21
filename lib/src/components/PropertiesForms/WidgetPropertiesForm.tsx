@@ -1,15 +1,15 @@
 import Form, { type ISubmitEvent, type UiSchema } from '@rjsf/core';
-import { defineMessages, useIntl } from 'react-intl';
-import { FormEvent, useMemo } from 'react';
 import _ from 'lodash';
+import { FormEvent, useMemo } from 'react';
+import { defineMessages, useIntl } from 'react-intl';
 import { useVerna } from ':/providers/VernaProvider';
-import { getUiWidgetName } from ':/utils';
 import { RJSF_ID_SEPARATOR } from ':/settings';
+import { defaultWidgetProps } from ':/templates';
 import type VernaJSONSchemaType from ':/types/rjsf';
+import { Maybe } from ':/types/utils';
+import { getUiWidgetName } from ':/utils';
 import { Properties, updateWidgetProperties } from ':/utils/schema';
 import { DEFAULT_PROPERTY_TRANSLATION } from ':/utils/translation';
-import { Maybe } from ':/types/utils';
-import { defaultWidgetProps } from ':/templates';
 
 interface WidgetPropertiesFormProps {
   onClose: () => void;

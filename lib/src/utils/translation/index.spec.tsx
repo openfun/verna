@@ -4,8 +4,8 @@ import userEvent from '@testing-library/user-event';
 import { noop } from 'lodash';
 import { Suspense } from 'react';
 import { createIntl, IntlProvider, type ResolvedIntlConfig } from 'react-intl';
-import VernaProvider, { WidgetsType } from ':/providers/VernaProvider';
 import VernaForm from ':/components/VernaForm';
+import VernaProvider, { WidgetsType } from ':/providers/VernaProvider';
 import {
   checkBoxesSchemaFactory,
   checkBoxesUiSchemaFactory,

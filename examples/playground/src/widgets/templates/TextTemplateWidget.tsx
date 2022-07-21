@@ -1,5 +1,5 @@
-import Field, { FieldProps } from './Field';
 import { ChangeEventHandler, InputHTMLAttributes } from 'react';
+import Field, { FieldProps } from './Field';
 
 interface TextTemplateWidgetProps extends InputHTMLAttributes<unknown>, FieldProps {
   label: string;

@@ -1,8 +1,9 @@
 import { type UiSchema } from '@rjsf/core';
 import { screen, render, waitFor } from '@testing-library/react';
-import { Suspense } from 'react';
-import _ from 'lodash';
 import userEvent from '@testing-library/user-event';
+import _ from 'lodash';
+import { Suspense } from 'react';
+import VernaForm from ':/components/VernaForm';
 import VernaProvider, { WidgetsType } from ':/providers/VernaProvider';
 import {
   schemaFactory,
@@ -10,7 +11,6 @@ import {
   uiSchemaFactory,
   widgetsFactory,
 } from ':/tests/mocks/factories';
-import VernaForm from ':/components/VernaForm';
 import { resolvePromisesOneByOne } from ':/tests/utils';
 
 describe('VernaForm', () => {

@@ -1,8 +1,8 @@
 import _ from 'lodash';
+import { updateProperty, updateRequired } from './widgetPropertyUpdaters';
 import { VernaContextProps } from ':/providers/VernaProvider';
 import { RJSF_ID_SEPARATOR } from ':/settings';
 import VernaJSONSchemaType from ':/types/rjsf';
-import { updateProperty, updateRequired } from './widgetPropertyUpdaters';
 
 type Maybe<T> = T | undefined;
 export type Properties = {
