@@ -1,11 +1,11 @@
 import Form, { type ISubmitEvent, type UiSchema } from '@rjsf/core';
-import { defineMessages, useIntl } from 'react-intl';
 import { FormEvent, useMemo } from 'react';
+import { defineMessages, useIntl } from 'react-intl';
 import { useVerna } from ':/providers/VernaProvider';
 import { RJSF_ID_SEPARATOR } from ':/settings';
-import { DEFAULT_PROPERTY_TRANSLATION } from ':/utils/translation';
 import { sectionParametersSchema } from ':/templates';
 import { SectionParameters, updateSectionProperties } from ':/utils/schema/updateSectionProperties';
+import { DEFAULT_PROPERTY_TRANSLATION } from ':/utils/translation';
 
 interface SectionPropertiesFormProps {
   onClose: () => void;

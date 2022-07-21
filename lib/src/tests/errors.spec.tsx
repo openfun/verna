@@ -1,15 +1,15 @@
-import userEvent from '@testing-library/user-event';
 import type { AjvError } from '@rjsf/core';
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { Suspense } from 'react';
+import VernaForm from ':/components/VernaForm';
+import VernaProvider from ':/providers/VernaProvider';
 import {
   schemaFactory,
   translationsFactory,
   uiSchemaFactory,
   widgetsFactory,
 } from ':/tests/mocks/factories';
-import { render, screen, waitFor } from '@testing-library/react';
-import VernaProvider from ':/providers/VernaProvider';
-import VernaForm from ':/components/VernaForm';
 
 describe('custom errors', () => {
   function transformErrors(errors: AjvError[]): AjvError[] {

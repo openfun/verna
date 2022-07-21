@@ -1,10 +1,10 @@
-import { v4 as uuidv4 } from 'uuid';
-import React from 'react';
 import type { ObjectFieldTemplateProps } from '@rjsf/core';
-import { getWidgetName, getSectionName } from ':/utils';
+import React from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import { VernaContextProps } from ':/providers/VernaProvider';
 import { sectionDefinition, stringDefinition } from ':/templates';
 import ShowCaseWidgetProps from ':/types/Widgets';
+import { getWidgetName, getSectionName } from ':/utils';
 
 function addWidgetToUiSchemaWithSelector(
   verna: VernaContextProps,

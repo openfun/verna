@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import { useVerna } from ':/providers/VernaProvider';
 import ShowCaseWidgetProps from ':/types/Widgets';
 import { addWidget } from ':/utils/schema';
-import { useVerna } from ':/providers/VernaProvider';
 
 export interface DropZoneProps {
   id: string;

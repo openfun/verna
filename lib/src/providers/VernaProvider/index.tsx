@@ -1,13 +1,3 @@
-import React, {
-  createContext,
-  FormEvent,
-  PropsWithChildren,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
-import { type ResolvedIntlConfig } from 'react-intl';
 import type {
   FieldTemplateProps,
   FormProps,
@@ -16,22 +6,32 @@ import type {
   UiSchema,
   Widget,
 } from '@rjsf/core';
+import React, {
+  FormEvent,
+  PropsWithChildren,
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+import { type ResolvedIntlConfig } from 'react-intl';
+import EditorFieldTemplate from ':/components/EditorFieldTemplate';
+import {
+  default as DefaultDropZone,
+  DropZoneProps,
+} from ':/components/EditorFieldTemplate/DropZone';
+import { default as DefaultSection } from ':/components/Fields/Section';
+import TranslationProvider from ':/providers/TranslationProvider';
 import { defaultVernaWidgets } from ':/templates';
 import VernaJSONSchemaType from ':/types/rjsf';
+import { TranslationType } from ':/types/translations';
 import {
   cleanUiSchema,
   getSelectedDefaultValues,
   getSelectedSchema,
   getSelectedUiSchema,
 } from ':/utils/schema';
-import { TranslationType } from ':/types/translations';
-import TranslationProvider from ':/providers/TranslationProvider';
-import { default as DefaultSection } from ':/components/Fields/Section';
-import EditorFieldTemplate from ':/components/EditorFieldTemplate';
-import {
-  default as DefaultDropZone,
-  DropZoneProps,
-} from ':/components/EditorFieldTemplate/DropZone';
 
 function functionNotSet() {
   throw new Error('function context not set');

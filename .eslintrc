@@ -7,9 +7,15 @@
     "plugin:prettier/recommended",
     "plugin:react/recommended"
   ],
-  "plugins": ["@typescript-eslint","react","import","jsx-a11y"],
+  "plugins": ["@typescript-eslint","import","jsx-a11y","react"],
   "rules": {
     "@typescript-eslint/no-unused-vars": "error",
+    "import/order": ["error", {
+      "alphabetize": {
+        "order": "asc",
+        "caseInsensitive": true
+      }
+    }],
     "linebreak-style": "warn",
     "no-duplicate-imports": "error",
     "no-console": ["error"],

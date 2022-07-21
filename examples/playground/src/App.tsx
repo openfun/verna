@@ -1,16 +1,16 @@
+import { VernaProvider, type VernaJSONSchemaType } from '@openfun/verna';
+import type { UiSchema } from '@rjsf/core';
 import { Suspense, useState } from 'react';
 import { FormattedMessage, useIntl, defineMessages } from 'react-intl';
-import type { UiSchema } from '@rjsf/core';
-import { VernaProvider, type VernaJSONSchemaType } from '@openfun/verna';
+import transformErrors from './ErrorCustom';
 import FormWrapper from './FormWrapper';
-import TextWidget from './widgets/TextWidget';
+import CheckboxWidget from './widgets/CheckboxWidget';
+import NumberWidget from './widgets/NumberWidget';
 import PasswordWidget from './widgets/PasswordWidget';
 import QuizWidget from './widgets/QuizWidget';
-import NumberWidget from './widgets/NumberWidget';
 import SelectWidget from './widgets/SelectWidget';
 import TextareaWidget from './widgets/TextareaWidget';
-import CheckboxWidget from './widgets/CheckboxWidget';
-import transformErrors from './ErrorCustom';
+import TextWidget from './widgets/TextWidget';
 import ':/styles/verna.scss';
 
 const messages = defineMessages({

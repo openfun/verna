@@ -1,7 +1,7 @@
-import React from 'react';
 import type { ObjectFieldTemplateProps, UiSchema } from '@rjsf/core';
-import VernaJSONSchemaType from ':/types/rjsf';
+import React from 'react';
 import Section from ':/components/Fields/Section';
+import VernaJSONSchemaType from ':/types/rjsf';
 import { Maybe } from ':/types/utils';
 
 /**

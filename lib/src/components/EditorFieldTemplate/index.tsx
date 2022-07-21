@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
 import type { FieldTemplateProps } from '@rjsf/core';
+import React, { useState } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { v4 as uuidv4 } from 'uuid';
-import ShowCaseWidgetProps from ':/types/Widgets';
-import { RJSF_ID_SEPARATOR } from ':/settings';
-import { useVerna } from ':/providers/VernaProvider';
-import { addWidget, addSection, removeSection, removeWidget } from ':/utils/schema';
 import WidgetPropertiesForm from ':/components/PropertiesForms/WidgetPropertiesForm';
+import { useVerna } from ':/providers/VernaProvider';
+import { RJSF_ID_SEPARATOR } from ':/settings';
+import ShowCaseWidgetProps from ':/types/Widgets';
+import { addWidget, addSection, removeSection, removeWidget } from ':/utils/schema';
 
 const messages = defineMessages({
   addInput: {
