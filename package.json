@@ -2,7 +2,7 @@
   "name": "verna",
   "version": "0.0.0",
   "description": "An extensible form builder based on React JSON Schema Form.",
-  "main": "./lib/dist/verna.umd.js",
+  "main": "./lib/dist/index.js",
   "repository": "https://github.com/openfun/verna",
   "author": {
     "name": "Open FUN (France Université Numérique)",
