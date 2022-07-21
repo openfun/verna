@@ -16,22 +16,22 @@ import type {
   FormProps,
 } from '@rjsf/core';
 import type { FieldTemplateProps } from '@rjsf/core';
-import { defaultVernaWidgets } from '../../templates';
-import VernaJSONSchemaType from '../../types/rjsf';
+import { defaultVernaWidgets } from ':/templates';
+import VernaJSONSchemaType from ':/types/rjsf';
 import {
   cleanUiSchema,
   getSelectedDefaultValues,
   getSelectedSchema,
   getSelectedUiSchema,
-} from '../../utils/schema';
-import { TranslationType } from '../../types/translations';
-import TranslationProvider from '../TranslationProvider';
-import { default as DefaultSection } from '../../components/Fields/Section';
-import EditorFieldTemplate from '../../components/EditorFieldTemplate';
+} from ':/utils/schema';
+import { TranslationType } from ':/types/translations';
+import TranslationProvider from ':/providers/TranslationProvider';
+import { default as DefaultSection } from ':/components/Fields/Section';
+import EditorFieldTemplate from ':/components/EditorFieldTemplate';
 import {
   default as DefaultDropZone,
   DropZoneProps,
-} from '../../components/EditorFieldTemplate/DropZone';
+} from ':/components/EditorFieldTemplate/DropZone';
 
 function functionNotSet() {
   throw new Error('function context not set');

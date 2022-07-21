@@ -6,10 +6,10 @@ import {
   translationsFactory,
   uiSchemaFactory,
   widgetsFactory,
-} from './mocks/factories';
+} from ':/tests/mocks/factories';
 import { render, screen, waitFor } from '@testing-library/react';
-import VernaProvider from '../providers/VernaProvider';
-import VernaForm from '../components/VernaForm';
+import VernaProvider from ':/providers/VernaProvider';
+import VernaForm from ':/components/VernaForm';
 
 describe('custom errors', () => {
   function transformErrors(errors: AjvError[]): AjvError[] {

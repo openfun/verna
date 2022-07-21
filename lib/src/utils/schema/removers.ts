@@ -1,5 +1,5 @@
-import { VernaContextProps } from '../../providers/VernaProvider';
-import { getWidgetName, getSectionName } from '../utils';
+import { VernaContextProps } from ':/providers/VernaProvider';
+import { getWidgetName, getSectionName } from ':/utils';
 
 function removeWidget(verna: VernaContextProps, id: string) {
   const currentSection = getSectionName(id);

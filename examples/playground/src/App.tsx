@@ -6,12 +6,12 @@ import FormWrapper from './FormWrapper';
 import TextWidget from './widgets/TextWidget';
 import PasswordWidget from './widgets/PasswordWidget';
 import QuizWidget from './widgets/QuizWidget';
-import './styles/verna.scss';
 import NumberWidget from './widgets/NumberWidget';
 import SelectWidget from './widgets/SelectWidget';
 import TextareaWidget from './widgets/TextareaWidget';
 import CheckboxWidget from './widgets/CheckboxWidget';
 import transformErrors from './ErrorCustom';
+import ':/styles/verna.scss';
 
 const messages = defineMessages({
   loading: {

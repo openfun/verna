@@ -1,8 +1,8 @@
-import { VernaContextProps } from '../../providers/VernaProvider';
-import VernaJSONSchemaType from '../../types/rjsf';
+import { VernaContextProps } from ':/providers/VernaProvider';
+import VernaJSONSchemaType from ':/types/rjsf';
+import { RJSF_ID_SEPARATOR } from ':/settings';
+import { Maybe } from ':/types/utils';
 import type { Properties } from './updateWidgetProperties';
-import { RJSF_ID_SEPARATOR } from '../../settings';
-import { Maybe } from '../../types/utils';
 
 /**
  * Generate the translation key based on those parameters

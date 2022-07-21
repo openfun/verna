@@ -1,7 +1,7 @@
 import { IntlFormatters } from '@formatjs/intl/src/types';
 import _ from 'lodash';
-import VernaJSONSchemaType from '../../types/rjsf';
-import { Maybe } from '../../types/utils';
+import VernaJSONSchemaType from ':/types/rjsf';
+import { Maybe } from ':/types/utils';
 
 export const DEFAULT_PROPERTY_TRANSLATION = '';
 

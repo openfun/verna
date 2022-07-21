@@ -1,8 +1,8 @@
 import { PropsWithChildren, useMemo } from 'react';
 import { createIntl, createIntlCache, RawIntlProvider, type ResolvedIntlConfig } from 'react-intl';
-import resourceLoader, { type ResourceLoader } from '../../utils/suspense/resourceLoader';
-import { VERNA_SUPPORTED_LOCALES } from '../../settings';
-import { TranslationType } from '../../types/translations';
+import resourceLoader, { type ResourceLoader } from ':/utils/suspense/resourceLoader';
+import { VERNA_SUPPORTED_LOCALES } from ':/settings';
+import { TranslationType } from ':/types/translations';
 
 interface TranslationProviderProps {
   defaultLocale?: string;
@@ -16,7 +16,7 @@ type MessageLoaders = Record<string, MessageLoader>;
 
 const messagesLoader = (locale: string): MessageLoader =>
   resourceLoader(() =>
-    import(`../../translations/${locale}.json`).then(
+    import(`:/translations/${locale}.json`).then(
       (response: { default: ResolvedIntlConfig['messages'] }) => response.default,
     ),
   );

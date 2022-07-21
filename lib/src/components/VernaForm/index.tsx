@@ -1,9 +1,9 @@
 import Form from '@rjsf/core';
 import { useIntl } from 'react-intl';
 import { useMemo } from 'react';
-import { useVerna } from '../../providers/VernaProvider';
-import { RJSF_ID_SEPARATOR } from '../../settings';
-import { translateSchema } from '../../utils/translation';
+import { useVerna } from ':/providers/VernaProvider';
+import { RJSF_ID_SEPARATOR } from ':/settings';
+import { translateSchema } from ':/utils/translation';
 
 interface VernaFormProperties {
   onSubmit: (formData: unknown) => void;

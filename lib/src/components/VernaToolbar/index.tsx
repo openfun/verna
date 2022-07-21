@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import ShowCaseWidgetProps from '../../types/Widgets';
+import ShowCaseWidgetProps from ':/types/Widgets';
 
 interface VernaToolbarProps {
   children: ReactElement[];

@@ -1,8 +1,8 @@
 import { defineMessages, FormattedMessage } from 'react-intl';
 import type { ObjectFieldTemplateProps } from '@rjsf/core';
 import React, { useState } from 'react';
-import { useVerna } from '../../providers/VernaProvider';
-import SectionPropertiesForm from '../PropertiesForms/SectionPropertiesForm';
+import { useVerna } from ':/providers/VernaProvider';
+import SectionPropertiesForm from ':/components/PropertiesForms/SectionPropertiesForm';
 
 const messages = defineMessages({
   parameters: {
