@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc && vite build",
     "build:check": "if [ ! -d dist ] || [ -n \"$(find src -type f -newer dist)\" ] ; then yarn build ; fi",
-    "build:dev": "vite build --watch --logLevel warn --mode development",
+    "build:dev": "vite build --watch --logLevel warn --mode development --config ./vite.dev.config.ts",
     "i18n:extract": "yarn formatjs extract --id-interpolation-pattern '[sha512:contenthash:base64:6]' --format crowdin './src/**/*.ts*' --ignore './src/**/*.spec.ts*' --out-file './i18n/frontend.json'",
     "i18n:compile": "yarn formatjs compile-folder --format crowdin ./i18n/locales ./src/translations",
     "lint": "eslint 'src/**/*.{ts,tsx}'",

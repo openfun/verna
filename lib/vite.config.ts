@@ -4,7 +4,7 @@ import react from '@vitejs/plugin-react';
 import typescript from '@rollup/plugin-typescript';
 
 // https://vitejs.dev/config/
-export default defineConfig(({ mode }) => ({
+export default defineConfig({
   build: {
     lib: {
       entry: resolve(__dirname, './src/index.ts'),
@@ -12,7 +12,7 @@ export default defineConfig(({ mode }) => ({
       formats: ['es'],
       name: 'index',
     },
-    minify: mode !== 'development',
+    minify: true,
     rollupOptions: {
       external: ['react', 'react-dom', 'react-intl'],
       output: {
@@ -33,7 +33,7 @@ export default defineConfig(({ mode }) => ({
             resolve(__dirname, './src/tests'),
             resolve(__dirname, './src/**/*.spec.tsx?'),
           ],
-          noEmitOnError: mode !== 'development',
+          noEmitOnError: true,
           rootDir: resolve(__dirname, './src'),
           target: 'ESNext',
         }),
@@ -41,4 +41,12 @@ export default defineConfig(({ mode }) => ({
     },
   },
   plugins: [react()],
-}));
+  resolve: {
+    alias: [
+      {
+        find: /:/,
+        replacement: resolve(__dirname, './src'),
+      },
+    ],
+  },
+});
