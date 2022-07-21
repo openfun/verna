@@ -27,6 +27,7 @@
     "@vitejs/plugin-react": "2.0.0",
     "eslint": "8.20.0",
     "eslint-config-prettier": "8.5.0",
+    "eslint-import-resolver-typescript": "3.3.0",
     "eslint-plugin-compat": "4.0.2",
     "eslint-plugin-import": "2.26.0",
     "eslint-plugin-jsx-a11y": "6.6.0",
