@@ -126,16 +126,6 @@ function App() {
     properties: {
       CheckboxWidget: {
         properties: {
-          items: {
-            additionalItems: {
-              type: 'boolean',
-            },
-            items: {
-              type: 'string',
-            },
-            minItems: 2,
-            type: 'array',
-          },
           required: {
             type: 'boolean',
           },
