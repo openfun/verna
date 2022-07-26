@@ -1,0 +1,134 @@
+{
+  "ErrorCustom.minimum": {
+    "description": "Error message displayed when minimum required isn't respected",
+    "message": "Nop ! It must be {comparison} to {limit}"
+  },
+  "ErrorCustom.pattern": {
+    "description": "Error message displayed when given pattern isn't respected",
+    "message": "Only digits are allowed"
+  },
+  "FormWrapper.dndInfos": {
+    "description": "Message displayed for information on how to use the drag and drop of questions",
+    "message": "You can drag the fields below and drop them in the form to add new questions."
+  },
+  "FormWrapper.emptyAnswer": {
+    "description": "Text used when an answer of something to select is nothing",
+    "message": "Empty answer"
+  },
+  "FormWrapper.error": {
+    "description": "Message displayed at the bottom when the form is in error",
+    "message": "Error, please fill the form correctly"
+  },
+  "FormWrapper.false": {
+    "description": "Label used for false value",
+    "message": "False"
+  },
+  "FormWrapper.goBack": {
+    "description": "Label of the button to go back to previous page",
+    "message": "Go back"
+  },
+  "FormWrapper.noQuestion": {
+    "description": "Text preview when there are no questions in a poll",
+    "message": "There are no question in this poll."
+  },
+  "FormWrapper.resetData": {
+    "description": "Label of the button to reset local storage data",
+    "message": "Reset form data"
+  },
+  "FormWrapper.save": {
+    "description": "Label of the button to save the form as editor",
+    "message": "Save"
+  },
+  "FormWrapper.success": {
+    "description": "Message displayed at the bottom when the form is submitted successfully",
+    "message": "Form successfully validated"
+  },
+  "FormWrapper.toolbarTitle": {
+    "description": "Label of the toolbar containing draggable questions",
+    "message": "Questions"
+  },
+  "FormWrapper.true": {
+    "description": "Label used for true value",
+    "message": "True"
+  },
+  "components.App.loading": {
+    "description": "Message displayed while verna is loading",
+    "message": "Loading..."
+  },
+  "components.App.title": {
+    "description": "Title of the playground application",
+    "message": "🧑‍💻 Verna poll builder with Grommet Library"
+  },
+  "components.Poll.defaultSectionName": {
+    "description": "The default name of a poll newly created",
+    "message": "Poll without title"
+  },
+  "components.Poll.newPoll": {
+    "description": "Label of the button to add a new poll",
+    "message": "Add a new poll"
+  },
+  "components.PollResume.QuestionResume.answers": {
+    "description": "Text beside the number of answers for a poll",
+    "message": "{count, plural, =0 {no answers} one {# Answer} other {# Answers}}"
+  },
+  "components.SectionResume.view": {
+    "description": "Label of the button to view the section",
+    "message": "Answer"
+  },
+  "components.VernaOverride.DropZone.descriptionDraggingOver": {
+    "description": "The description written in the drop zone when dragging over",
+    "message": "Drop here"
+  },
+  "components.VernaOverride.Section.addQuestion": {
+    "description": "Label of the button to add a new question",
+    "message": "Add"
+  },
+  "components.VernaOverride.Section.addQuestionTextModal": {
+    "description": "Text of modal to add a new question",
+    "message": "Select a type of question to add"
+  },
+  "components.VernaOverride.Section.closeModal": {
+    "description": "Label of the button to close the modal to add a new question",
+    "message": "Close"
+  },
+  "components.VernaOverride.Section.newQuestion": {
+    "description": "Label of the button to add a new question",
+    "message": "Add a new question"
+  },
+  "components.VernaOverride.SubmitButton.submitButtonText": {
+    "description": "The text wrote on the submit button used to submit answers of a poll",
+    "message": "Submit"
+  },
+  "widgetToolbarItems.CheckboxWidget": {
+    "description": "Label of the checkbox widget",
+    "message": "Yes/no question"
+  },
+  "widgetToolbarItems.CheckboxesWidget": {
+    "description": "Label of the multiple choices widget",
+    "message": "Multiple choice question"
+  },
+  "widgetToolbarItems.NumberWidget": {
+    "description": "Label of the number widget",
+    "message": "Number answer question"
+  },
+  "widgetToolbarItems.SelectWidget": {
+    "description": "Label of the select widget",
+    "message": "Single choice question"
+  },
+  "widgetToolbarItems.TextWidget": {
+    "description": "Label of the text widget",
+    "message": "Free answer question"
+  },
+  "widgetToolbarItems.TextareaWidget": {
+    "description": "Label of the textarea widget",
+    "message": "Free large answer question"
+  },
+  "widgets.templates.TextTemplateWidget.placeholder": {
+    "description": "placeholder displayed in every empty fields",
+    "message": "Type here..."
+  },
+  "widgets.templates.TextTemplateWidget.placeholderSelect": {
+    "description": "placeholder displayed in empty select field",
+    "message": "Select option"
+  }
+}

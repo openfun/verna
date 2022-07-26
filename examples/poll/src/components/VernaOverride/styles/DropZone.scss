@@ -1,0 +1,54 @@
+@keyframes dropdown {
+  0% {
+    height: 0;
+    top: -40px;
+  }
+
+  100% {
+    height: 24px;
+    top: 0;
+  }
+}
+
+@keyframes rollback {
+  0% {
+    height: 24px;
+    top: 0;
+  }
+
+  100% {
+    height: 0;
+    top: -40px;
+  }
+}
+
+.hidden-drop-zone {
+  animation-duration: 0.3s;
+  animation-name: rollback;
+}
+
+.drop-zone-divider {
+  animation-duration: 0.3s;
+  animation-name: dropdown;
+  border: 2px dashed #7d4cdb;
+  border-radius: 5px;
+  display: flex;
+  flex-shrink: 0;
+  justify-content: center;
+  margin: 6px;
+  padding: 5px;
+  width: 600px;
+}
+
+.drop-zone-drag-over .drop-zone-divider {
+  background-color: rgba(145 110 208 / 18%);
+  border: 2px dashed #7d4cdb;
+  border-radius: 5px;
+  display: flex;
+  flex-shrink: 0;
+  justify-content: center;
+  margin: 6px;
+  padding: 5px;
+  transition: height 2.4s;
+  width: 600px;
+}

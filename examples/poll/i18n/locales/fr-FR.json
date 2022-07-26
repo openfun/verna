@@ -1,0 +1,62 @@
+{
+  "components.SectionResume.delete": {
+    "description": "Label of the button to delete the section",
+    "message": "Supprimer"
+  },
+  "components.SectionResume.edit": {
+    "description": "Label of the button to edit the section",
+    "message": "Éditer"
+  },
+  "components.SectionResume.view": {
+    "description": "Label of the button to view the section",
+    "message": "Répondre au sondage"
+  },
+  "components.VernaOverride.DropZone.descriptionDraggingOver": {
+    "description": "The description written in the drop zone when dragging over",
+    "message": "Lâchez ici"
+  },
+  "components.VernaOverride.SubmitButton.newPoll": {
+    "description": "Label of the button to add a new poll",
+    "message": "Ajouter un nouveau sondage"
+  },
+  "components.VernaOverride.SubmitButton.resetData": {
+    "description": "Label of the button to reset local storage data",
+    "message": "Réinitialiser les données locales"
+  },
+  "components.VernaOverride.SubmitButton.save": {
+    "description": "Label of the button to save the form as editor",
+    "message": "Sauvegarder"
+  },
+  "components.VernaOverride.SubmitButton.submit": {
+    "description": "Label of the button to submit the form",
+    "message": "Soumettre"
+  },
+  "components.VernaOverride.SubmitButton.toolbarTitle": {
+    "description": "Label of the toolbar containing draggable polls",
+    "message": "Questions"
+  },
+  "widgetToolbarItems.CheckboxWidget": {
+    "description": "Label of the checkbox widget",
+    "message": "Question Oui/non"
+  },
+  "widgetToolbarItems.CheckboxesWidget": {
+    "description": "Label of the multiple choices widget",
+    "message": "Question à choix multiples"
+  },
+  "widgetToolbarItems.NumberWidget": {
+    "description": "Label of the number widget",
+    "message": "Question à réponse numérique"
+  },
+  "widgetToolbarItems.SelectWidget": {
+    "description": "Label of the select widget",
+    "message": "Question à choix unique"
+  },
+  "widgetToolbarItems.TextWidget": {
+    "description": "Label of the text widget",
+    "message": "Question à réponse libre"
+  },
+  "widgetToolbarItems.TextareaWidget": {
+    "description": "Label of the textarea widget",
+    "message": "Question à large réponse libre"
+  }
+}

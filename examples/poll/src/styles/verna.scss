@@ -1,0 +1,236 @@
+@font-face {
+  font-family: Roboto;
+  src: url("/roboto-v30-latin-regular.woff2");
+}
+
+body {
+  background-color: #f0f5f7;
+  font-family: Roboto, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.verna-wrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  min-height: 700px;
+  padding: 20px;
+}
+
+.widget-wrapper {
+  max-width: 0 !important;
+  transition: max-width 200ms ease-out;
+  transition-delay: 150ms;
+
+  & > * {
+    opacity: 0;
+    transition: opacity 200ms ease-out;
+  }
+}
+
+.widget-wrapper-active {
+  max-width: 320px !important;
+  transition-delay: 0ms;
+  transition-duration: 300ms;
+
+  & > * {
+    opacity: 1;
+    transition-delay: 250ms;
+  }
+}
+
+.accordion {
+  --padding: 15px;
+
+  border: rgb(125 76 219 / 0%) solid 0;
+  border-radius: 5px;
+  box-sizing: border-box;
+  height: 0;
+  padding: 0 var(--padding);
+  transition: all 400ms ease-out;
+  transition-delay: 250ms;
+  visibility: hidden;
+
+  & > div {
+    opacity: 0;
+    transform-origin: top center;
+    transition: opacity 200ms ease-out;
+  }
+
+  &--active {
+    border: #7d4cdb solid 1px;
+    height: calc(var(--padding) * 2 + var(--height));
+    padding: var(--padding);
+    transition-delay: 0ms;
+    transition-duration: 350ms;
+    visibility: visible;
+
+    & > div {
+      opacity: 1;
+      transition-delay: 200ms;
+    }
+  }
+}
+
+.form-toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+}
+
+.form-toolbar-item {
+  align-items: center;
+  border: rgb(125 76 219 / 45%) dashed 2px;
+  border-radius: 5px;
+  display: flex;
+  gap: 1rem;
+  padding: 10px;
+  width: 100%;
+}
+
+.form-options {
+  align-items: flex-end;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  justify-content: flex-end;
+
+  button {
+    width: 140px;
+  }
+}
+
+.form-sections-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.form-goback-button {
+  width: 200px;
+}
+
+.array-item-move-down {
+  height: 30px;
+  width: 30px;
+
+  .glyphicon-arrow-down {
+    @extend %arrow;
+
+    transform: rotate(45deg);
+  }
+}
+
+.array-item-move-up {
+  height: 30px;
+  width: 30px;
+
+  .glyphicon-arrow-up {
+    @extend %arrow;
+
+    transform: rotate(-135deg);
+  }
+}
+
+.array-item-remove {
+  height: 30px;
+  position: relative;
+  width: 30px;
+}
+
+.array-item-remove::after {
+  @extend %cross-before-template;
+
+  background-color: black;
+  transform: rotate(-45deg);
+}
+
+.array-item-remove::before {
+  @extend %cross-before-template;
+
+  background-color: black;
+  transform: rotate(45deg);
+}
+
+%arrow {
+  border: solid black;
+  border-width: 0 3px 3px 0;
+  display: inline-block;
+  padding: 3px;
+}
+
+.btn-add {
+  background-color: gray;
+  border-radius: 50%;
+  height: 30px;
+  position: relative;
+  width: 30px;
+}
+
+.btn-add::after {
+  @extend %cross-after-template;
+}
+
+.btn-add::before {
+  @extend %cross-before-template;
+}
+
+.cross-after {
+  @extend %cross-after-template;
+}
+
+.cross-before {
+  @extend %cross-before-template;
+}
+
+.buttons-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+%cross-after-template {
+  background-color: white;
+  content: " ";
+  height: 3px;
+  left: 5px;
+  margin-top: -2px;
+  position: absolute;
+  right: 5px;
+  top: 50%;
+}
+
+%cross-before-template {
+  background-color: white;
+  bottom: 5px;
+  content: " ";
+  left: 50%;
+  margin-left: -2px;
+  position: absolute;
+  top: 5px;
+  width: 3px;
+}
+
+.widget-parameters-wrapper {
+  background-color: #b9b9b9;
+  border: solid 1px gray;
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  width: 350px;
+
+  .option-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+.sidebar {
+  gap: 5px;
+}
+
+fieldset {
+  border: none;
+}

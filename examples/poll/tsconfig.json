@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.json",
+  "include": ["src"],
+  "compilerOptions": {
+    // If you update aliases defined within "paths" property,
+    // you have also to update the "resolve.alias" property in ./vite.config.js
+    "paths": {
+      ":/*": ["./src/*"]
+    },
+    "skipLibCheck": true
+  }
+}

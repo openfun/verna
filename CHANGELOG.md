@@ -12,6 +12,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Add a poll builder example using Grommet library
 - Fix bugs in the library and add setSchema action
 - Allow customisation of form options
 - Use a reducer to manage schema

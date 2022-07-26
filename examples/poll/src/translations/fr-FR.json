@@ -1,0 +1,17 @@
+{
+  "components.SectionResume.delete": "Supprimer",
+  "components.SectionResume.edit": "Éditer",
+  "components.SectionResume.view": "Répondre au sondage",
+  "components.VernaOverride.DropZone.descriptionDraggingOver": "Lâchez ici",
+  "components.VernaOverride.SubmitButton.newPoll": "Ajouter un nouveau sondage",
+  "components.VernaOverride.SubmitButton.resetData": "Réinitialiser les données locales",
+  "components.VernaOverride.SubmitButton.save": "Sauvegarder",
+  "components.VernaOverride.SubmitButton.submit": "Soumettre",
+  "components.VernaOverride.SubmitButton.toolbarTitle": "Questions",
+  "widgetToolbarItems.CheckboxWidget": "Question Oui/non",
+  "widgetToolbarItems.CheckboxesWidget": "Question à choix multiples",
+  "widgetToolbarItems.NumberWidget": "Question à réponse numérique",
+  "widgetToolbarItems.SelectWidget": "Question à choix unique",
+  "widgetToolbarItems.TextWidget": "Question à réponse libre",
+  "widgetToolbarItems.TextareaWidget": "Question à large réponse libre"
+}
