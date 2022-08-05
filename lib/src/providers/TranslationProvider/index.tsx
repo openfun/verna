@@ -16,7 +16,7 @@ type MessageLoaders = Record<string, MessageLoader>;
 
 const messagesLoader = (locale: string): MessageLoader =>
   resourceLoader(() =>
-    import(`:/translations/${locale}.json`).then(
+    import(`../../translations/${locale}.json`).then(
       (response: { default: ResolvedIntlConfig['messages'] }) => response.default,
     ),
   );
