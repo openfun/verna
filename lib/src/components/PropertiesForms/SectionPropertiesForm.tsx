@@ -69,7 +69,7 @@ export default function SectionPropertiesForm({ id, onClose }: SectionProperties
       if (isMessageKey(key) && parameterSchema?.properties) {
         parameterSchema.properties[key].title = formatMessage({
           defaultMessage:
-            (locale && verna.schemaTranslations[locale][key]) || messages[key].defaultMessage,
+            (locale && verna.schemaTranslations[locale]?.[key]) || messages[key].defaultMessage,
           id: messages[key].id,
         });
       }

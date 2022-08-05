@@ -121,6 +121,8 @@ function updateStringTranslation(
     // @ts-ignore
     widget[propertyKey] = translationKey;
   }
+  if (!Object.keys(verna.schemaTranslations).includes(locale))
+    verna.schemaTranslations[locale] = {};
   verna.schemaTranslations[locale][translationKey] = value;
   verna.setSchemaTranslations({
     ...verna.schemaTranslations,

@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { VernaContextProps } from ':/providers/VernaProvider';
 import { RJSF_ID_SEPARATOR } from ':/settings';
 
@@ -12,6 +13,7 @@ function updateProperty(
   verna: VernaContextProps,
   locale: string,
   id: string,
+  translations: VernaContextProps['schemaTranslations'],
 ) {
   const section =
     verna.selector || id === 'root'
@@ -21,7 +23,6 @@ function updateProperty(
         ];
   const translationKey = [id, verna.selector, propertyName].join(RJSF_ID_SEPARATOR);
 
-  const translations = { ...verna.schemaTranslations };
   if (!value) {
     if (translationKey in translations[locale]) {
       delete translations[locale][translationKey];
@@ -31,7 +32,6 @@ function updateProperty(
     section[propertyName] = translationKey;
     translations[locale][translationKey] = value;
   }
-  verna.setSchemaTranslations(translations);
 }
 
 export function updateSectionProperties(
@@ -40,7 +40,11 @@ export function updateSectionProperties(
   id: string,
   locale: string,
 ) {
-  updateProperty('title', formData['title'], verna, locale, id);
-  updateProperty('description', formData['description'], verna, locale, id);
+  const translations = _.cloneDeep(verna.schemaTranslations);
+  if (!Object.keys(translations).includes(locale)) translations[locale] = {};
+
+  updateProperty('title', formData['title'], verna, locale, id, translations);
+  updateProperty('description', formData['description'], verna, locale, id, translations);
   verna.setSchema({ ...verna.schema });
+  verna.setSchemaTranslations(translations);
 }
