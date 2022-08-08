@@ -1,8 +1,27 @@
+import { DropZoneOverloadProps } from ':/components/EditorFieldTemplate/DropZone';
 import Section from ':/components/Fields/Section';
+import SectionPropertiesForm from ':/components/PropertiesForms/SectionPropertiesForm';
+import WidgetPropertiesForm from ':/components/PropertiesForms/WidgetPropertiesForm';
 import VernaForm from ':/components/VernaForm';
 import VernaToolbar from ':/components/VernaToolbar';
 import VernaProvider, { useVerna } from ':/providers/VernaProvider';
+import { RJSF_ID_SEPARATOR } from ':/settings';
 import type VernaJSONSchemaType from ':/types/rjsf';
+import ShowCaseWidgetProps, { VernaWidgetProps } from ':/types/Widgets';
+import { addSection, cleanUiSchema, removeSection, removeWidget } from ':/utils/schema';
 
-export { VernaForm, VernaProvider, useVerna, VernaToolbar, Section };
-export type { VernaJSONSchemaType };
+export {
+  RJSF_ID_SEPARATOR,
+  Section,
+  SectionPropertiesForm,
+  VernaForm,
+  VernaProvider,
+  VernaToolbar,
+  WidgetPropertiesForm,
+  addSection,
+  cleanUiSchema,
+  removeWidget,
+  removeSection,
+  useVerna,
+};
+export type { DropZoneOverloadProps, ShowCaseWidgetProps, VernaJSONSchemaType, VernaWidgetProps };

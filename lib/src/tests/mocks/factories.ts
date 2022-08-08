@@ -2,6 +2,7 @@ import type { UiSchema } from '@rjsf/core';
 import { merge } from 'lodash';
 import NumberWidget from './NumberWidget';
 import SelectWidget from './SelectWidget';
+import { WidgetsType } from ':/providers/VernaProvider';
 import VernaJSONSchemaType from ':/types/rjsf';
 import { TranslationType } from ':/types/translations';
 
@@ -96,7 +97,8 @@ const checkBoxesUiSchemaFactory = (): UiSchema => ({
   },
 });
 
-const widgetsFactory = () => ({
+const widgetsFactory = (widgets?: WidgetsType) => ({
+  ...widgets,
   numberWidget: NumberWidget,
   selectWidget: SelectWidget,
 });

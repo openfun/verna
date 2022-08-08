@@ -14,13 +14,6 @@ import {
 import { resolvePromisesOneByOne } from ':/tests/utils';
 
 describe('VernaForm', () => {
-  async function clickOnLastAddInputButton() {
-    const buttons = await screen.findAllByRole('button', {
-      name: 'Add an input',
-    });
-    await userEvent.click(_.last(buttons)!);
-  }
-
   const VernaSuspenseWrapper = ({
     isEditor,
     selector,
@@ -91,21 +84,10 @@ describe('VernaForm', () => {
       )!,
     );
 
-    await waitFor(() => {
-      const $addFieldButtons = screen.queryAllByRole('button', {
-        name: 'Add an input',
-      });
-      expect($addFieldButtons).toHaveLength(3);
-    });
-
-    // Add two input fields
-    await clickOnLastAddInputButton();
-    await clickOnLastAddInputButton();
-
     const $parametersButton = await screen.findAllByRole('button', {
       name: 'Parameters',
     });
-    expect($parametersButton).toHaveLength(7);
+    expect($parametersButton).toHaveLength(5);
 
     const $addSectionButtons = screen.queryAllByRole('button', {
       name: 'Add a section',
@@ -167,7 +149,7 @@ describe('VernaForm', () => {
     expect($field1.type).toBe('number');
   });
 
-  it('should use a selector to query sub schema and add or remove fields on it', async () => {
+  it('should use a selector to query sub schema and remove fields on it', async () => {
     render(
       <VernaSuspenseWrapper
         isEditor
@@ -181,33 +163,9 @@ describe('VernaForm', () => {
     await waitFor(() => {
       expect(screen.queryByTestId('wrapper')).toBeInTheDocument();
     });
-
-    // Add two input fields
-    await clickOnLastAddInputButton();
-    await clickOnLastAddInputButton();
-
-    const $addFieldButtons = screen.queryAllByRole('button', {
-      name: 'Add an input',
-    });
-    expect($addFieldButtons).toHaveLength(3);
-
-    // Delete every element from top to bottom
+    // Delete the field
     // eslint-disable-next-line compat/compat
-    await userEvent.click(
-      screen.queryAllByRole('button', {
-        name: 'x',
-      })[0],
-    );
-    await userEvent.click(
-      screen.queryAllByRole('button', {
-        name: 'x',
-      })[0],
-    );
-    await userEvent.click(
-      screen.queryAllByRole('button', {
-        name: 'x',
-      })[0],
-    );
+
     await userEvent.click(
       screen.queryAllByRole('button', {
         name: 'x',
@@ -216,11 +174,6 @@ describe('VernaForm', () => {
 
     // - All delete buttons should have been removed
     expect(screen.queryByRole('button', { name: 'x' })).not.toBeInTheDocument();
-
-    const $addFieldButtons3 = screen.queryAllByRole('button', {
-      name: 'Add an input',
-    });
-    expect($addFieldButtons3).toHaveLength(1);
   });
 
   it('should not render add functionalities if isEditor is false', async () => {

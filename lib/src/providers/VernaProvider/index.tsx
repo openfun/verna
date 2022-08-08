@@ -17,8 +17,8 @@ import React, {
 } from 'react';
 import { type ResolvedIntlConfig } from 'react-intl';
 import EditorFieldTemplate from ':/components/EditorFieldTemplate';
-import {
-  default as DefaultDropZone,
+import DropZone, {
+  DropZoneOverloadProps,
   DropZoneProps,
 } from ':/components/EditorFieldTemplate/DropZone';
 import { default as DefaultSection } from ':/components/Fields/Section';
@@ -71,7 +71,7 @@ export interface VernaContextProps extends Pick<FormProps<unknown>, 'transformEr
 }
 
 const VernaContext = createContext<VernaContextProps>({
-  DropZone: DefaultDropZone,
+  DropZone: DropZone,
   FieldTemplate: EditorFieldTemplate,
   Section: DefaultSection,
   SubmitButton: undefined,
@@ -107,7 +107,7 @@ function useVerna() {
 }
 
 export interface VernaProviderProps extends Pick<FormProps<unknown>, 'transformErrors'> {
-  DropZone: React.FunctionComponent<DropZoneProps>;
+  DropZone: React.FunctionComponent<DropZoneOverloadProps>;
   FieldTemplate: React.FunctionComponent<FieldTemplateProps>;
   Section: React.FunctionComponent<ObjectFieldTemplateProps>;
   SubmitButton: React.ReactNode;
@@ -137,7 +137,7 @@ function VernaProvider({
   isEditor,
   locale,
   SubmitButton,
-  DropZone,
+  DropZone: DropZoneRender,
   FieldTemplate,
   Section,
   transformErrors,
@@ -226,7 +226,7 @@ function VernaProvider({
     >
       <VernaContext.Provider
         value={{
-          DropZone: DropZone,
+          DropZone: (props: DropZoneProps) => <DropZone render={DropZoneRender} {...props} />,
           FieldTemplate: FieldTemplate,
           Section: Section,
           SubmitButton: SubmitButton,
@@ -260,7 +260,7 @@ function VernaProvider({
 }
 
 VernaProvider.defaultProps = {
-  DropZone: DefaultDropZone,
+  DropZone: undefined,
   FieldTemplate: EditorFieldTemplate,
   Section: DefaultSection,
   SubmitButton: undefined,

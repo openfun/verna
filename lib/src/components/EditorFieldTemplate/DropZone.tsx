@@ -6,9 +6,14 @@ import { addWidget } from ':/utils/schema';
 
 export interface DropZoneProps {
   id: string;
+  render?: React.FunctionComponent<DropZoneOverloadProps>;
 }
 
-export default function DropZone({ id }: DropZoneProps) {
+export interface DropZoneOverloadProps {
+  isDraggingOver: boolean;
+}
+
+export default function DropZone({ id, render: DropZoneOverload }: DropZoneProps) {
   const [draggingOver, setDraggingOver] = useState(false);
   const verna = useVerna();
 
@@ -37,7 +42,11 @@ export default function DropZone({ id }: DropZoneProps) {
       onDragOver={onDragOver}
       onDrop={onDrop}
     >
-      <div className={draggingOver ? 'drop-zone-divider-drag-over' : 'drop-zone-divider'} />
+      {DropZoneOverload ? (
+        <DropZoneOverload isDraggingOver={draggingOver} />
+      ) : (
+        <div className={draggingOver ? 'drop-zone-divider-drag-over' : 'drop-zone-divider'} />
+      )}
     </div>
   );
 }
