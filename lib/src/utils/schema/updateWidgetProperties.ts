@@ -2,7 +2,10 @@ import _ from 'lodash';
 import { updateProperty, updateRequired } from './widgetPropertyUpdaters';
 import { VernaContextProps } from ':/providers/VernaProvider';
 import { RJSF_ID_SEPARATOR } from ':/settings';
-import VernaJSONSchemaType from ':/types/rjsf';
+import { defaultWidgetProps } from ':/templates';
+import VernaJSONSchemaType, { VernaSchemaType } from ':/types/rjsf';
+import { getSectionName, getUiWidgetName } from ':/utils';
+import { getSection } from ':/utils/schema/getSection';
 
 type Maybe<T> = T | undefined;
 export type Properties = {
@@ -22,34 +25,61 @@ type PropertyName = Properties[keyof Properties];
  * parameter set in the parametersModifier
  */
 type PropertyUpdater<T> = (
-  value: T,
   verna: VernaContextProps,
+  value: T,
+  section: VernaJSONSchemaType,
   widgetPath: string[],
   locale: string,
-  newSchema: VernaJSONSchemaType,
-) => void;
+) => VernaJSONSchemaType;
 
 type PropertyUpdaters = {
   [key in keyof Properties]: PropertyUpdater<Properties[key]>;
 };
 
 const propertyUpdaters: PropertyUpdaters = {
-  description: (value, verna, widgetPath, locale, newSchema) =>
-    updateProperty('description', value, verna, widgetPath, locale, newSchema),
-  enum: (value, verna, widgetPath, locale, newSchema) =>
-    updateProperty('enum', value, verna, widgetPath, locale, newSchema),
-  items: (value, verna, widgetPath, locale, newSchema) =>
-    updateProperty('items', value, verna, widgetPath, locale, newSchema),
-  maxLength: (value, verna, widgetPath, locale, newSchema) =>
-    updateProperty('maxLength', value, verna, widgetPath, locale, newSchema),
-  maximum: (value, verna, widgetPath, locale, newSchema) =>
-    updateProperty('maximum', value, verna, widgetPath, locale, newSchema),
-  minimum: (value, verna, widgetPath, locale, newSchema) =>
-    updateProperty('minimum', value, verna, widgetPath, locale, newSchema),
+  description: (verna, value, section, widgetPath, locale) =>
+    updateProperty('description', value, verna, widgetPath, locale, section),
+  enum: (verna, value, section, widgetPath, locale) =>
+    updateProperty('enum', value, verna, widgetPath, locale, section),
+  items: (verna, value, section, widgetPath, locale) =>
+    updateProperty('items', value, verna, widgetPath, locale, section),
+  maxLength: (verna, value, section, widgetPath, locale) =>
+    updateProperty('maxLength', value, verna, widgetPath, locale, section),
+  maximum: (verna, value, section, widgetPath, locale) =>
+    updateProperty('maximum', value, verna, widgetPath, locale, section),
+  minimum: (verna, value, section, widgetPath, locale) =>
+    updateProperty('minimum', value, verna, widgetPath, locale, section),
   required: updateRequired,
-  title: (value, verna, widgetPath, locale, newSchema) =>
-    updateProperty('title', value, verna, widgetPath, locale, newSchema),
+  title: (verna, value, section, widgetPath, locale) =>
+    updateProperty('title', value, verna, widgetPath, locale, section),
 };
+
+function rebuildSchema(
+  verna: VernaContextProps,
+  section: VernaJSONSchemaType,
+  id: string,
+): VernaSchemaType {
+  if (verna.selector) {
+    return {
+      formSchema: {
+        properties: {
+          [verna.selector]: section,
+        },
+      },
+    };
+  }
+  const sectionName = getSectionName(id);
+  if (!sectionName) {
+    return { formSchema: section };
+  }
+  return {
+    formSchema: {
+      properties: {
+        [sectionName]: section,
+      },
+    },
+  };
+}
 
 /**
  * This function will update the value of each property by calling the corresponding updater
@@ -60,18 +90,23 @@ export function updateWidgetProperties(
   properties: Properties,
   verna: VernaContextProps,
   id: string,
-  widgetPropsKeys: string[],
   locale: string,
 ) {
-  const widgetPath = id.split(RJSF_ID_SEPARATOR);
-  const newSchema = _.cloneDeep(verna.schema);
+  const widgetIdParts = id.split(RJSF_ID_SEPARATOR);
+  const templateName = getUiWidgetName(id, verna.schema.uiSchema || {});
+  const widgetPropsKeys = Object.keys({
+    ...verna.configSchema?.properties?.[templateName]?.properties,
+    ...defaultWidgetProps,
+  });
+  let section = _.cloneDeep(getSection(verna.selector, verna.schema.formSchema!, id));
 
   const updateProperty = (key: keyof Properties) => {
     const updater = propertyUpdaters[key] as PropertyUpdater<PropertyName>;
     const value = properties[key];
-    updater(value, verna, widgetPath, locale, newSchema);
+
+    section = updater(verna, value, section, widgetIdParts, locale);
   };
 
   widgetPropsKeys.forEach((key) => updateProperty(key as keyof Properties));
-  verna.setSchema(newSchema);
+  verna.updateVernaProperty(rebuildSchema(verna, section, id));
 }

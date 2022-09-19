@@ -1,3 +1,5 @@
+import _ from 'lodash';
+import { v4 as uuid } from 'uuid';
 import type { Properties } from './updateWidgetProperties';
 import { VernaContextProps } from ':/providers/VernaProvider';
 import { RJSF_ID_SEPARATOR } from ':/settings';
@@ -23,29 +25,6 @@ function getTranslationKey(widgetPath: string[], propertyKey: string, selector: 
   }
 }
 
-/**
- * Destroy old translation values of the propertyKey element
- *
- * @param propertyKey The key of the property which translations have to be removed
- * @param verna Verna context
- * @param translationKey the key of translation used for this element
- * @param locale Current locale
- */
-function removePropertyTranslations(
-  propertyKey: keyof VernaJSONSchemaType,
-  verna: VernaContextProps,
-  translationKey: string,
-  locale: string,
-) {
-  translationKey.replace(`_${propertyKey}`, '');
-  const oldKeys = Object.keys(verna.schemaTranslations[locale]).filter((key) =>
-    key.includes(translationKey),
-  );
-  oldKeys.forEach((key) => {
-    delete verna.schemaTranslations[locale][key];
-  });
-}
-
 function updateItemsTranslations(widget: VernaJSONSchemaType, translationKeys: string[]) {
   if (Array.isArray(widget.items)) {
     // TODO: add other properties management & matching between those and translation keys
@@ -57,6 +36,68 @@ function updateItemsTranslations(widget: VernaJSONSchemaType, translationKeys: s
   } else {
     widget.items!.enum = translationKeys;
   }
+}
+
+/**
+ * Retrieve unchanged, removed, updated and new translation keys
+ *
+ * @param propertyKey The key of the property to modify
+ * @param widget The schema part representing the current widget
+ * @param verna The verna context, used to update the rendered schema and the translations
+ * @param values The value is a list of strings that we set to this key
+ * @param translationKey the corresponding key used in the translation object
+ * @param locale The current locale loaded
+ */
+function getTranslationState(
+  propertyKey: keyof VernaJSONSchemaType,
+  widget: VernaJSONSchemaType,
+  verna: VernaContextProps,
+  values: string[],
+  translationKey: string,
+  locale: string,
+) {
+  return Object.entries(verna.schema.translationSchema?.[locale] || {})
+    .filter(([key]) => key.includes(translationKey))
+    .reduce(
+      (state, [key, message], index, filteredTranslationEntries) => {
+        if (values.includes(message)) {
+          state.unchanged[key] = message;
+        } else {
+          state.removed.push(key);
+        }
+        // This is the last round, it's time to check which values has been updated or added
+        if (filteredTranslationEntries.length === index + 1) {
+          const unchangedMessages = Object.values(state.unchanged);
+          let newValues = values.filter((value) => !unchangedMessages.includes(value));
+          if (values.length >= filteredTranslationEntries.length) {
+            state.updated = state.removed.reduce(
+              (updatedMessages, key, index) => ({
+                ...updatedMessages,
+                [key]: newValues[index],
+              }),
+              {},
+            );
+            state.removed = [];
+            const updatedValues = Object.values(state.updated);
+            newValues = newValues.filter((v) => !updatedValues.includes(v));
+          }
+          state.new = newValues.reduce(
+            (newMessages, value) => ({
+              ...newMessages,
+              [`${translationKey}_${uuid()}`]: value,
+            }),
+            {},
+          );
+        }
+        return state;
+      },
+      {
+        new: {} as { [key: string]: string },
+        removed: [] as string[],
+        unchanged: {} as { [key: string]: string },
+        updated: {} as { [key: string]: string },
+      },
+    );
 }
 
 /**
@@ -78,25 +119,58 @@ function updateEnumTranslations(
   translationKey: string,
   locale: string,
 ) {
-  removePropertyTranslations(propertyKey, verna, translationKey, locale);
+  const translationState = getTranslationState(
+    propertyKey,
+    widget,
+    verna,
+    values,
+    translationKey,
+    locale,
+  );
 
-  // Create translation values
-  let newTranslationKeys: string[] = [];
-  values.forEach((e, index) => {
-    const key = translationKey.concat(`_${index.toString()}`);
-    newTranslationKeys.push(key);
-    if (locale) {
-      verna.schemaTranslations[locale][key] = e;
-    }
-  });
-  verna.setSchemaTranslations({
-    ...verna.schemaTranslations,
-  });
-  if (propertyKey === 'enum') {
-    widget.enum = newTranslationKeys;
-  } else if (propertyKey === 'items') {
-    updateItemsTranslations(widget, newTranslationKeys);
+  // Remove unused keys
+  if (translationState.removed.length > 0) {
+    verna.removeVernaTranslations(translationState.removed);
   }
+
+  // Update translationSchema with new and updated keys
+  if (translationState.new || translationState.updated) {
+    const allLocales = Object.keys(verna.schema.translationSchema || {});
+    verna.addVernaTranslations(
+      allLocales.reduce(
+        (locales, currentLocale) => ({
+          ...locales,
+          [currentLocale]: {
+            ...translationState.new,
+            ...(currentLocale === locale && translationState.updated),
+          },
+        }),
+        {},
+      ),
+    );
+  }
+
+  // In case of enum or items, bind it new translation keys
+  if (['enum', 'items'].includes(propertyKey)) {
+    const translationsEntries = Object.entries({
+      ...translationState.new,
+      ...translationState.unchanged,
+      ...translationState.updated,
+    });
+
+    const translationKeys = values.map((value) => {
+      const translation = translationsEntries.find(([, message]) => message === value);
+      return translation![0];
+    });
+
+    if (propertyKey === 'enum') {
+      widget.enum = translationKeys;
+    } else if (propertyKey === 'items') {
+      updateItemsTranslations(widget, translationKeys);
+    }
+  }
+
+  return widget;
 }
 
 /**
@@ -117,16 +191,18 @@ function updateStringTranslation(
   translationKey: string,
   locale: string,
 ) {
-  if (!widget[propertyKey]) {
+  const newWidget = _.cloneDeep(widget);
+  if (!newWidget[propertyKey]) {
     // @ts-ignore
-    widget[propertyKey] = translationKey;
+    newWidget[propertyKey] = translationKey;
   }
-  if (!Object.keys(verna.schemaTranslations).includes(locale))
-    verna.schemaTranslations[locale] = {};
-  verna.schemaTranslations[locale][translationKey] = value;
-  verna.setSchemaTranslations({
-    ...verna.schemaTranslations,
-  });
+  const newTranslation = {
+    [locale]: {
+      [translationKey]: value,
+    },
+  };
+  verna.addVernaTranslations(newTranslation);
+  return newWidget;
 }
 
 /**
@@ -137,7 +213,7 @@ function updateStringTranslation(
  * @param verna The verna context, used to update the rendered schema
  * @param widgetPath The decomposed id for the corresponding widget
  * @param locale The current locale loaded
- * @param newSchema New Schema that will update render once set
+ * @param section The section containing the widget to update
  */
 function updateProperty(
   propertyKey: keyof VernaJSONSchemaType,
@@ -145,28 +221,26 @@ function updateProperty(
   verna: VernaContextProps,
   widgetPath: string[],
   locale: string,
-  newSchema: VernaJSONSchemaType,
+  section: VernaJSONSchemaType,
 ) {
-  let widget: VernaJSONSchemaType | undefined;
+  const widgetName = widgetPath[widgetPath.length - 1];
+  let widget = section.properties?.[widgetName];
 
-  if (verna.selector) {
-    widget = newSchema.properties?.[widgetPath[1]];
+  if (!widget)
+    throw new Error(
+      "Error, can't get the widget to update its properties in updateProperty function",
+    );
+
+  const translationKey = getTranslationKey(widgetPath, propertyKey, verna.selector);
+  if (typeof value === 'string' && locale) {
+    widget = updateStringTranslation(propertyKey, widget, verna, value, translationKey, locale);
+  } else if (Array.isArray(value) && locale) {
+    widget = updateEnumTranslations(propertyKey, widget, verna, value, translationKey, locale);
+    verna.updateWidget(widget, widgetPath.join(RJSF_ID_SEPARATOR));
   } else {
-    const section = newSchema.properties?.[widgetPath[1]];
-    widget = section?.properties?.[widgetPath[2]];
+    widget[propertyKey] = value;
   }
-
-  if (widget) {
-    const translationKey = getTranslationKey(widgetPath, propertyKey, verna.selector);
-    if (typeof value === 'string' && locale) {
-      updateStringTranslation(propertyKey, widget, verna, value, translationKey, locale);
-    } else if (Array.isArray(value) && locale) {
-      updateEnumTranslations(propertyKey, widget, verna, value, translationKey, locale);
-    } else {
-      // @ts-ignore
-      widget[propertyKey] = value;
-    }
-  }
+  return { ...section, properties: { ...section.properties, [widgetName]: widget } };
 }
 
 /**
@@ -174,36 +248,27 @@ function updateProperty(
  *
  * @param value The value to add or removed from required property
  * @param verna The verna context, used to update the rendered schema
+ * @param section The section containing the widget to update
  * @param widgetPath The decomposed id for the corresponding widget
- * @param locale The current locale loaded
- * @param newSchema New Schema that will update render once set
+ * @param locale The current locale loaded, added only to have the same prototype as other functions
  */
 function updateRequired(
-  value: Properties['required'],
   verna: VernaContextProps,
+  value: Properties['required'],
+  section: VernaJSONSchemaType,
   widgetPath: string[],
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   locale: string,
-  newSchema: VernaJSONSchemaType,
 ) {
-  let section;
-  let widgetName: string;
-
-  if (verna.selector) {
-    section = newSchema;
-    widgetName = widgetPath[1];
-  } else {
-    section = newSchema.properties?.[widgetPath[1]];
-    widgetName = widgetPath[2];
-  }
-  if (section) {
-    if (value) {
-      if (!section.required?.includes(widgetName)) {
-        section.required = [...(section.required || []), widgetName];
-      }
-    } else {
-      section.required = section.required?.filter((e: string) => e !== widgetName);
+  const widgetName = widgetPath[widgetPath.length - 1];
+  if (value) {
+    if (!section.required?.includes(widgetName)) {
+      section.required = [...(section.required || []), widgetName];
     }
+  } else {
+    section.required = section.required?.filter((e: string) => e !== widgetName);
   }
+  return section;
 }
 
 export { updateRequired, updateProperty };
