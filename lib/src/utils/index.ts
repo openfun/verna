@@ -11,9 +11,24 @@ import { Maybe } from ':/types/utils';
  *
  * As a section is always the first element under the root element, to retrieve its name
  * we have to split the id then get the second value.
+ *
+ * If the id is only in two parts, it means either it's a section id, or that it has no section
+ * and it's a widget id
  */
-function getSectionName(id: string): Maybe<string> {
-  return id.split(RJSF_ID_SEPARATOR)[1];
+function getSectionName(id: string | null, isSectionId?: boolean): Maybe<string> {
+  const idParts = id?.split(RJSF_ID_SEPARATOR);
+
+  if (idParts?.length === 3) {
+    // If the id is shaped like root_section_id
+    return idParts[1];
+  }
+  if (isSectionId && id !== 'root') {
+    // if the id is a section id and is not only root (no intermediate section)
+    return idParts?.pop();
+  }
+  // if none of the upper conditions are valid, it means there is no
+  // intermediate section in this id
+  return undefined;
 }
 
 /**

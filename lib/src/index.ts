@@ -8,7 +8,7 @@ import VernaProvider, { useVerna } from ':/providers/VernaProvider';
 import { RJSF_ID_SEPARATOR } from ':/settings';
 import type VernaJSONSchemaType from ':/types/rjsf';
 import ShowCaseWidgetProps, { VernaWidgetProps } from ':/types/Widgets';
-import { addSection, cleanUiSchema, removeSection, removeWidget } from ':/utils/schema';
+import { addSection, cleanUiSchema } from ':/utils/schema';
 
 export {
   RJSF_ID_SEPARATOR,
@@ -20,8 +20,6 @@ export {
   WidgetPropertiesForm,
   addSection,
   cleanUiSchema,
-  removeWidget,
-  removeSection,
   useVerna,
 };
 export type { DropZoneOverloadProps, ShowCaseWidgetProps, VernaJSONSchemaType, VernaWidgetProps };

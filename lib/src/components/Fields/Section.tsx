@@ -1,8 +1,11 @@
 import type { ObjectFieldTemplateProps } from '@rjsf/core';
+import _ from 'lodash';
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import SectionPropertiesForm from ':/components/PropertiesForms/SectionPropertiesForm';
 import { useVerna } from ':/providers/VernaProvider';
+import { VernaSchemaType } from ':/types/rjsf';
+import { Maybe } from ':/types/utils';
 
 const messages = defineMessages({
   parameters: {
@@ -12,19 +15,33 @@ const messages = defineMessages({
   },
 });
 
+/**
+ * Manage conditions to display or not the dropzone at the top of a section
+ * It must not display a dropzone in a section that contains other sections to
+ * avoid using widgets and sections at the same level
+ *
+ * @param id of the section
+ * @param schema is the whole schema loaded in the library
+ * @param selector is the section name if one is selected
+ */
+function doesContainSection(id: string, schema: VernaSchemaType, selector: Maybe<string>) {
+  if (selector || id !== 'root') return false;
+  let containObject = false;
+  _.forEach(schema.formSchema?.properties, (section) => {
+    if (section.type === 'object') containObject = true;
+  });
+  return containObject;
+}
+
 export default function Section({
   title,
   idSchema,
   properties,
   description,
 }: ObjectFieldTemplateProps) {
-  const { isEditor, selector, DropZone } = useVerna();
+  const { isEditor, DropZone, schema, selector } = useVerna();
   const [isEditingParameters, setIsEditingParameters] = useState(false);
-  const isRoot = idSchema.$id === 'root';
-
-  // Display drop zone at the top of the section only if in editor mode and if it's not the
-  // primary section in the case where there aren't any selector
-  const ownDropZone = isEditor && !(!selector && isRoot);
+  const hasSection = doesContainSection(idSchema['$id'], schema, selector);
 
   return (
     <fieldset>
@@ -38,7 +55,7 @@ export default function Section({
       {isEditingParameters && (
         <SectionPropertiesForm id={idSchema.$id} onClose={() => setIsEditingParameters(false)} />
       )}
-      {ownDropZone && <DropZone id={idSchema['$id']} />}
+      {isEditor && !hasSection && <DropZone isSection id={idSchema['$id']} />}
       {properties.map((element) => element.content)}
     </fieldset>
   );

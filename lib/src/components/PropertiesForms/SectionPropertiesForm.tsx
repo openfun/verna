@@ -4,6 +4,9 @@ import { defineMessages, useIntl } from 'react-intl';
 import { useVerna } from ':/providers/VernaProvider';
 import { RJSF_ID_SEPARATOR } from ':/settings';
 import { sectionParametersSchema } from ':/templates';
+import VernaJSONSchemaType from ':/types/rjsf';
+import { Maybe } from ':/types/utils';
+import { getSectionName } from ':/utils';
 import { SectionParameters, updateSectionProperties } from ':/utils/schema/updateSectionProperties';
 import { DEFAULT_PROPERTY_TRANSLATION } from ':/utils/translation';
 
@@ -69,7 +72,8 @@ export default function SectionPropertiesForm({ id, onClose }: SectionProperties
       if (isMessageKey(key) && parameterSchema?.properties) {
         parameterSchema.properties[key].title = formatMessage({
           defaultMessage:
-            (locale && verna.schemaTranslations[locale]?.[key]) || messages[key].defaultMessage,
+            (locale && verna.schema.translationSchema?.[locale]?.[key]) ||
+            messages[key].defaultMessage,
           id: messages[key].id,
         });
       }
@@ -89,19 +93,25 @@ export default function SectionPropertiesForm({ id, onClose }: SectionProperties
   };
 
   function getDefaultValues(): SectionParameters {
-    const sectionName = verna.selector ? verna.selector : id.split(RJSF_ID_SEPARATOR)[1];
-    const currentSection =
-      id === 'root' ? verna.schema : verna.schema.properties?.[sectionName] || {};
+    let currentSection: Maybe<VernaJSONSchemaType>;
+    if (verna.selector) {
+      currentSection = verna.schema.formSchema?.properties?.[verna.selector];
+    } else {
+      const sectionName = getSectionName(id, true);
+      currentSection = sectionName
+        ? verna.schema.formSchema?.properties?.[sectionName]
+        : verna.schema.formSchema;
+    }
 
     return {
       description:
-        currentSection.description &&
+        currentSection?.description &&
         formatMessage({
           defaultMessage: DEFAULT_PROPERTY_TRANSLATION,
           id: currentSection.description,
         }),
       title:
-        currentSection.title &&
+        currentSection?.title &&
         formatMessage({
           defaultMessage: DEFAULT_PROPERTY_TRANSLATION,
           id: currentSection.title,

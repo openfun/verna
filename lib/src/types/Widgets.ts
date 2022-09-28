@@ -5,6 +5,7 @@ import { ChangeEventHandler } from 'react';
 export default interface ShowCaseWidgetProps {
   widgetName: string;
   type: JSONSchema7TypeName;
+  isDroppedInSection?: boolean;
 }
 
 export interface VernaWidgetProps extends WidgetProps {

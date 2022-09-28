@@ -1,40 +1,28 @@
-import { type UiSchema } from '@rjsf/core';
 import { screen, render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import _ from 'lodash';
 import { Suspense } from 'react';
 import VernaForm from ':/components/VernaForm';
 import VernaProvider, { WidgetsType } from ':/providers/VernaProvider';
-import {
-  schemaFactory,
-  translationsFactory,
-  uiSchemaFactory,
-  widgetsFactory,
-} from ':/tests/mocks/factories';
+import { vernaSchemaFactory, widgetsFactory } from ':/tests/mocks/factories';
 import { resolvePromisesOneByOne } from ':/tests/utils';
 
 describe('VernaForm', () => {
   const VernaSuspenseWrapper = ({
     isEditor,
     selector,
-    uiSchema,
-    widgets,
   }: {
     selector?: string;
     isEditor?: boolean;
-    uiSchema?: UiSchema;
     widgets?: WidgetsType;
   }) => {
-    const translations = translationsFactory();
     return (
       <Suspense fallback="Loading...">
         <VernaProvider
-          defaultSchema={schemaFactory()}
+          defaultSchema={vernaSchemaFactory()}
           defaultSelector={selector}
-          defaultUiSchema={uiSchema}
-          defaultWidgets={widgets}
+          defaultWidgets={widgetsFactory()}
           isEditor={isEditor}
-          translations={translations}
         >
           <div data-testid="wrapper">
             <VernaForm />
@@ -45,7 +33,7 @@ describe('VernaForm', () => {
   };
 
   it('should render a basic form', async () => {
-    render(<VernaSuspenseWrapper uiSchema={uiSchemaFactory()} widgets={widgetsFactory()} />);
+    render(<VernaSuspenseWrapper />);
     // Wait that the form is rendered...
     await waitFor(() => {
       expect(screen.queryByTestId('wrapper')).toBeInTheDocument();
@@ -118,14 +106,7 @@ describe('VernaForm', () => {
   });
 
   it('should use selector parameter to query sub schema and render it', async () => {
-    render(
-      <VernaSuspenseWrapper
-        isEditor
-        selector="testSection"
-        uiSchema={uiSchemaFactory()}
-        widgets={widgetsFactory()}
-      />,
-    );
+    render(<VernaSuspenseWrapper isEditor selector="testSection" />);
 
     // Wait that the form is rendered...
     await waitFor(() => {
@@ -150,14 +131,7 @@ describe('VernaForm', () => {
   });
 
   it('should use a selector to query sub schema and remove fields on it', async () => {
-    render(
-      <VernaSuspenseWrapper
-        isEditor
-        selector="testSection"
-        uiSchema={uiSchemaFactory()}
-        widgets={widgetsFactory()}
-      />,
-    );
+    render(<VernaSuspenseWrapper isEditor selector="testSection" />);
 
     // Wait that the form is rendered...
     await waitFor(() => {
@@ -177,7 +151,7 @@ describe('VernaForm', () => {
   });
 
   it('should not render add functionalities if isEditor is false', async () => {
-    render(<VernaSuspenseWrapper uiSchema={uiSchemaFactory()} widgets={widgetsFactory()} />);
+    render(<VernaSuspenseWrapper />);
 
     // Wait that the form is rendered...
     await waitFor(() => {

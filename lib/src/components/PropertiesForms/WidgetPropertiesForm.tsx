@@ -9,6 +9,7 @@ import type VernaJSONSchemaType from ':/types/rjsf';
 import { Maybe } from ':/types/utils';
 import { getUiWidgetName } from ':/utils';
 import { Properties, updateWidgetProperties } from ':/utils/schema';
+import { getSection } from ':/utils/schema/getSection';
 import { DEFAULT_PROPERTY_TRANSLATION } from ':/utils/translation';
 
 interface WidgetPropertiesFormProps {
@@ -77,20 +78,14 @@ const messages = defineMessages({
 export default function WidgetPropertiesForm({ id, onClose }: WidgetPropertiesFormProps) {
   const verna = useVerna();
   const { locale, formatMessage } = useIntl();
-  const templateName = getUiWidgetName(id, verna.uiSchema);
+  const templateName = getUiWidgetName(
+    id,
+    verna.selector ? verna.schema.uiSchema?.[verna.selector] : verna.schema.uiSchema || {},
+  );
 
   function handleSubmit(event: ISubmitEvent<unknown>, nativeEvent: FormEvent<HTMLFormElement>) {
     nativeEvent.preventDefault();
-    updateWidgetProperties(
-      event.formData as Properties,
-      verna,
-      id,
-      Object.keys({
-        ...verna.configSchema?.properties?.[templateName]?.properties,
-        ...defaultWidgetProps,
-      }),
-      locale,
-    );
+    updateWidgetProperties(event.formData as Properties, verna, id, locale);
     onClose();
     return false;
   }
@@ -113,7 +108,8 @@ export default function WidgetPropertiesForm({ id, onClose }: WidgetPropertiesFo
       if (isMessageKey(key) && widgetSchema?.properties) {
         widgetSchema.properties[key].title = formatMessage({
           defaultMessage:
-            (locale && verna.schemaTranslations[locale]?.[key]) || messages[key].defaultMessage,
+            (locale && verna.schema.translationSchema?.[locale]?.[key]) ||
+            messages[key].defaultMessage,
           id: messages[key].id,
         });
       }
@@ -169,9 +165,12 @@ export default function WidgetPropertiesForm({ id, onClose }: WidgetPropertiesFo
 
   function getDefaultValues() {
     const path = id.split(RJSF_ID_SEPARATOR);
-    const widgetName = path[verna.selector ? 1 : 2];
-    const currentSection: VernaJSONSchemaType =
-      (verna.selector ? verna.schema : verna.schema.properties?.[path[1]]) || {};
+    const widgetName = path[path.length - 1];
+    const currentSection: VernaJSONSchemaType = getSection(
+      verna.selector,
+      verna.schema.formSchema || {},
+      id,
+    );
     const self = currentSection?.properties?.[widgetName] || {};
 
     return {

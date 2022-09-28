@@ -10,34 +10,33 @@ import { cleanUiSchema, reduceSchema } from ':/utils/schema';
 function schemaReducer(state: VernaSchemaType, action: ReducerAction): VernaSchemaType {
   if (action.error) {
     throw new Error('An error happened while applying a modification on the schema.');
-  } else {
-    const selector: Maybe<string> = action.meta?.selector;
-
-    if (selector) {
-      const reducedSchema: Maybe<VernaSchemaType> = reduceSchema(
-        {
-          formSchema: state.formSchema?.properties?.[selector],
-          translationSchema: state.translationSchema,
-          uiSchema: state.uiSchema?.[selector],
-        },
-        action,
-      );
-      if (!reducedSchema) throw new Error('Error, something went wrong while modifying the schema');
-
-      return {
-        formSchema: {
-          ...state.formSchema,
-          properties: {
-            ...state.formSchema?.properties,
-            [selector]: reducedSchema.formSchema || {},
-          },
-        },
-        translationSchema: reducedSchema.translationSchema,
-        uiSchema: { ...state.uiSchema, [selector]: reducedSchema.uiSchema },
-      };
-    }
-    return reduceSchema(state, action) || state;
   }
+  const selector: Maybe<string> = action.meta?.selector;
+
+  if (selector) {
+    const reducedSchema: Maybe<VernaSchemaType> = reduceSchema(
+      {
+        formSchema: state.formSchema?.properties?.[selector],
+        translationSchema: state.translationSchema,
+        uiSchema: state.uiSchema?.[selector],
+      },
+      action,
+    );
+    if (!reducedSchema) throw new Error('Error, something went wrong while modifying the schema');
+
+    return {
+      formSchema: {
+        ...state.formSchema,
+        properties: {
+          ...state.formSchema?.properties,
+          [selector]: reducedSchema.formSchema || {},
+        },
+      },
+      translationSchema: reducedSchema.translationSchema,
+      uiSchema: { ...state.uiSchema, [selector]: reducedSchema.uiSchema },
+    };
+  }
+  return reduceSchema(state, action) || state;
 }
 
 interface FormSchemaProps {

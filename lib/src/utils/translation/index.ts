@@ -1,7 +1,6 @@
 import { IntlFormatters } from '@formatjs/intl/src/types';
 import _ from 'lodash';
-import VernaJSONSchemaType from ':/types/rjsf';
-import { Maybe } from ':/types/utils';
+import VernaJSONSchemaType, { VernaSchemaType } from ':/types/rjsf';
 
 export const DEFAULT_PROPERTY_TRANSLATION = '';
 
@@ -108,20 +107,14 @@ function translateSchemaWithoutSelector(
  *
  * @param schema original schema with translation keys
  * @param formatMessage Intl function to translate a key
- * @param selector is the name of the selected section if there is one
  */
 export function translateSchema(
-  schema: VernaJSONSchemaType,
+  schema: VernaSchemaType,
   formatMessage: IntlFormatters['formatMessage'],
-  selector: Maybe<string>,
-) {
-  const translatedSchema = _.cloneDeep(schema);
+): VernaJSONSchemaType {
+  const translatedSchema = _.cloneDeep(schema.formSchema || {});
   translateSection(translatedSchema, formatMessage);
 
-  if (selector) {
-    translateSectionWidgets(translatedSchema, formatMessage);
-  } else {
-    translateSchemaWithoutSelector(translatedSchema, formatMessage);
-  }
+  translateSchemaWithoutSelector(translatedSchema, formatMessage);
   return translatedSchema;
 }

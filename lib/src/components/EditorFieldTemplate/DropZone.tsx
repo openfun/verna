@@ -1,26 +1,24 @@
 import React, { useState } from 'react';
-import { v4 as uuidv4 } from 'uuid';
 import { useVerna } from ':/providers/VernaProvider';
 import ShowCaseWidgetProps from ':/types/Widgets';
-import { addWidget } from ':/utils/schema';
 
 export interface DropZoneProps {
   id: string;
   render?: React.FunctionComponent<DropZoneOverloadProps>;
+  isSection?: boolean;
 }
 
 export interface DropZoneOverloadProps {
   isDraggingOver: boolean;
 }
 
-export default function DropZone({ id, render: DropZoneOverload }: DropZoneProps) {
+export default function DropZone({ id, isSection, render: DropZoneOverload }: DropZoneProps) {
   const [draggingOver, setDraggingOver] = useState(false);
   const verna = useVerna();
 
-  function addItem(widgetProps?: ShowCaseWidgetProps) {
+  function addItem(widgetProps: ShowCaseWidgetProps) {
     if (!id) return;
-    const newKey = uuidv4();
-    addWidget(newKey, id, verna, widgetProps);
+    verna.addVernaWidget(id, { ...widgetProps, isDroppedInSection: isSection });
   }
 
   function onDrop(event: React.DragEvent<HTMLDivElement>) {

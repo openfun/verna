@@ -3,6 +3,7 @@ import { useMemo } from 'react';
 import { useIntl } from 'react-intl';
 import { useVerna } from ':/providers/VernaProvider';
 import { RJSF_ID_SEPARATOR } from ':/settings';
+import VernaJSONSchemaType from ':/types/rjsf';
 import { translateSchema } from ':/utils/translation';
 
 interface VernaFormProperties {
@@ -19,14 +20,19 @@ function VernaForm({ onSubmit }: VernaFormProperties) {
     selectedFormData,
     selector,
     transformErrors,
-    uiSchema,
     widgets,
   } = useVerna();
   const { locale, formatMessage } = useIntl();
-  const formSchema = useMemo(
-    () => translateSchema(schema, formatMessage, selector),
-    [locale, schema],
-  );
+  const translatedFormSchema: VernaJSONSchemaType = useMemo(() => {
+    const translatedSchema = translateSchema(schema, formatMessage);
+    return selector
+      ? translatedSchema.properties![selector as keyof typeof translatedSchema.properties]
+      : translatedSchema;
+  }, [locale, schema.formSchema, selector]);
+
+  function getUiSchema() {
+    return selector ? schema.uiSchema?.[selector] : schema.uiSchema;
+  }
 
   return (
     <Form
@@ -37,11 +43,11 @@ function VernaForm({ onSubmit }: VernaFormProperties) {
       idSeparator={RJSF_ID_SEPARATOR}
       liveValidate={!isEditor}
       onSubmit={handleSubmit(onSubmit)}
-      schema={formSchema}
+      schema={translatedFormSchema}
       showErrorList={false}
       tagName={isEditor ? 'div' : undefined}
       transformErrors={transformErrors}
-      uiSchema={uiSchema}
+      uiSchema={getUiSchema()}
       widgets={widgets}
     >
       {SubmitButton}
