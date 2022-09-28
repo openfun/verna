@@ -30,6 +30,11 @@ export function TextTemplateWidget({
 }: TextTemplateWidgetProps) {
   return (
     <Field error={error} fieldClasses={fieldClasses} message={message}>
+      {label && (
+        <label className="form-field__label" htmlFor={id}>
+          {label}
+        </label>
+      )}
       <input
         aria-label={label}
         className="form-field__input"
@@ -38,11 +43,6 @@ export function TextTemplateWidget({
         type={type}
         {...props}
       />
-      {label && (
-        <label className="form-field__label" htmlFor={id}>
-          {label}
-        </label>
-      )}
     </Field>
   );
 }

@@ -7,7 +7,6 @@ import FormWrapper from './FormWrapper';
 import CheckboxWidget from './widgets/CheckboxWidget';
 import NumberWidget from './widgets/NumberWidget';
 import PasswordWidget from './widgets/PasswordWidget';
-import QuizWidget from './widgets/QuizWidget';
 import SelectWidget from './widgets/SelectWidget';
 import TextareaWidget from './widgets/TextareaWidget';
 import TextWidget from './widgets/TextWidget';
@@ -65,7 +64,7 @@ const translations = {
 function App() {
   const intl = useIntl();
 
-  const schema: VernaJSONSchemaType = {
+  const formSchema: VernaJSONSchemaType = {
     description: 'root_description',
     properties: {
       section: {
@@ -102,7 +101,6 @@ function App() {
     type: 'object',
   };
 
-  // TODO: Add management for ui:ObjectFieldTemplate saving
   const uiSchema: UiSchema = {
     section: {
       checkboxes: {
@@ -113,6 +111,7 @@ function App() {
       },
       'ui:order': ['checkboxes', 'select'],
     },
+    'ui:order': ['section'],
     'ui:submitButtonOptions': {
       norender: false,
       props: {
@@ -219,7 +218,6 @@ function App() {
     checkboxWidget: CheckboxWidget,
     numberWidget: NumberWidget,
     passwordWidget: PasswordWidget,
-    quizWidget: QuizWidget,
     selectWidget: SelectWidget,
     textWidget: TextWidget,
     textareaWidget: TextareaWidget,
@@ -238,13 +236,15 @@ function App() {
         <VernaProvider
           configSchema={configSchema}
           defaultFormValues={formData}
-          defaultSchema={schema}
-          defaultUiSchema={uiSchema}
           defaultWidgets={widgets}
           intl={intl}
           isEditor={isEditor}
           transformErrors={transformErrors}
-          translations={translations}
+          defaultSchema={{
+            formSchema,
+            translationSchema: translations,
+            uiSchema,
+          }}
         >
           <FormWrapper toggleEditorMode={toggleEditorMode} />
         </VernaProvider>

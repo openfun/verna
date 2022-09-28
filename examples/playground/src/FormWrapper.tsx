@@ -1,12 +1,11 @@
 import { useVerna, VernaForm, VernaToolbar } from '@openfun/verna';
-import { JSONSchema7 } from 'json-schema';
+import { useEffect } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { useLocale } from './providers/LocaleProvider';
 import CheckboxesWidget from './widgetToolbarItems/CheckboxesWidget';
 import CheckboxWidget from './widgetToolbarItems/CheckboxWidget';
 import NumberWidget from './widgetToolbarItems/NumberWidget';
 import PasswordWidget from './widgetToolbarItems/PasswordWidget';
-import QuizWidget from './widgetToolbarItems/QuizWidget';
 import SelectWidget from './widgetToolbarItems/SelectWidget';
 import TextareaWidget from './widgetToolbarItems/TextareaWidget';
 import TextWidget from './widgetToolbarItems/TextWidget';
@@ -54,8 +53,10 @@ const messages = defineMessages({
 });
 
 export default function FormWrapper({ toggleEditorMode }: FormWrapperProps) {
-  const { schema, uiSchema, setSelector, isEditor, selector, schemaTranslations } = useVerna();
+  const { schema, setSelector, isEditor, selector } = useVerna();
   const [locale, setLocale] = useLocale();
+
+  useEffect(() => console.log('New selector set:', selector), [selector]);
 
   return (
     <div className="verna-wrapper">
@@ -64,7 +65,6 @@ export default function FormWrapper({ toggleEditorMode }: FormWrapperProps) {
           <VernaToolbar>
             <TextWidget type="string" widgetName="textWidget" />
             <PasswordWidget type="string" widgetName="passwordWidget" />
-            <QuizWidget type="string" widgetName="quizWidget" />
             <TextareaWidget type="string" widgetName="textareaWidget" />
             <NumberWidget type="number" widgetName="numberWidget" />
             <CheckboxWidget type="boolean" widgetName="checkboxWidget" />
@@ -80,7 +80,7 @@ export default function FormWrapper({ toggleEditorMode }: FormWrapperProps) {
             <FormattedMessage {...messages.selectSection} />
           </legend>
           {!selector &&
-            Object.keys(schema.properties as JSONSchema7)?.map((key) => (
+            Object.keys(schema.formSchema.properties)?.map((key) => (
               <button key={key} onClick={() => setSelector(key)}>
                 <FormattedMessage {...messages.sectionName} values={{ name: key }} />
               </button>
@@ -109,15 +109,7 @@ export default function FormWrapper({ toggleEditorMode }: FormWrapperProps) {
               {...(isEditor ? messages.turnOffEditorMode : messages.turnOnEditorMode)}
             />
           </button>
-          <button
-            onClick={() =>
-              console.log('FormData:', {
-                schema: schema,
-                translations: schemaTranslations,
-                uiSchema: uiSchema,
-              })
-            }
-          >
+          <button onClick={() => console.log('Schema:', schema)}>
             <FormattedMessage {...messages.saveForm} />
           </button>
         </fieldset>

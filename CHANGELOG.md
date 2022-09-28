@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Use a reducer to manage schema
 - Make translation overridable
 - Setup @formatjs to extract/compile translations
 - Add customization of verna render components
