@@ -3,12 +3,7 @@ import { Suspense } from 'react';
 import VernaForm from ':/components/VernaForm';
 import VernaToolbar from ':/components/VernaToolbar';
 import VernaProvider from ':/providers/VernaProvider';
-import {
-  schemaFactory,
-  translationsFactory,
-  uiSchemaFactory,
-  widgetsFactory,
-} from ':/tests/mocks/factories';
+import { vernaSchemaFactory, widgetsFactory } from ':/tests/mocks/factories';
 import ShowCaseWidgetProps from ':/types/Widgets';
 
 describe('drag and drop', () => {
@@ -29,18 +24,14 @@ describe('drag and drop', () => {
   });
 
   it('should add corresponding field on drop at position', async () => {
-    const translations = translationsFactory();
-
     render(
       <Suspense fallback="Loading...">
         <VernaProvider
           isEditor
           DropZone={() => <span>dropzone</span>}
-          defaultSchema={schemaFactory()}
-          defaultUiSchema={uiSchemaFactory()}
+          defaultSchema={vernaSchemaFactory()}
           defaultWidgets={widgetsFactory()}
           locale="en-US"
-          translations={translations}
         >
           <div data-testid="wrapper">
             <VernaForm />

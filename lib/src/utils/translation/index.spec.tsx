@@ -1,5 +1,5 @@
 import { type UiSchema } from '@rjsf/core';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { noop } from 'lodash';
 import { Suspense } from 'react';
@@ -34,18 +34,19 @@ describe('schema translations', () => {
     uiSchema: UiSchema;
     widgets?: WidgetsType;
   }) => {
-    const translations = translationsFactory();
     return (
       <Suspense fallback="Loading...">
         <VernaProvider
           isEditor
           configSchema={configSchema}
-          defaultSchema={schema}
-          defaultUiSchema={uiSchema}
           defaultWidgets={widgets}
           intl={intl}
           locale={locale}
-          translations={translations}
+          defaultSchema={{
+            formSchema: schema,
+            translationSchema: translationsFactory(),
+            uiSchema: uiSchema,
+          }}
         >
           <div data-testid="wrapper">
             <VernaForm />
@@ -133,13 +134,14 @@ describe('schema translations', () => {
 
     // change the value of the first enum
     const $newInputs = screen.getAllByRole('textbox', {});
-    fireEvent.change($newInputs[2], { target: { value: 'Option 0 edited' } });
+    await userEvent.clear($newInputs[2]);
+    await userEvent.type($newInputs[2], 'Option 0 edited');
 
     await userEvent.click(screen.getByRole('button', { name: 'Add' }));
 
-    fireEvent.change(screen.getAllByRole('textbox', {})[4], {
-      target: { value: 'Option 2' },
-    });
+    const $addButtons = screen.getAllByRole('textbox', {});
+    await userEvent.clear($addButtons[4]);
+    await userEvent.type($addButtons[4], 'Option 2');
 
     // Save parameters
     screen.getByRole('button', { name: 'save' }).click();
@@ -189,13 +191,14 @@ describe('schema translations', () => {
 
     // change the value of the first item
     const $newInputs = screen.getAllByRole('textbox', {});
-    fireEvent.change($newInputs[2], { target: { value: 'Checkbox 0 edited' } });
+    await userEvent.clear($newInputs[2]);
+    await userEvent.type($newInputs[2], 'Checkbox 0 edited');
 
     await userEvent.click(screen.getByRole('button', { name: 'Add' }));
 
-    fireEvent.change(screen.getAllByRole('textbox', {})[4], {
-      target: { value: 'Checkbox 2' },
-    });
+    const $addButtons = screen.getAllByRole('textbox', {});
+    await userEvent.clear($addButtons[4]);
+    await userEvent.type($addButtons[4], 'Checkbox 2');
 
     // Save parameters
     screen.getByRole('button', { name: 'save' }).click();
@@ -255,13 +258,14 @@ describe('schema translations', () => {
 
     // change the value of the first item
     const $newInputs = screen.getAllByRole('textbox', {});
-    fireEvent.change($newInputs[2], { target: { value: 'Case à cocher 0 éditée' } });
+    await userEvent.clear($newInputs[2]);
+    await userEvent.type($newInputs[2], 'Case à cocher 0 éditée');
 
     await userEvent.click(screen.getByRole('button', { name: 'Add' }));
 
-    fireEvent.change(screen.getAllByRole('textbox', {})[4], {
-      target: { value: 'Case à cocher 2' },
-    });
+    const $addButtons = screen.getAllByRole('textbox', {});
+    await userEvent.clear($addButtons[4]);
+    await userEvent.type($addButtons[4], 'Case à cocher 2');
 
     // Save parameters
     screen.getByRole('button', { name: 'Sauvegarder' }).click();

@@ -4,27 +4,22 @@ import { Suspense } from 'react';
 import VernaForm from ':/components/VernaForm';
 import VernaProvider from ':/providers/VernaProvider';
 import {
-  selectSchemaFactory,
-  translationsFactory,
-  selectUiSchemaFactory,
   confSchemaFactory,
   widgetsFactory,
+  vernaComplexSchemaFactory,
 } from ':/tests/mocks/factories';
 import VernaJSONSchemaType from ':/types/rjsf';
 
 describe('section properties edition', () => {
   const VernaSuspenseWrapper = ({ configSchema }: { configSchema?: VernaJSONSchemaType }) => {
-    const translations = translationsFactory();
     return (
       <Suspense fallback="Loading...">
         <VernaProvider
           isEditor
           configSchema={configSchema}
-          defaultSchema={selectSchemaFactory()}
-          defaultUiSchema={selectUiSchemaFactory()}
+          defaultSchema={vernaComplexSchemaFactory()}
           defaultWidgets={widgetsFactory()}
           locale="en-US"
-          translations={translations}
         >
           <div data-testid="wrapper">
             <VernaForm />

@@ -3,37 +3,62 @@ import { merge } from 'lodash';
 import NumberWidget from './NumberWidget';
 import SelectWidget from './SelectWidget';
 import { WidgetsType } from ':/providers/VernaProvider';
-import VernaJSONSchemaType from ':/types/rjsf';
+import VernaJSONSchemaType, { VernaSchemaType } from ':/types/rjsf';
 import { TranslationType } from ':/types/translations';
 
-const schemaFactory = (): VernaJSONSchemaType => ({
-  description: 'root_description',
-  properties: {
-    testSection: {
-      properties: {
-        field1: {
-          maximum: 10,
-          minimum: 5,
-          title: 'root_testSection_field1',
-          type: 'number',
-        },
-      },
-      title: 'root_testSection_title',
-      type: 'object',
-    },
-  },
-  title: 'root_title',
-  type: 'object',
+const vernaSchemaFactory = (schema?: VernaSchemaType): VernaSchemaType => ({
+  formSchema: schemaFactory(schema?.formSchema),
+  translationSchema: translationsFactory(schema?.translationSchema),
+  uiSchema: uiSchemaFactory(schema?.uiSchema),
 });
 
-const uiSchemaFactory = (): UiSchema => ({
-  testSection: {
-    field1: {
-      'ui:widget': 'numberWidget',
-    },
-    'ui:order': ['field1'],
-  },
+/**
+ * ComplexSchema contains a select widget, it's needed for tests with deep options
+ * to modify on a widget
+ */
+const vernaComplexSchemaFactory = (): VernaSchemaType => ({
+  formSchema: selectSchemaFactory(),
+  translationSchema: translationsFactory(),
+  uiSchema: selectUiSchemaFactory(),
 });
+
+const schemaFactory = (schema?: VernaJSONSchemaType): VernaJSONSchemaType =>
+  merge(
+    {
+      description: 'root_description',
+      properties: {
+        testSection: {
+          properties: {
+            field1: {
+              maximum: 10,
+              minimum: 5,
+              title: 'root_testSection_field1_title',
+              type: 'number',
+            },
+          },
+          title: 'root_testSection_title',
+          type: 'object',
+        },
+      },
+      title: 'root_title',
+      type: 'object',
+    },
+    schema,
+  );
+
+const uiSchemaFactory = (uiSchema?: UiSchema): UiSchema =>
+  merge(
+    {
+      testSection: {
+        field1: {
+          'ui:widget': 'numberWidget',
+        },
+        'ui:order': ['field1'],
+      },
+      'ui:order': ['testSection'],
+    },
+    uiSchema,
+  );
 
 const selectSchemaFactory = (): VernaJSONSchemaType => ({
   description: 'root_description',
@@ -154,7 +179,7 @@ const translationsFactory = (translations: TranslationType = {}) => {
         root_testSection_checkboxes_items_1: 'Checkbox 1',
         root_testSection_checkboxes_title: 'Checkboxes widget',
         root_testSection_description: 'Description of the first section',
-        root_testSection_field1: 'First field',
+        root_testSection_field1_title: 'First field',
         root_testSection_select_enum_0: 'Option 0',
         root_testSection_select_enum_1: 'Option 1',
         root_testSection_select_title: 'A select widget',
@@ -168,7 +193,7 @@ const translationsFactory = (translations: TranslationType = {}) => {
         root_testSection_checkboxes_items_1: 'Case à cocher 1',
         root_testSection_checkboxes_title: 'Un widget cases à cocher',
         root_testSection_description: 'Description de la première section',
-        root_testSection_field1: 'Premier champ',
+        root_testSection_field1_title: 'Premier champ',
         root_testSection_select_enum_0: 'Choix 0',
         root_testSection_select_enum_1: 'Choix 1',
         root_testSection_select_title: 'Un widget menu déroulant',
@@ -206,4 +231,6 @@ export {
   uiSchemaFactory,
   translationsFactory,
   translationUiFactory,
+  vernaComplexSchemaFactory,
+  vernaSchemaFactory,
 };

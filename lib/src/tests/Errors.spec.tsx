@@ -4,12 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { Suspense } from 'react';
 import VernaForm from ':/components/VernaForm';
 import VernaProvider from ':/providers/VernaProvider';
-import {
-  schemaFactory,
-  translationsFactory,
-  uiSchemaFactory,
-  widgetsFactory,
-} from ':/tests/mocks/factories';
+import { vernaSchemaFactory, widgetsFactory } from ':/tests/mocks/factories';
 
 describe('custom errors', () => {
   function transformErrors(errors: AjvError[]): AjvError[] {
@@ -25,17 +20,13 @@ describe('custom errors', () => {
   }
 
   it('should display the custom errors', async () => {
-    const translations = translationsFactory();
-
     render(
       <Suspense fallback="Loading...">
         <VernaProvider
-          defaultSchema={schemaFactory()}
-          defaultUiSchema={uiSchemaFactory()}
+          defaultSchema={vernaSchemaFactory()}
           defaultWidgets={widgetsFactory()}
           locale="en-US"
           transformErrors={transformErrors}
-          translations={translations}
         >
           <div data-testid="wrapper">
             <VernaForm />
