@@ -23,7 +23,6 @@ export default function TextWidget({
         type="text"
         value={value}
       />
-      {required && '*'}
       {rawErrors}
     </>
   );

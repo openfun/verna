@@ -215,6 +215,8 @@ function App() {
   const formData = {};
 
   const widgets = {
+    NumberWidget: NumberWidget,
+    TextWidget: TextWidget,
     checkboxWidget: CheckboxWidget,
     numberWidget: NumberWidget,
     passwordWidget: PasswordWidget,

@@ -16,25 +16,10 @@ interface SectionPropertiesFormProps {
 }
 
 const messages = defineMessages({
-  description: {
-    defaultMessage: 'Description',
-    description: 'Description of the section',
-    id: 'components.SectionPropertiesForm.description',
-  },
-  legend: {
-    defaultMessage: 'Options',
-    description: 'Legend of the section',
-    id: 'components.SectionPropertiesForm.legend',
-  },
   submitWidgetParameter: {
     defaultMessage: 'Save',
     description: 'Label of submit input',
     id: 'components.SectionPropertiesForm.submitWidgetParameter',
-  },
-  title: {
-    defaultMessage: 'Title',
-    description: 'Title of the section',
-    id: 'components.SectionPropertiesForm.title',
   },
 });
 
@@ -59,9 +44,6 @@ export default function SectionPropertiesForm({ id, onClose }: SectionProperties
 
   function translateSchema() {
     const parameterSchema = sectionParametersSchema();
-
-    parameterSchema.title = formatMessage(messages.legend);
-    parameterSchema.description = formatMessage(messages.description);
 
     const isMessageKey = (key: PropertyKey): key is keyof typeof messages => {
       return key in messages;
@@ -123,6 +105,7 @@ export default function SectionPropertiesForm({ id, onClose }: SectionProperties
 
   return (
     <Form
+      FieldTemplate={verna.FieldTemplate}
       className="section-properties-form"
       formData={getDefaultValues()}
       idSeparator={RJSF_ID_SEPARATOR}
@@ -130,6 +113,9 @@ export default function SectionPropertiesForm({ id, onClose }: SectionProperties
       schema={propertiesSchema}
       showErrorList={false}
       uiSchema={uiSchema}
-    />
+      widgets={verna.widgets}
+    >
+      {verna.SubmitButton}
+    </Form>
   );
 }

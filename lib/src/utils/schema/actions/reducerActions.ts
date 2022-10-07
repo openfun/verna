@@ -19,9 +19,14 @@ import {
 export function reduceSchema(schema: VernaSchemaType, action: ReducerAction) {
   switch (action.type) {
     case VernaActionsEnum.ADD_SECTION:
-      return addSection(schema, action.payload.id!, action.payload.SectionTemplate);
+      return addSection(
+        schema,
+        action.payload.id!,
+        action.payload.SectionTemplate,
+        action.meta.intl,
+      );
     case VernaActionsEnum.ADD_WIDGET:
-      return addWidget(schema, action.payload.id!, action.payload.widgetInfos!);
+      return addWidget(schema, action.payload.id!, action.payload.widgetInfos!, action.meta.intl);
     case VernaActionsEnum.UPDATE_PROPERTY:
       return updateSchema(schema, action.payload.schema!);
     case VernaActionsEnum.UPDATE_WIDGET:

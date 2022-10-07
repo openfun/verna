@@ -11,11 +11,6 @@ const messages = defineMessages({
     description: 'Label of the button to add an input',
     id: 'components.EditorFieldTemplate.addInput',
   },
-  addSection: {
-    defaultMessage: 'Add a section',
-    description: 'Label of the button to add a section',
-    id: 'components.EditorFieldTemplate.addSection',
-  },
   parameters: {
     defaultMessage: 'Parameters',
     description: 'Label of the button to display the widget properties form',
@@ -38,7 +33,6 @@ export default function EditorFieldTemplate({
   const path = id.split(RJSF_ID_SEPARATOR);
   const isRoot = id === 'root';
   const isSection = path.length === 2 && !verna.selector;
-  const ownProperties = Object.keys(formSchema.properties || {}).length > 0;
   const canAddField = formSchema.type !== 'object';
   const canAddSection = isSection && !isRoot && !verna.selector;
   const DropZone = verna.DropZone;
@@ -65,14 +59,6 @@ export default function EditorFieldTemplate({
           {!(verna.selector && isRoot) && <DropZone id={id} />}
         </>
       )}
-      <div style={{ display: 'flex', flexDirection: 'row' }}>
-        {(canAddSection || (isRoot && !ownProperties && !verna.selector)) && (
-          <button onClick={() => verna.addVernaSection(id)} style={{ flex: 1 }}>
-            <FormattedMessage {...messages.addSection} />
-          </button>
-        )}
-        {canAddSection && <button onClick={() => verna.removeVernaProperty(id)}>x</button>}
-      </div>
     </div>
   );
 }

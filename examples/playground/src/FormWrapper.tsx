@@ -1,5 +1,4 @@
 import { useVerna, VernaForm, VernaToolbar } from '@openfun/verna';
-import { useEffect } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { useLocale } from './providers/LocaleProvider';
 import CheckboxesWidget from './widgetToolbarItems/CheckboxesWidget';
@@ -56,8 +55,6 @@ export default function FormWrapper({ toggleEditorMode }: FormWrapperProps) {
   const { schema, setSelector, isEditor, selector } = useVerna();
   const [locale, setLocale] = useLocale();
 
-  useEffect(() => console.log('New selector set:', selector), [selector]);
-
   return (
     <div className="verna-wrapper">
       {isEditor && (
@@ -80,6 +77,7 @@ export default function FormWrapper({ toggleEditorMode }: FormWrapperProps) {
             <FormattedMessage {...messages.selectSection} />
           </legend>
           {!selector &&
+            schema.formSchema?.properties &&
             Object.keys(schema.formSchema.properties)?.map((key) => (
               <button key={key} onClick={() => setSelector(key)}>
                 <FormattedMessage {...messages.sectionName} values={{ name: key }} />

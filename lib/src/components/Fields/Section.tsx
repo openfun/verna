@@ -4,10 +4,16 @@ import React, { useState } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import SectionPropertiesForm from ':/components/PropertiesForms/SectionPropertiesForm';
 import { useVerna } from ':/providers/VernaProvider';
+import { RJSF_ID_SEPARATOR } from ':/settings';
 import { VernaSchemaType } from ':/types/rjsf';
 import { Maybe } from ':/types/utils';
 
 const messages = defineMessages({
+  addSection: {
+    defaultMessage: 'Add a section',
+    description: 'Label of the button to add a section',
+    id: 'components.fields.section.addSection',
+  },
   parameters: {
     defaultMessage: 'Parameters',
     description: 'Label of the button to display the section properties form',
@@ -38,25 +44,47 @@ export default function Section({
   idSchema,
   properties,
   description,
+  uiSchema,
 }: ObjectFieldTemplateProps) {
-  const { isEditor, DropZone, schema, selector } = useVerna();
+  const { addVernaSection, isEditor, DropZone, removeVernaProperty, schema, selector } = useVerna();
   const [isEditingParameters, setIsEditingParameters] = useState(false);
   const hasSection = doesContainSection(idSchema['$id'], schema, selector);
+  const isRoot = idSchema['$id'] === 'root';
+
+  function getLastPropertyId() {
+    const sectionList = uiSchema['ui:order'];
+
+    if (!sectionList || sectionList.length === 0) {
+      return null;
+    }
+    const lastPropertyName = sectionList[sectionList?.length - 1];
+    return ['root', lastPropertyName].join(RJSF_ID_SEPARATOR);
+  }
 
   return (
     <fieldset>
       <legend>{title}</legend>
       <p>{description}</p>
       {isEditor && (
-        <button onClick={() => setIsEditingParameters(!isEditingParameters)}>
-          <FormattedMessage {...messages.parameters} />
-        </button>
+        <>
+          <button onClick={() => setIsEditingParameters(!isEditingParameters)}>
+            <FormattedMessage {...messages.parameters} />
+          </button>
+          {idSchema['$id'] !== 'root' && (
+            <button onClick={() => removeVernaProperty(idSchema['$id'])}>x</button>
+          )}
+        </>
       )}
       {isEditingParameters && (
         <SectionPropertiesForm id={idSchema.$id} onClose={() => setIsEditingParameters(false)} />
       )}
       {isEditor && !hasSection && <DropZone isSection id={idSchema['$id']} />}
       {properties.map((element) => element.content)}
+      {isEditor && isRoot && (
+        <button onClick={() => addVernaSection(getLastPropertyId())} style={{ flex: 1 }}>
+          <FormattedMessage {...messages.addSection} />
+        </button>
+      )}
     </fieldset>
   );
 }

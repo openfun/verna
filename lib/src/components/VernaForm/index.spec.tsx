@@ -1,6 +1,5 @@
 import { screen, render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import _ from 'lodash';
 import { Suspense } from 'react';
 import VernaForm from ':/components/VernaForm';
 import VernaProvider, { WidgetsType } from ':/providers/VernaProvider';
@@ -64,23 +63,13 @@ describe('VernaForm', () => {
 
     // Add two sections
     await userEvent.click(screen.getByRole('button', { name: 'Add a section' }));
-    await userEvent.click(
-      _.last(
-        screen.getAllByRole('button', {
-          name: 'Add a section',
-        }) as HTMLElement[],
-      )!,
-    );
+    await userEvent.click(screen.getByRole('button', { name: 'Add a section' }));
 
     const $parametersButton = await screen.findAllByRole('button', {
       name: 'Parameters',
     });
     expect($parametersButton).toHaveLength(5);
 
-    const $addSectionButtons = screen.queryAllByRole('button', {
-      name: 'Add a section',
-    });
-    expect($addSectionButtons).toHaveLength(3);
     screen.getByRole('button', { name: 'Submit' });
 
     // Delete every element from top to bottom

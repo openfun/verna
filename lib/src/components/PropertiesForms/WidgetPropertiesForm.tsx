@@ -201,6 +201,7 @@ export default function WidgetPropertiesForm({ id, onClose }: WidgetPropertiesFo
 
   return (
     <Form
+      FieldTemplate={verna.FieldTemplate}
       className="widget-properties-form"
       formData={getDefaultValues()}
       idSeparator={RJSF_ID_SEPARATOR}
@@ -208,6 +209,9 @@ export default function WidgetPropertiesForm({ id, onClose }: WidgetPropertiesFo
       schema={propertiesSchema}
       showErrorList={false}
       uiSchema={uiSchema}
-    />
+      widgets={verna.widgets}
+    >
+      {verna.SubmitButton}
+    </Form>
   );
 }

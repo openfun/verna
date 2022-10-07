@@ -61,7 +61,6 @@ describe('section properties edition', () => {
     const $parameterButtons = screen.getAllByRole('button', { name: 'Parameters' });
     expect($parameterButtons).toHaveLength(3);
     await userEvent.click($parameterButtons[1]);
-    await screen.findByRole('group', { name: 'Options' });
 
     // Set the field name and description
     const $fieldInputs = screen.getAllByRole('textbox', {});

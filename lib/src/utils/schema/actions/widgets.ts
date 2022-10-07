@@ -1,10 +1,21 @@
 import _ from 'lodash';
+import { defineMessages, type IntlShape } from 'react-intl';
 import { v4 as uuidv4 } from 'uuid';
 import { RJSF_ID_SEPARATOR } from ':/settings';
 import { stringDefinition } from ':/templates';
 import { VernaSchemaType } from ':/types/rjsf';
+import { Maybe } from ':/types/utils';
 import ShowCaseWidgetProps from ':/types/Widgets';
 import { getSectionName, getWidgetName } from ':/utils';
+import { addTranslations } from ':/utils/schema';
+
+const messages = defineMessages({
+  defaultWidgetTitle: {
+    defaultMessage: 'Default widget title',
+    description: 'The default name of a newly created widget',
+    id: 'templates.defaultWidgetTitle',
+  },
+});
 
 function addWidgetToUiSchema(
   schema: VernaSchemaType,
@@ -45,16 +56,24 @@ function addWidgetToUiSchema(
  * @param id of the element on the top of the drop zone either a section or a widget
  * @param widgetInfos info on the new widget to add, shaped on the onDrop data matching the
  * ShowCaseWidgetProps layout
+ * @param intl
  */
 export function addWidget(
   schema: VernaSchemaType,
   id: string,
-  widgetInfos?: ShowCaseWidgetProps,
+  widgetInfos: Maybe<ShowCaseWidgetProps>,
+  intl?: IntlShape,
 ): VernaSchemaType {
-  const newSchema = _.cloneDeep(schema.formSchema);
+  const newSchema = _.cloneDeep(schema);
   const newKey = uuidv4();
   const sectionName = getSectionName(id, widgetInfos?.isDroppedInSection);
-  const section = sectionName ? newSchema?.properties?.[sectionName] : newSchema;
+
+  if (!newSchema.formSchema) newSchema.formSchema = {};
+  if (!newSchema.translationSchema && intl) newSchema.translationSchema = { [intl.locale]: {} };
+
+  const section = sectionName
+    ? newSchema?.formSchema?.properties?.[sectionName]
+    : newSchema.formSchema;
 
   if (!section)
     throw Error("Error, corrupted data in schema, widget id isn't corresponding to schema content");
@@ -62,9 +81,24 @@ export function addWidget(
   if (!section.properties) section.properties = {};
   section.properties[newKey] = stringDefinition(widgetInfos?.type);
 
+  let newIdTitle = '';
+  if (intl) {
+    // Set default title for the new widget
+    const idParts = sectionName
+      ? ['root', sectionName, newKey, 'title']
+      : ['root', newKey, 'title'];
+    newIdTitle = idParts.join(RJSF_ID_SEPARATOR);
+    newSchema.translationSchema = addTranslations(schema, {
+      [intl.locale]: { [newIdTitle]: intl.formatMessage(messages.defaultWidgetTitle) },
+    }).translationSchema;
+  } else {
+    newIdTitle = messages.defaultWidgetTitle.defaultMessage;
+  }
+
+  section.properties![newKey].title = newIdTitle;
+
   return {
-    formSchema: newSchema,
-    translationSchema: schema.translationSchema,
+    ...newSchema,
     uiSchema: addWidgetToUiSchema(schema, newKey, id, widgetInfos),
   };
 }

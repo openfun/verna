@@ -13,7 +13,7 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import { type ResolvedIntlConfig } from 'react-intl';
+import { type IntlShape } from 'react-intl';
 import EditorFieldTemplate from ':/components/EditorFieldTemplate';
 import DropZone, {
   DropZoneOverloadProps,
@@ -25,7 +25,7 @@ import useSchemaReducer from ':/reducers/useSchemaReducer';
 import { defaultVernaWidgets } from ':/templates';
 import VernaJSONSchemaType, { VernaSchemaType } from ':/types/rjsf';
 import { TranslationType } from ':/types/translations';
-import { Maybe } from ':/types/utils';
+import { Maybe, Nullable } from ':/types/utils';
 import ShowCaseWidgetProps from ':/types/Widgets';
 import { getSelectedDefaultValues } from ':/utils/schema';
 
@@ -42,9 +42,13 @@ export interface VernaContextProps extends Pick<FormProps<unknown>, 'transformEr
   FieldTemplate: React.FunctionComponent<FieldTemplateProps>;
   Section: React.FunctionComponent<ObjectFieldTemplateProps>;
   SubmitButton: React.ReactNode;
-  addVernaSection: (idPreviousSection: string) => void;
+  addVernaSection: (idPreviousSection: Nullable<string>) => void;
   addVernaTranslations: (translations: TranslationType) => void;
-  addVernaWidget: (idPreviousWidget: string, widgetInfos?: ShowCaseWidgetProps) => void;
+  addVernaWidget: (
+    idPreviousWidget: string,
+    widgetInfos?: ShowCaseWidgetProps,
+    intl?: IntlShape,
+  ) => void;
   configSchema?: VernaJSONSchemaType;
   formData: unknown;
   handleSubmit: <FormData = unknown>(
@@ -113,9 +117,9 @@ export interface VernaProviderProps extends Pick<FormProps<unknown>, 'transformE
   defaultLocale?: string;
   defaultSelector?: string;
   defaultWidgets: WidgetsType;
-  intl?: ResolvedIntlConfig;
+  intl?: IntlShape;
   isEditor: boolean;
-  locale?: string;
+  locale: string;
 }
 
 function VernaProvider({
@@ -212,6 +216,7 @@ VernaProvider.defaultProps = {
   defaultValues: {},
   defaultWidgets: {},
   isEditor: false,
+  locale: 'en-US',
   objectFieldTemplate: {},
 };
 

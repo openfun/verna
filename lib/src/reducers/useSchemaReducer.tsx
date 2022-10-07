@@ -1,8 +1,9 @@
 import { ObjectFieldTemplateProps } from '@rjsf/core';
 import React, { useCallback, useReducer } from 'react';
+import { type IntlShape } from 'react-intl';
 import VernaJSONSchemaType, { VernaSchemaType } from ':/types/rjsf';
 import { TranslationType } from ':/types/translations';
-import { Maybe } from ':/types/utils';
+import { Maybe, Nullable } from ':/types/utils';
 import { ReducerAction, VernaActionsEnum } from ':/types/VernaProvider';
 import ShowCaseWidgetProps from ':/types/Widgets';
 import { cleanUiSchema, reduceSchema } from ':/utils/schema';
@@ -46,9 +47,13 @@ interface FormSchemaProps {
 }
 
 interface SchemaReducerValueProperties {
-  addVernaSection: (idPreviousSection: string) => void;
+  addVernaSection: (idPreviousSection: Nullable<string>) => void;
   addVernaTranslations: (translations: TranslationType) => void;
-  addVernaWidget: (idPreviousWidget: string, widgetInfos?: ShowCaseWidgetProps) => void;
+  addVernaWidget: (
+    idPreviousWidget: string,
+    widgetInfos?: ShowCaseWidgetProps,
+    intl?: IntlShape,
+  ) => void;
   removeVernaProperty: (id: string) => void;
   removeVernaTranslations: (translationToDelete: Maybe<string[]>) => void;
   schema: VernaSchemaType;
@@ -83,7 +88,7 @@ export default function useSchemaReducer({
   }
 
   const addVernaSection = useCallback(
-    (idPreviousSection: string) => {
+    (idPreviousSection: Nullable<string>) => {
       schemaDispatch({
         payload: {
           SectionTemplate: Section,
@@ -96,8 +101,11 @@ export default function useSchemaReducer({
   );
 
   const addVernaWidget = useCallback(
-    (idPreviousWidget: string, widgetInfos?: ShowCaseWidgetProps) => {
+    (idPreviousWidget: string, widgetInfos?: ShowCaseWidgetProps, intl?: IntlShape) => {
       schemaDispatch({
+        meta: {
+          intl: intl,
+        },
         payload: {
           id: idPreviousWidget,
           widgetInfos: widgetInfos,

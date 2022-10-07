@@ -1,23 +1,23 @@
 import { PropsWithChildren, useMemo } from 'react';
-import { createIntl, createIntlCache, RawIntlProvider, type ResolvedIntlConfig } from 'react-intl';
+import { createIntl, createIntlCache, RawIntlProvider, type IntlShape } from 'react-intl';
 import { VERNA_SUPPORTED_LOCALES } from ':/settings';
 import { TranslationType } from ':/types/translations';
 import resourceLoader, { type ResourceLoader } from ':/utils/suspense/resourceLoader';
 
 interface TranslationProviderProps {
   defaultLocale?: string;
-  intl?: ResolvedIntlConfig;
+  intl?: IntlShape;
   locale?: string;
   schemaTranslations?: TranslationType;
 }
 
-type MessageLoader = ResourceLoader<ResolvedIntlConfig['messages']>;
+type MessageLoader = ResourceLoader<IntlShape['messages']>;
 type MessageLoaders = Record<string, MessageLoader>;
 
 const messagesLoader = (locale: string): MessageLoader =>
   resourceLoader(() =>
     import(`../../translations/${locale}.json`).then(
-      (response: { default: ResolvedIntlConfig['messages'] }) => response.default,
+      (response: { default: IntlShape['messages'] }) => response.default,
     ),
   );
 

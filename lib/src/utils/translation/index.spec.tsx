@@ -3,7 +3,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { noop } from 'lodash';
 import { Suspense } from 'react';
-import { createIntl, IntlProvider, type ResolvedIntlConfig } from 'react-intl';
+import { createIntl, IntlProvider, type IntlShape } from 'react-intl';
 import VernaForm from ':/components/VernaForm';
 import VernaProvider, { WidgetsType } from ':/providers/VernaProvider';
 import {
@@ -28,7 +28,7 @@ describe('schema translations', () => {
     widgets,
   }: {
     configSchema?: VernaJSONSchemaType;
-    intl?: ResolvedIntlConfig;
+    intl?: IntlShape;
     locale?: string;
     schema: VernaJSONSchemaType;
     uiSchema: UiSchema;

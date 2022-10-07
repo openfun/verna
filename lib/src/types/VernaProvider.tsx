@@ -1,7 +1,9 @@
 import { ObjectFieldTemplateProps } from '@rjsf/core';
 import React from 'react';
+import { type IntlShape } from 'react-intl';
 import VernaJSONSchemaType, { VernaSchemaType } from ':/types/rjsf';
 import { TranslationType } from ':/types/translations';
+import { Nullable } from ':/types/utils';
 import ShowCaseWidgetProps from ':/types/Widgets';
 
 /**
@@ -18,7 +20,7 @@ export enum VernaActionsEnum {
 }
 
 interface PayloadType {
-  id?: string;
+  id?: Nullable<string>;
   SectionTemplate?: React.FunctionComponent<ObjectFieldTemplateProps>;
   widgetInfos?: ShowCaseWidgetProps;
   translations?: TranslationType;
@@ -44,7 +46,7 @@ export interface ReducerAction {
   type: VernaActionsEnum;
   payload: PayloadType;
   error?: boolean;
-  meta?: { selector?: string } | any;
+  meta?: { intl: IntlShape } | any;
 }
 
 /**

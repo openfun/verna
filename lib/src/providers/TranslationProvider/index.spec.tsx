@@ -1,6 +1,6 @@
 import { screen, render, waitFor } from '@testing-library/react';
 import { Suspense } from 'react';
-import { createIntl, FormattedMessage, type ResolvedIntlConfig } from 'react-intl';
+import { createIntl, FormattedMessage, type IntlShape } from 'react-intl';
 import TranslationProvider from '.';
 
 jest.mock(':/translations/fr-FR.json', () => ({
@@ -11,13 +11,7 @@ jest.mock(':/translations/fr-FR.json', () => ({
 }));
 
 describe('TranslationProvider', () => {
-  const VernaSuspenseWrapper = ({
-    intl,
-    locale,
-  }: {
-    intl?: ResolvedIntlConfig;
-    locale?: string;
-  }) => (
+  const VernaSuspenseWrapper = ({ intl, locale }: { intl?: IntlShape; locale?: string }) => (
     <Suspense fallback={<span data-testid="suspense-fallback" />}>
       <TranslationProvider intl={intl} locale={locale}>
         <h1>

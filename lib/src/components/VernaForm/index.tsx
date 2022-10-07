@@ -50,7 +50,7 @@ function VernaForm({ onSubmit }: VernaFormProperties) {
       uiSchema={getUiSchema()}
       widgets={widgets}
     >
-      {SubmitButton}
+      {!schema.uiSchema?.['ui:submitButtonOptions']?.norender && SubmitButton}
     </Form>
   );
 }
