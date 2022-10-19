@@ -7,7 +7,7 @@ describe('widgets actions', () => {
 
   it('should be able to add a widget in the schema at defined position', async () => {
     const defaultSectionName = 'testSection';
-    // Create a widget bellow the testSection
+    // Create a widget in first place in the testSection
     let newSchema = addWidget(defaultSchema, defaultSectionName, {
       type: 'string',
       widgetName: 'widgetname',
@@ -26,7 +26,9 @@ describe('widgets actions', () => {
       (key) => key !== 'testSection' && key !== firstAddedWidgetName,
     )[0];
 
-    expect(Object.keys(newSchema.formSchema?.properties || {})).toHaveLength(3);
+    expect(
+      Object.keys(newSchema.formSchema?.properties?.['testSection'].properties || {}),
+    ).toHaveLength(3);
     expect(
       _.isEqual(newSchema.uiSchema?.['ui:order'], [
         defaultSectionName,

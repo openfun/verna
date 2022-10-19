@@ -17,13 +17,14 @@ import { Maybe } from ':/types/utils';
  */
 function getSectionName(id: string | null, isSectionId?: boolean): Maybe<string> {
   const idParts = id?.split(RJSF_ID_SEPARATOR);
+  const isValidSectionId = (isSectionId && id !== 'root') || (id && id.length > 0);
 
   if (idParts?.length === 3) {
     // If the id is shaped like root_section_id
     return idParts[1];
   }
-  if (isSectionId && id !== 'root') {
-    // if the id is a section id and is not only root (no intermediate section)
+  if (isValidSectionId) {
+    // if the id is a section id and the id is a valid id
     return idParts?.pop();
   }
   // if none of the upper conditions are valid, it means there is no

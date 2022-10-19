@@ -79,7 +79,7 @@ function translateSectionWidgets(
   translatedSchema: VernaJSONSchemaType,
   formatMessage: IntlFormatters['formatMessage'],
 ) {
-  const widgets = translatedSchema.properties;
+  const widgets = translatedSchema?.properties;
   if (!widgets) return;
 
   Object.keys(widgets).forEach((widgetKey) => {
@@ -92,14 +92,20 @@ function translateSchemaWithoutSelector(
   translatedSchema: VernaJSONSchemaType,
   formatMessage: IntlFormatters['formatMessage'],
 ) {
-  const sections = translatedSchema.properties;
-  if (!sections) return;
+  const properties = translatedSchema.properties;
+  if (!properties) return;
 
-  Object.keys(sections).forEach((sectionKey) => {
-    const section = sections[sectionKey];
-    translateSection(section, formatMessage);
-    translateSectionWidgets(section, formatMessage);
-  });
+  const propKeys = Object.keys(properties);
+
+  if (propKeys.length > 0 && properties[propKeys[0]].type !== 'object') {
+    translateSectionWidgets(translatedSchema, formatMessage);
+  } else {
+    propKeys.forEach((key) => {
+      const property = properties[key];
+      translateSection(property, formatMessage);
+      translateSectionWidgets(property, formatMessage);
+    });
+  }
 }
 
 /**
@@ -112,9 +118,8 @@ export function translateSchema(
   schema: VernaSchemaType,
   formatMessage: IntlFormatters['formatMessage'],
 ): VernaJSONSchemaType {
-  const translatedSchema = _.cloneDeep(schema.formSchema || {});
+  const translatedSchema = _.cloneDeep(schema.formSchema) || {};
   translateSection(translatedSchema, formatMessage);
-
   translateSchemaWithoutSelector(translatedSchema, formatMessage);
   return translatedSchema;
 }

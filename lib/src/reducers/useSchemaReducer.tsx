@@ -57,6 +57,7 @@ interface SchemaReducerValueProperties {
   removeVernaProperty: (id: string) => void;
   removeVernaTranslations: (translationToDelete: Maybe<string[]>) => void;
   schema: VernaSchemaType;
+  setSchema: (newSchema: VernaSchemaType) => void;
   updateVernaProperty: (schema: VernaSchemaType) => void;
   updateWidget: (schema: VernaJSONSchemaType, id: string) => void;
 }
@@ -177,6 +178,15 @@ export default function useSchemaReducer({
     [schema, selector],
   );
 
+  const setSchema = (newSchema: VernaSchemaType) => {
+    schemaDispatch({
+      payload: {
+        schema: newSchema,
+      },
+      type: VernaActionsEnum.SET_SCHEMA,
+    });
+  };
+
   return {
     addVernaSection,
     addVernaTranslations,
@@ -184,6 +194,7 @@ export default function useSchemaReducer({
     removeVernaProperty,
     removeVernaTranslations,
     schema,
+    setSchema,
     updateVernaProperty,
     updateWidget,
   };

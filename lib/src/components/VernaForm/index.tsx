@@ -22,17 +22,17 @@ function VernaForm({ onSubmit }: VernaFormProperties) {
     transformErrors,
     widgets,
   } = useVerna();
-  const { locale, formatMessage } = useIntl();
+  const { locale, formatMessage, messages } = useIntl();
   const translatedFormSchema: VernaJSONSchemaType = useMemo(() => {
     const translatedSchema = translateSchema(schema, formatMessage);
     return selector
       ? translatedSchema.properties![selector as keyof typeof translatedSchema.properties]
       : translatedSchema;
-  }, [locale, schema.formSchema, selector]);
+  }, [locale, schema, selector, messages, schema.uiSchema]);
 
-  function getUiSchema() {
+  const uiSchema = useMemo(() => {
     return selector ? schema.uiSchema?.[selector] : schema.uiSchema;
-  }
+  }, [selector, schema.uiSchema]);
 
   return (
     <Form
@@ -47,7 +47,7 @@ function VernaForm({ onSubmit }: VernaFormProperties) {
       showErrorList={false}
       tagName={isEditor ? 'div' : undefined}
       transformErrors={transformErrors}
-      uiSchema={getUiSchema()}
+      uiSchema={uiSchema}
       widgets={widgets}
     >
       {!schema.uiSchema?.['ui:submitButtonOptions']?.norender && SubmitButton}

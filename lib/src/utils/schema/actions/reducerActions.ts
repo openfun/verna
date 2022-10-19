@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { VernaSchemaType } from ':/types/rjsf';
 import { ReducerAction, VernaActionsEnum } from ':/types/VernaProvider';
 import {
@@ -37,6 +38,8 @@ export function reduceSchema(schema: VernaSchemaType, action: ReducerAction) {
       return addTranslations(schema, action.payload.translations);
     case VernaActionsEnum.REMOVE_TRANSLATION:
       return removeTranslations(schema, action.payload.translationsToDelete!);
+    case VernaActionsEnum.SET_SCHEMA:
+      return _.cloneDeep(action.payload.schema)!;
     default:
       return schema;
   }

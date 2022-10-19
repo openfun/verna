@@ -61,6 +61,7 @@ export interface VernaContextProps extends Pick<FormProps<unknown>, 'transformEr
   selectedFormData: unknown;
   selector: string | undefined;
   setFormData: (newDefaultValues: unknown) => void;
+  setSchema: (newSchema: VernaSchemaType) => void;
   setSelector: (selector: string | undefined) => void;
   setWidgets: (newWidgets: WidgetsType) => void;
   updateVernaProperty: (schema: VernaSchemaType) => void;
@@ -90,6 +91,7 @@ const VernaContext = createContext<VernaContextProps>({
   selectedFormData: {},
   selector: undefined,
   setFormData: () => functionNotSet(),
+  setSchema: () => functionNotSet(),
   setSelector: () => functionNotSet(),
   setWidgets: () => functionNotSet(),
   transformErrors: undefined,

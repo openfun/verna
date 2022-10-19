@@ -15,6 +15,7 @@ export enum VernaActionsEnum {
   ADD_WIDGET = 'addWidget',
   REMOVE_TRANSLATION = 'removeTranslations',
   REMOVE_PROPERTY = 'removeProperty',
+  SET_SCHEMA = 'setSchema',
   UPDATE_PROPERTY = 'updateProperty',
   UPDATE_WIDGET = 'updateWidget',
 }
