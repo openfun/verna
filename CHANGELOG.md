@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Fix bugs in the library and add setSchema action
 - Allow customisation of form options
 - Use a reducer to manage schema
 - Make translation overridable

@@ -14,16 +14,18 @@ describe('widget properties edition', () => {
   const VernaSuspenseWrapper = ({
     configSchema,
     locale = 'en-US',
+    emptySelect,
   }: {
     configSchema?: VernaJSONSchemaType;
     locale?: string;
+    emptySelect?: boolean;
   }) => {
     return (
       <Suspense fallback="Loading...">
         <VernaProvider
           isEditor
           configSchema={configSchema}
-          defaultSchema={vernaComplexSchemaFactory()}
+          defaultSchema={vernaComplexSchemaFactory(emptySelect)}
           defaultWidgets={widgetsFactory()}
           locale={locale ? locale : 'en-US'}
         >
@@ -166,6 +168,8 @@ describe('widget properties edition', () => {
     expect($inputs).toHaveLength(4);
     expect($inputs[2]).toHaveValue('New option 0');
     expect($inputs[3]).toHaveValue('Option 2');
+
+    // Change language
     rerender(<VernaSuspenseWrapper configSchema={confSchemaFactory()} locale="fr-FR" />);
 
     // Check that the options in French are properly updated after english modifications
@@ -174,5 +178,81 @@ describe('widget properties edition', () => {
     expect($options).toHaveLength(2);
     expect($options[0]).toHaveValue('Choix 0');
     expect($options[1]).toHaveValue('Option 2');
+  });
+
+  it('should be able to create brand new component with an enum to edit', async () => {
+    const { rerender } = render(
+      <VernaSuspenseWrapper configSchema={confSchemaFactory()} emptySelect={true} />,
+    );
+
+    // Wait that the form is rendered...
+    await waitFor(() => {
+      expect(screen.queryByTestId('wrapper')).toBeInTheDocument();
+    });
+
+    // Open parameters
+    const $parameterButtons = screen.getAllByRole('button', { name: 'Parameters' });
+    expect($parameterButtons).toHaveLength(3);
+    await userEvent.click($parameterButtons[2]);
+
+    await screen.findByRole('group', { name: 'Options' });
+
+    // Add two inputs in the list of choices
+    await userEvent.click(screen.getByRole('button', { name: 'Add' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Add' }));
+
+    // Set the value of the new field
+    let $inputs = screen.getAllByRole('textbox');
+    await userEvent.type($inputs[2], 'New option 0');
+    await userEvent.type($inputs[3], 'New option 1');
+
+    // Save parameters
+    await userEvent.click(screen.getByRole('button', { name: 'save' }));
+
+    // Open parameters again
+    await userEvent.click($parameterButtons[2]);
+    $inputs = screen.getAllByRole('textbox', {});
+    expect($inputs).toHaveLength(4);
+    expect($inputs[2]).toHaveValue('New option 0');
+    expect($inputs[3]).toHaveValue('New option 1');
+
+    // Save parameters
+    await userEvent.click(screen.getByRole('button', { name: 'save' }));
+
+    // Change the language
+    rerender(
+      <VernaSuspenseWrapper configSchema={confSchemaFactory()} emptySelect={true} locale="fr-FR" />,
+    );
+
+    // Open parameters again
+    await userEvent.click($parameterButtons[2]);
+
+    // Add french translations
+    const $NewFrInputs = screen.getAllByRole('textbox');
+    await userEvent.clear($NewFrInputs[2]);
+    await userEvent.type($NewFrInputs[2], 'Nouvelle option 0');
+    await userEvent.clear($NewFrInputs[3]);
+    await userEvent.type($NewFrInputs[3], 'Nouvelle option 1');
+
+    // Save parameters
+    await userEvent.click(screen.getByRole('button', { name: 'sauvegarder' }));
+
+    // Check that the options in French are properly updated after english modifications
+    await userEvent.click($parameterButtons[2]);
+    let $options = screen.getAllByRole('option', {});
+    expect($options).toHaveLength(2);
+    expect($options[0]).toHaveValue('Nouvelle option 0');
+    expect($options[1]).toHaveValue('Nouvelle option 1');
+
+    // Change back the language to english
+    rerender(
+      <VernaSuspenseWrapper configSchema={confSchemaFactory()} emptySelect={true} locale="en-US" />,
+    );
+
+    // Check that the options in english didn't changed
+    $options = screen.getAllByRole('option', {});
+    expect($options).toHaveLength(2);
+    expect($options[0]).toHaveValue('New option 0');
+    expect($options[1]).toHaveValue('New option 1');
   });
 });

@@ -2,7 +2,7 @@ import { IntlFormatters } from '@formatjs/intl/src/types';
 import _ from 'lodash';
 import VernaJSONSchemaType, { VernaSchemaType } from ':/types/rjsf';
 
-export const DEFAULT_PROPERTY_TRANSLATION = '';
+export const DEFAULT_PROPERTY_TRANSLATION = [];
 
 export function translateWidget(
   widget: VernaJSONSchemaType,

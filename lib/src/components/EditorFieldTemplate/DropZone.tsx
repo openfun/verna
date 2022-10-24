@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useVerna } from ':/providers/VernaProvider';
+import { RJSF_ID_SEPARATOR } from ':/settings';
 import ShowCaseWidgetProps from ':/types/Widgets';
 
 export interface DropZoneProps {
@@ -20,7 +21,15 @@ export default function DropZone({ id, isSection, render: DropZoneOverload }: Dr
 
   function addItem(widgetProps: ShowCaseWidgetProps) {
     if (!id) return;
-    verna.addVernaWidget(id, { ...widgetProps, isDroppedInSection: isSection }, intl);
+    verna.addVernaWidget(
+      id,
+      {
+        ...widgetProps,
+        isDroppedInSection:
+          isSection || (id.split(RJSF_ID_SEPARATOR).length <= 2 && !verna.selector),
+      },
+      intl,
+    );
   }
 
   function onDrop(event: React.DragEvent<HTMLDivElement>) {

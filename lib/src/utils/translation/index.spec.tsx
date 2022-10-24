@@ -284,7 +284,7 @@ describe('schema translations', () => {
     expect($inputs[4]).toHaveValue('Case à cocher 2');
   });
 
-  it('should display the translation key if no translation is found', async () => {
+  it('should not display the translation key if no translation is found', async () => {
     const errorSpy = jest.spyOn(console, 'error').mockImplementation(noop);
     render(
       <VernaSuspenseWrapper
@@ -307,9 +307,9 @@ describe('schema translations', () => {
     expect($parameterButtons).toHaveLength(3);
     await userEvent.click($parameterButtons[2]);
 
-    // As translation has not been found, the translation key should be displayed
-    screen.getByText('root_testSection_checkboxes_items_0');
-    screen.getByText('root_testSection_checkboxes_items_1');
+    // As translation has not been found, the translation key should not be displayed
+    expect(screen.queryByText('root_testSection_checkboxes_items_0')).toBeNull();
+    expect(screen.queryByText('root_testSection_checkboxes_items_1')).toBeNull();
     expect(errorSpy).toHaveBeenCalled();
   });
 });

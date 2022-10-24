@@ -6,9 +6,10 @@ describe('widgets actions', () => {
   const defaultSchema = vernaSchemaFactory();
 
   it('should be able to add a widget in the schema at defined position', async () => {
-    const defaultSectionName = 'testSection';
+    const defaultSectionName = 'root_testSection';
     // Create a widget in first place in the testSection
     let newSchema = addWidget(defaultSchema, defaultSectionName, {
+      isDroppedInSection: true,
       type: 'string',
       widgetName: 'widgetname',
     });
@@ -18,6 +19,7 @@ describe('widgets actions', () => {
 
     // Create a widget between the testSection and the widget above
     newSchema = addWidget(newSchema, defaultSectionName, {
+      isDroppedInSection: true,
       type: 'string',
       widgetName: 'widgetname2',
     });

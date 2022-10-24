@@ -1,6 +1,6 @@
 import type { UiSchema } from '@rjsf/core';
 import { RJSF_ID_SEPARATOR } from ':/settings';
-import { Maybe } from ':/types/utils';
+import { Maybe, Nullable } from ':/types/utils';
 
 /**
  * Retrieve the section name from the provided id.
@@ -12,15 +12,22 @@ import { Maybe } from ':/types/utils';
  * As a section is always the first element under the root element, to retrieve its name
  * we have to split the id then get the second value.
  *
- * If the id is only in two parts, it means either it's a section id, or that it has no section
- * and it's a widget id
+ * If the id is only in two parts, it means either it's a section id, or that it has no
+ * section and that it's a widget id
+ *
+ * The root id isn't considered as a section here
+ *
+ * @param id is the id used to identify the element
+ * @param isSectionId is a boolean to know if the widget is dropped in a section, it's used
+ * specially when a widget is added in an empty section (so the id is only a section id and not
+ * another widget id)
  */
-function getSectionName(id: string | null, isSectionId?: boolean): Maybe<string> {
+function getSectionName(id: Nullable<string>, isSectionId: boolean = false): Maybe<string> {
   const idParts = id?.split(RJSF_ID_SEPARATOR);
-  const isValidSectionId = (isSectionId && id !== 'root') || (id && id.length > 0);
+  const isValidSectionId = isSectionId && id && id.length > 0 && id !== 'root';
 
   if (idParts?.length === 3) {
-    // If the id is shaped like root_section_id
+    // If the id is shaped like root_section_widget
     return idParts[1];
   }
   if (isValidSectionId) {

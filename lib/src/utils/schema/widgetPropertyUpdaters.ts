@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import { ResolvedIntlConfig } from 'react-intl';
 import { v4 as uuid } from 'uuid';
 import type { Properties } from './updateWidgetProperties';
 import { VernaContextProps } from ':/providers/VernaProvider';
@@ -41,63 +42,62 @@ function updateItemsTranslations(widget: VernaJSONSchemaType, translationKeys: s
 /**
  * Retrieve unchanged, removed, updated and new translation keys
  *
- * @param propertyKey The key of the property to modify
- * @param widget The schema part representing the current widget
- * @param verna The verna context, used to update the rendered schema and the translations
+ * @param translations
  * @param values The value is a list of strings that we set to this key
  * @param translationKey the corresponding key used in the translation object
- * @param locale The current locale loaded
  */
 function getTranslationState(
-  propertyKey: keyof VernaJSONSchemaType,
-  widget: VernaJSONSchemaType,
-  verna: VernaContextProps,
+  translations: Maybe<ResolvedIntlConfig['messages']> = {},
   values: string[],
   translationKey: string,
-  locale: string,
 ) {
-  return Object.entries(verna.schema.translationSchema?.[locale] || {})
-    .filter(([key]) => key.includes(translationKey))
-    .reduce(
-      (state, [key, message], index, filteredTranslationEntries) => {
-        if (values.includes(message)) {
-          state.unchanged[key] = message;
-        } else {
-          state.removed.push(key);
-        }
-        // This is the last round, it's time to check which values has been updated or added
-        if (filteredTranslationEntries.length === index + 1) {
-          const unchangedMessages = Object.values(state.unchanged);
-          let newValues = values.filter((value) => !unchangedMessages.includes(value));
-          if (values.length >= filteredTranslationEntries.length) {
-            state.updated = state.removed.reduce(
-              (updatedMessages, key, index) => ({
-                ...updatedMessages,
-                [key]: newValues[index],
-              }),
-              {},
-            );
-            state.removed = [];
-            const updatedValues = Object.values(state.updated);
-            newValues = newValues.filter((v) => !updatedValues.includes(v));
-          }
-          state.new = newValues.reduce(
-            (newMessages, value) => ({
-              ...newMessages,
-              [`${translationKey}_${uuid()}`]: value,
-            }),
-            {},
-          );
-        }
-        return state;
-      },
-      {
-        new: {} as { [key: string]: string },
-        removed: [] as string[],
-        unchanged: {} as { [key: string]: string },
-        updated: {} as { [key: string]: string },
-      },
+  const filteredTranslationEntries = Object.entries(translations).filter(([key]) =>
+    key.includes(translationKey),
+  );
+
+  const state = filteredTranslationEntries.reduce(
+    (state, [key, message]) => {
+      if (values.includes(message)) {
+        state.unchanged[key] = message;
+      } else {
+        state.removed.push(key);
+      }
+
+      return state;
+    },
+    {
+      new: {} as { [key: string]: string },
+      removed: [] as string[],
+      unchanged: {} as { [key: string]: string },
+      updated: {} as { [key: string]: string },
+    },
+  );
+
+  // Now check which entries have been added or updated
+  const unchangedMessages = Object.values(state.unchanged);
+  let newValues = values.filter((value) => !unchangedMessages.includes(value));
+  if (values.length >= filteredTranslationEntries.length) {
+    state.updated = state.removed.reduce(
+      (updatedMessages, key, index) => ({
+        ...updatedMessages,
+        [key]: newValues[index],
+      }),
+      {},
     );
+    state.removed = [];
+    const updatedValues = Object.values(state.updated);
+    newValues = newValues.filter((v) => !updatedValues.includes(v));
+  }
+
+  state.new = newValues.reduce(
+    (newMessages, value) => ({
+      ...newMessages,
+      [`${translationKey}_${uuid()}`]: value,
+    }),
+    {},
+  );
+
+  return state;
 }
 
 /**
@@ -120,12 +120,9 @@ function updateEnumTranslations(
   locale: string,
 ) {
   const translationState = getTranslationState(
-    propertyKey,
-    widget,
-    verna,
+    verna.schema.translationSchema?.[locale],
     values,
     translationKey,
-    locale,
   );
 
   // Remove unused keys
@@ -135,7 +132,10 @@ function updateEnumTranslations(
 
   // Update translationSchema with new and updated keys
   if (translationState.new || translationState.updated) {
-    const allLocales = Object.keys(verna.schema.translationSchema || {});
+    if (!verna.schema?.translationSchema) verna.schema.translationSchema = { [locale]: {} };
+    if (!Object.keys(verna.schema.translationSchema).includes(locale))
+      verna.schema.translationSchema[locale] = {};
+    const allLocales = Object.keys(verna.schema.translationSchema);
     verna.addVernaTranslations(
       allLocales.reduce(
         (locales, currentLocale) => ({
@@ -192,10 +192,8 @@ function updateStringTranslation(
   locale: string,
 ) {
   const newWidget = _.cloneDeep(widget);
-  if (!newWidget[propertyKey]) {
-    // @ts-ignore
-    newWidget[propertyKey] = translationKey;
-  }
+  // @ts-ignore
+  newWidget[propertyKey] = translationKey;
   const newTranslation = {
     [locale]: {
       [translationKey]: value,

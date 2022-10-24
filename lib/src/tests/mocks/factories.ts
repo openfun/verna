@@ -16,8 +16,8 @@ const vernaSchemaFactory = (schema?: VernaSchemaType): VernaSchemaType => ({
  * ComplexSchema contains a select widget, it's needed for tests with deep options
  * to modify on a widget
  */
-const vernaComplexSchemaFactory = (): VernaSchemaType => ({
-  formSchema: selectSchemaFactory(),
+const vernaComplexSchemaFactory = (emptySelect?: boolean): VernaSchemaType => ({
+  formSchema: selectSchemaFactory(emptySelect),
   translationSchema: translationsFactory(),
   uiSchema: selectUiSchemaFactory(),
 });
@@ -60,14 +60,16 @@ const uiSchemaFactory = (uiSchema?: UiSchema): UiSchema =>
     uiSchema,
   );
 
-const selectSchemaFactory = (): VernaJSONSchemaType => ({
+const selectSchemaFactory = (emptySelect?: boolean): VernaJSONSchemaType => ({
   description: 'root_description',
   properties: {
     testSection: {
       description: 'root_testSection_description',
       properties: {
         select: {
-          enum: ['root_testSection_select_enum_0', 'root_testSection_select_enum_1'],
+          enum: emptySelect
+            ? []
+            : ['root_testSection_select_enum_0', 'root_testSection_select_enum_1'],
           title: 'root_testSection_select_title',
           type: 'string',
         },

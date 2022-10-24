@@ -67,7 +67,6 @@ export function addWidget(
   const newSchema = _.cloneDeep(schema);
   const newKey = uuidv4();
   const sectionName = getSectionName(id, widgetInfos?.isDroppedInSection);
-
   if (!newSchema.formSchema) newSchema.formSchema = {};
   if (!newSchema.translationSchema && intl) newSchema.translationSchema = { [intl.locale]: {} };
 
