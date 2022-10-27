@@ -1,7 +1,0 @@
-{
-  "settings": {
-    "import/resolver": {
-      "typescript": {}
-    }
-  }
-}
