@@ -3,15 +3,18 @@
 
 An extensible form builder based on [React JSON Schema Form](https://github.com/rjsf-team/react-jsonschema-form).
 
+## Demos
+To demonstrate verna capabilities, we developed several use case examples.
+- Basic form playground:[👀 Live demo](https://openfun.github.io/verna/playground), [🧑‍💻 Source code](https://github.com/openfun/verna/tree/main/examples/playground)
+
 ## Overview
 
 Verna is a React component to build forms that generates a [JSON Schema](http://json-schema.org/)
 description of the form as output. The form can then be rendered with the [React JSON Schema Form](https://github.com/rjsf-team/react-jsonschema-form)
 library, which makes it fully extensible to fit your needs.
 
-
 ## Quick preview
-
+ 
 You can check examples available within the `examples` folder. Take a loot at the
 `README.md` file in each example then follow instructions to run it.
 
