@@ -1,0 +1,68 @@
+name: Deploy Verna demos
+
+# Controls when the workflow will run
+on:
+  push:
+    branches: [ "main", "playground/marsha" ]
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  deploy:
+    runs-on: ubuntu-latest
+    
+    defaults:
+      run:
+        working-directory: ./verna
+
+    # Constant data
+    strategy:
+      matrix:
+        dependencies: [ "verna/lib/package-lock.json", "verna/examples/playground/package-lock.json" ]
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+      - name: Set up Node.JS 17
+        uses: actions/setup-node@v3
+        with:
+          node-version: 17
+          cache: npm
+          cache-dependency-path: ${{ matrix.dependencies }}
+
+      - uses: borales/actions-yarn@v3.0.0
+        with:
+          cmd: install # will run 'yarn install'
+          
+      - uses: borales/actions-yarn@v3.0.0
+        with:
+          cmd: build # will run 'yarn build'
+
+      - name: Install dependencies and build the library
+        run: |
+          yarn install --frozen-lockfile
+          yarn build
+          
+      - name: Prepare the deployment branch
+        run: |
+          mkdir ~/deployment
+          cd ~/deployment
+          git fetch
+          git checkout pages-deployment
+      
+      - name: Clean the deployment directory and copy the build inside 
+        run: |
+          rm -rf ~/deployment/*
+          cp -R build/* ~/deployment
+          echo www.verna-fun.com > ~/deployment/CNAME
+          
+      - name: Deploy the build artifact to Github Pages by pushing on the deployment branch
+        run: |
+          cd ~/deployment
+          git config user.email "funmoocbot@users.noreply.github.com"
+          git config user.name "FUN MOOC bot"
+          git add --all
+          git commit --allow-empty -m "Deploy to Github Pages"
+          git push origin pages-deployment
