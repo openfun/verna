@@ -19,26 +19,27 @@
     "react-dom": "17.0.2"
   },
   "devDependencies": {
-    "@formatjs/cli": "5.1.0",
+    "@formatjs/cli": "5.1.3",
     "@types/react": "17.0.45",
     "@types/react-dom": "17.0.17",
-    "@typescript-eslint/eslint-plugin": "5.38.1",
-    "@typescript-eslint/parser": "5.38.1",
-    "@vitejs/plugin-react": "2.1.0",
-    "eslint": "8.24.0",
+    "@typescript-eslint/eslint-plugin": "5.42.0",
+    "@typescript-eslint/parser": "5.42.0",
+    "@vitejs/plugin-react": "2.2.0",
+    "eslint": "8.26.0",
     "eslint-config-prettier": "8.5.0",
-    "eslint-import-resolver-typescript": "3.5.1",
+    "eslint-import-resolver-typescript": "3.5.2",
     "eslint-plugin-compat": "4.0.2",
     "eslint-plugin-import": "2.26.0",
     "eslint-plugin-jsx-a11y": "6.6.1",
     "eslint-plugin-prettier": "4.2.1",
-    "eslint-plugin-react": "7.31.8",
+    "eslint-plugin-react": "7.31.10",
+    "postcss": "8.3.3",
     "sass": "1.55.0",
-    "stylelint": "14.13.0",
-    "stylelint-config-standard": "28.0.0",
-    "stylelint-config-standard-scss": "5.0.0",
+    "stylelint": "14.14.0",
+    "stylelint-config-standard": "29.0.0",
+    "stylelint-config-standard-scss": "6.0.0",
     "stylelint-order": "5.0.0",
     "typescript": "4.8.4",
-    "vite": "3.1.4"
+    "vite": "3.2.2"
   }
 }
