@@ -164,7 +164,7 @@ jobs:
     steps:
       - add_ssh_keys:
           fingerprints:
-            - "8e:5e:ee:52:cb:28:c7:c0:3d:79:ce:76:6c:87:03:1b"
+            - "cd:48:76:dd:42:15:64:18:7c:1a:31:2b:d6:ab:60:57"
       - *checkout_fun
       - *restore_node_modules
       - run:
