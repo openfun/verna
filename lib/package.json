@@ -4,7 +4,7 @@
   "private": false,
   "description": "An extensible form builder based on React JSON Schema Form.",
   "scripts": {
-    "build": "tsc && vite build",
+    "build": "tsc && vite build && tsc-alias",
     "build:check": "if [ ! -d dist ] || [ -n \"$(find src -type f -newer dist)\" ] ; then yarn build ; fi",
     "build:dev": "vite build --watch --logLevel warn --mode development --config ./vite.dev.config.ts",
     "i18n:extract": "yarn formatjs extract --id-interpolation-pattern '[sha512:contenthash:base64:6]' --format crowdin './src/**/*.ts*' --ignore './src/**/*.spec.ts*' --out-file './i18n/frontend.json'",
@@ -40,6 +40,7 @@
     "@rjsf/core": "4.2.3",
     "json-schema": "0.4.0",
     "lodash": "4.17.21",
+    "tsc-alias": "1.7.0",
     "uuid": "9.0.0"
   },
   "peerDependencies": {

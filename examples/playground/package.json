@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
+    "build": "tsc && vite build",
     "verna:build:check": "yarn workspace @openfun/verna build:check",
     "start": "vite",
     "i18n:extract": "yarn formatjs extract --id-interpolation-pattern '[sha512:contenthash:base64:6]' --format crowdin './src/**/*.ts*' --out-file ./i18n/frontend.json",

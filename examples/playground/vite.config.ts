@@ -1,9 +1,12 @@
 import { resolve } from 'path';
-import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import { defineConfig } from 'vite';
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  // Defined to match the path to access to this demo on github pages.
+  // (https://openfun.github.io/verna/playground/)
+  base: '/verna/playground/',
   optimizeDeps: {
     exclude: ['@openfun/verna'],
   },

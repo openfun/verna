@@ -6,6 +6,6 @@
     // you have also to update the "resolve.alias" property in ./vite.config.js
     "paths": {
       ":/*": ["./src/*"]
-    }
-  }
+    },
+  },
 }
