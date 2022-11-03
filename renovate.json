@@ -6,6 +6,7 @@
     "@testing-library/react",
     "@types/react",
     "@types/react-dom",
+    "node",
     "react",
     "react-dom"
   ],
