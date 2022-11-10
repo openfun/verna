@@ -34,3 +34,9 @@ dist-ssr
 
 # Crowdin
 env.d/development/crowdin
+
+# Typescript
+*.tsbuildinfo
+
+# Rollup
+.rollup.cache
