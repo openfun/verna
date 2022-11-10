@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+## [1.0.0-beta.0]
+
 ### Added
 
 - Fix bugs in the library and add setSchema action
@@ -33,4 +35,5 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Pin React to version less than 17
 
-[unreleased]: https://github.com/openfun/verna
+[unreleased]: https://github.com/openfun/verna/compare/v1.0.0-beta.0...main
+[1.0.0-beta.0]: https://github.com/openfun/verna/compare/c7a5eb3b32a4a626f32fc9257019f297d72b85c7...v1.0.0-beta.0

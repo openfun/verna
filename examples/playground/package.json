@@ -1,7 +1,7 @@
 {
   "name": "verna-examples-playground",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0-beta.0",
   "scripts": {
     "build": "tsc && vite build",
     "verna:build:check": "yarn workspace @openfun/verna build:check",
@@ -14,7 +14,7 @@
     "lint": "yarn lint:stylelint && yarn lint:eslint"
   },
   "dependencies": {
-    "@openfun/verna": "0.0.0",
+    "@openfun/verna": "1.0.0-beta.0",
     "@rjsf/core": "4.2.3",
     "react": "17.0.2",
     "react-dom": "17.0.2"
