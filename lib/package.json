@@ -2,6 +2,7 @@
   "name": "@openfun/verna",
   "version": "1.0.0-beta.0",
   "private": false,
+  "keywords": ["react", "form", "json-schema"],
   "description": "An extensible form builder based on React JSON Schema Form.",
   "scripts": {
     "build": "tsc && vite build && tsc-alias",
