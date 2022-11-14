@@ -152,8 +152,11 @@ jobs:
           name: Authenticate with registry
           command: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/fun/.npmrc
       - run:
-          name: Publish package
-          command: npm publish ./lib/
+          name: Copy project README into package
+          command: cp README.md ./lib/
+      - run:
+          name: Publish package as public
+          command: npm publish --access public ./lib/
   deployment:
     docker:
       - image: cimg/node:16.15
