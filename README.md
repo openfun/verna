@@ -1,5 +1,6 @@
-# Verna 🏗
+# Verna
 [![CircleCI](https://circleci.com/gh/openfun/verna/tree/main.svg?style=svg)](https://circleci.com/gh/openfun/verna/tree/main)
+[![npm version](https://badge.fury.io/js/@openfun%2Fverna.svg)](https://badge.fury.io/js/@openfun%2Fverna)
 
 An extensible form builder based on [React JSON Schema Form](https://github.com/rjsf-team/react-jsonschema-form).
 
@@ -20,14 +21,27 @@ You can check examples available within the `examples` folder. Take a loot at th
 
 ### Instructions
 
-🚧 **`@openfun/verna` is not yet available on NPM. Stay tuned !**
-Soon instructions to install `@openfun/verna` within your project.
+#### Install in our project
 
-To run the project, you have to run :
-1. `yarn install` 
-2. `yarn dev`
+```sh
+  yarn add -E @openfun/verna
+```
 
-You should now be able to access the playground example from http://localhost:3000
+#### Test or contribute to the project
+
+```sh
+  # -- Clone repository
+  git clone https://github.com/openfun/verna.git
+  cd verna
+  
+  # -- Install dependencies
+  yarn install
+  
+  # -- Run dev server
+  yarn dev
+```
+
+You should now be able to access the playground example from http://localhost:5173
 
 ### Project structure (Yarn workspaces)
 
