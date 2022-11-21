@@ -100,6 +100,10 @@ jobs:
       - run:
           name: Build front-end application for production
           command: yarn build
+      - persist_to_workspace:
+          root: ~/fun
+          paths:
+            - lib/dist
       - save_cache:
           paths:
             - ./lib/node_modules
@@ -148,6 +152,8 @@ jobs:
     working_directory: ~/fun
     steps:
       - *checkout_fun
+      - attach_workspace:
+          at: ~/fun
       - run:
           name: Authenticate with registry
           command: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/fun/.npmrc
@@ -170,9 +176,8 @@ jobs:
             - "cd:48:76:dd:42:15:64:18:7c:1a:31:2b:d6:ab:60:57"
       - *checkout_fun
       - *restore_node_modules
-      - run:
-          name: Build front-end application for production
-          command: yarn build
+      - attach_workspace:
+          at: ~/fun
       - run:
           name: build examples for production
           command: |
