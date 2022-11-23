@@ -210,12 +210,12 @@ VernaProvider.defaultProps = {
   FieldTemplate: EditorFieldTemplate,
   Section: DefaultSection,
   SubmitButton: undefined,
+  defaultFormValues: {},
   defaultSchema: {
     formSchema: {},
     translationSchema: {},
     uiSchema: {},
   },
-  defaultValues: {},
   defaultWidgets: {},
   isEditor: false,
   locale: 'en-US',
