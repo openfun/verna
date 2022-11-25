@@ -7,6 +7,7 @@ An extensible form builder based on [React JSON Schema Form](https://github.com/
 ## Demos
 To demonstrate verna capabilities, we developed several use case examples.
 - Basic form playground:[👀 Live demo](https://openfun.github.io/verna/playground), [🧑‍💻 Source code](https://github.com/openfun/verna/tree/main/examples/playground)
+- Poll form playground:[👀 Live demo](https://openfun.github.io/verna/poll), [🧑‍💻 Source code](https://github.com/openfun/verna/tree/main/examples/poll)
 
 ## Overview
 
