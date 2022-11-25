@@ -19,15 +19,13 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "build": "yarn workspace @openfun/verna build",
-    "build:example": "yarn workspace ${VERNA_EXAMPLE:-verna-examples-playground} build",
-    "dev:lib": "yarn workspace @openfun/verna build:dev",
-    "dev:example": "yarn workspace ${VERNA_EXAMPLE:-verna-examples-playground} start",
-    "dev": "concurrently -kc 'blue,magenta' 'yarn run dev:*'",
-    "i18n:extract": "yarn workspaces run i18n:extract",
-    "i18n:compile": "yarn workspaces run i18n:compile",
-    "lint": "yarn workspaces run lint",
-    "test": "yarn workspaces run test"
+    "build": "turbo run build --filter=@openfun/verna",
+    "build:examples": "turbo run build --filter='./examples/*'",
+    "dev": "turbo run dev --parallel --filter=@openfun/verna --filter=${VERNA_EXAMPLE:-verna-examples-playground}",
+    "lint": "FORCE_COLOR=1 turbo run lint",
+    "i18n:extract": "turbo run i18n:extract",
+    "i18n:compile": "turbo run i18n:compile",
+    "test": "FORCE_COLOR=1 turbo run test --"
   },
   "workspaces": [
     "lib",
@@ -38,6 +36,6 @@
     "yarn": "1.22.19"
   },
   "devDependencies": {
-    "concurrently": "7.6.0"
+    "turbo": "1.6.3"
   }
 }

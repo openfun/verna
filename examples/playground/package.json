@@ -4,15 +4,12 @@
   "version": "1.0.0-beta.1",
   "scripts": {
     "build": "tsc && vite build",
-    "verna:build:check": "yarn workspace @openfun/verna build:check",
-    "start": "vite",
+    "dev": "vite",
     "i18n:extract": "yarn formatjs extract --id-interpolation-pattern '[sha512:contenthash:base64:6]' --format crowdin './src/**/*.ts*' --out-file ./i18n/frontend.json",
     "i18n:compile": "yarn formatjs compile-folder --format crowdin ./i18n/locales ./src/translations",
     "lint:stylelint": "stylelint 'src/**/*.scss' --fix",
-    "prelint:eslint": "yarn verna:build:check",
     "lint:eslint": "eslint 'src/**/*.{ts,tsx}'",
-    "lint": "yarn lint:stylelint && yarn lint:eslint",
-    "test": "tsc && jest --passWithNoTests"
+    "lint": "yarn lint:stylelint && yarn lint:eslint"
   },
   "dependencies": {
     "@openfun/verna": "1.0.0-beta.1",

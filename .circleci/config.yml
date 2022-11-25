@@ -183,12 +183,7 @@ jobs:
           at: ~/fun
       - run:
           name: build examples for production
-          command: |
-            for workspace in $(yarn workspaces info | grep -oP "verna-examples.*(?=\":)")
-            do
-              export VERNA_EXAMPLE="${workspace}"
-              yarn build:example
-            done
+          command: yarn build:examples
       - run:
           name: Create the deployment directory copy the git repo there & checkout the deployment branch
           command: |
