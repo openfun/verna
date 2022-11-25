@@ -46,9 +46,11 @@ const TranslationProvider = ({
     () => intl?.locale || locale || defaultLocale!,
     [intl?.locale, locale, defaultLocale],
   );
+
   const messages = {
     ...messageLoaders[lang]?.read(),
     ...intl?.messages,
+    ...(defaultLocale && schemaTranslations?.[defaultLocale]),
     ...schemaTranslations?.[lang],
   };
 

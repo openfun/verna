@@ -18,9 +18,6 @@ const sectionDefinition = (): VernaJSONSchemaType => ({
 });
 
 const defaultWidgetProps: { [key: string]: VernaJSONSchemaType } = {
-  description: {
-    type: 'string',
-  },
   title: {
     type: 'string',
   },

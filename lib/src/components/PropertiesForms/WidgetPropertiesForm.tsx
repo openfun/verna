@@ -201,6 +201,7 @@ export default function WidgetPropertiesForm({ id, onClose }: WidgetPropertiesFo
 
   return (
     <Form
+      key={locale}
       FieldTemplate={verna.FieldTemplate}
       className="widget-properties-form"
       formData={getDefaultValues()}

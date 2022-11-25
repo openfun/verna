@@ -1,11 +1,22 @@
 import { VernaContextProps } from ':/providers/VernaProvider';
 import { RJSF_ID_SEPARATOR } from ':/settings';
-import { VernaSchemaType } from ':/types/rjsf';
-import { Maybe } from ':/types/utils';
+import VernaJSONSchemaType, { VernaSchemaType } from ':/types/rjsf';
 
 export interface SectionParameters {
   title?: string;
   description?: string;
+}
+
+function setNewSectionPropertyValue(
+  idParts: string[],
+  property: keyof SectionParameters,
+  value: string,
+  schemaSection: VernaJSONSchemaType,
+  newTranslations: Record<string, string>,
+) {
+  const propertyId = idParts.join(RJSF_ID_SEPARATOR);
+  schemaSection[property] = propertyId;
+  newTranslations[propertyId] = value;
 }
 
 export function updateSectionProperties(
@@ -14,57 +25,33 @@ export function updateSectionProperties(
   id: string,
   locale: string,
 ) {
-  let schemaUpdate: Maybe<VernaSchemaType>;
+  const schemaUpdate: VernaSchemaType = { formSchema: {} };
+  const newTranslations: Record<string, string> = {};
 
   if (id === 'root') {
-    if (verna.selector) {
-      schemaUpdate = {
-        formSchema: {
-          description: [id, verna.selector, 'description'].join(RJSF_ID_SEPARATOR),
-          title: [id, verna.selector, 'title'].join(RJSF_ID_SEPARATOR),
-        },
-        translationSchema: {
-          [locale]: {
-            [[id, verna.selector, 'description'].join(RJSF_ID_SEPARATOR)]:
-              formData['description'] || '',
-            [[id, verna.selector, 'title'].join(RJSF_ID_SEPARATOR)]: formData['title'] || '',
-          },
-        },
-      };
-    } else {
-      schemaUpdate = {
-        formSchema: {
-          description: [id, 'description'].join(RJSF_ID_SEPARATOR),
-          title: [id, 'title'].join(RJSF_ID_SEPARATOR),
-        },
-        translationSchema: {
-          [locale]: {
-            [[id, 'description'].join(RJSF_ID_SEPARATOR)]: formData['description'] || '',
-            [[id, 'title'].join(RJSF_ID_SEPARATOR)]: formData['title'] || '',
-          },
-        },
-      };
-    }
+    Object.keys(formData).forEach((property) => {
+      setNewSectionPropertyValue(
+        verna.selector ? [id, verna.selector, property] : [id, property],
+        property as keyof SectionParameters,
+        formData[property as keyof SectionParameters] || '',
+        schemaUpdate.formSchema!,
+        newTranslations,
+      );
+    });
   } else {
     const sectionName = id.split(RJSF_ID_SEPARATOR)[1];
-
-    schemaUpdate = {
-      formSchema: {
-        properties: {
-          [sectionName]: {
-            description: [id, sectionName, 'description'].join(RJSF_ID_SEPARATOR),
-            title: [id, sectionName, 'title'].join(RJSF_ID_SEPARATOR),
-          },
-        },
-      },
-      translationSchema: {
-        [locale]: {
-          [[id, sectionName, 'description'].join(RJSF_ID_SEPARATOR)]: formData['description'] || '',
-          [[id, sectionName, 'title'].join(RJSF_ID_SEPARATOR)]: formData['title'] || '',
-        },
-      },
-    };
+    schemaUpdate.formSchema = { properties: { [sectionName]: {} } };
+    Object.keys(formData).forEach((property) => {
+      setNewSectionPropertyValue(
+        [id, sectionName, property],
+        property as keyof SectionParameters,
+        formData[property as keyof SectionParameters] || '',
+        schemaUpdate.formSchema!.properties![sectionName],
+        newTranslations,
+      );
+    });
   }
 
   verna.updateVernaProperty(schemaUpdate);
+  verna.addVernaTranslations({ [locale]: newTranslations });
 }

@@ -134,14 +134,14 @@ describe('schema translations', () => {
 
     // change the value of the first enum
     const $newInputs = screen.getAllByRole('textbox', {});
-    await userEvent.clear($newInputs[2]);
-    await userEvent.type($newInputs[2], 'Option 0 edited');
+    await userEvent.clear($newInputs[1]);
+    await userEvent.type($newInputs[1], 'Option 0 edited');
 
     await userEvent.click(screen.getByRole('button', { name: 'Add' }));
 
     const $addButtons = screen.getAllByRole('textbox', {});
-    await userEvent.clear($addButtons[4]);
-    await userEvent.type($addButtons[4], 'Option 2');
+    await userEvent.clear($addButtons[3]);
+    await userEvent.type($addButtons[3], 'Option 2');
 
     // Save parameters
     screen.getByRole('button', { name: 'save' }).click();
@@ -154,9 +154,9 @@ describe('schema translations', () => {
     // Nb: those options are not cached, it's checking defaultSchema & defaultUiSchema
     //     on each opening
     const $inputs = await screen.findAllByRole('textbox', {});
-    expect($inputs[2]).toHaveValue('Option 0 edited');
-    expect($inputs[3]).toHaveValue('Option 1');
-    expect($inputs[4]).toHaveValue('Option 2');
+    expect($inputs[1]).toHaveValue('Option 0 edited');
+    expect($inputs[2]).toHaveValue('Option 1');
+    expect($inputs[3]).toHaveValue('Option 2');
   });
 
   it('should translate the "items" option in en', async () => {
@@ -191,14 +191,14 @@ describe('schema translations', () => {
 
     // change the value of the first item
     const $newInputs = screen.getAllByRole('textbox', {});
-    await userEvent.clear($newInputs[2]);
-    await userEvent.type($newInputs[2], 'Checkbox 0 edited');
+    await userEvent.clear($newInputs[1]);
+    await userEvent.type($newInputs[1], 'Checkbox 0 edited');
 
     await userEvent.click(screen.getByRole('button', { name: 'Add' }));
 
     const $addButtons = screen.getAllByRole('textbox', {});
-    await userEvent.clear($addButtons[4]);
-    await userEvent.type($addButtons[4], 'Checkbox 2');
+    await userEvent.clear($addButtons[3]);
+    await userEvent.type($addButtons[3], 'Checkbox 2');
 
     // Save parameters
     screen.getByRole('button', { name: 'save' }).click();
@@ -212,9 +212,9 @@ describe('schema translations', () => {
     // Nb: those options are not cached, it's checking defaultSchema & defaultUiSchema
     //     on each opening
     const $inputs = await screen.findAllByRole('textbox', {});
-    expect($inputs[2]).toHaveValue('Checkbox 0 edited');
-    expect($inputs[3]).toHaveValue('Checkbox 1');
-    expect($inputs[4]).toHaveValue('Checkbox 2');
+    expect($inputs[1]).toHaveValue('Checkbox 0 edited');
+    expect($inputs[2]).toHaveValue('Checkbox 1');
+    expect($inputs[3]).toHaveValue('Checkbox 2');
   });
 
   it('should translate the "items" option in fr', async () => {
@@ -258,14 +258,14 @@ describe('schema translations', () => {
 
     // change the value of the first item
     const $newInputs = screen.getAllByRole('textbox', {});
-    await userEvent.clear($newInputs[2]);
-    await userEvent.type($newInputs[2], 'Case à cocher 0 éditée');
+    await userEvent.clear($newInputs[1]);
+    await userEvent.type($newInputs[1], 'Case à cocher 0 éditée');
 
     await userEvent.click(screen.getByRole('button', { name: 'Add' }));
 
     const $addButtons = screen.getAllByRole('textbox', {});
-    await userEvent.clear($addButtons[4]);
-    await userEvent.type($addButtons[4], 'Case à cocher 2');
+    await userEvent.clear($addButtons[3]);
+    await userEvent.type($addButtons[3], 'Case à cocher 2');
 
     // Save parameters
     screen.getByRole('button', { name: 'Sauvegarder' }).click();
@@ -279,9 +279,9 @@ describe('schema translations', () => {
     // Nb: those options are not cached, it's checking defaultSchema & defaultUiSchema
     //     on each opening
     const $inputs = await screen.findAllByRole('textbox', {});
-    expect($inputs[2]).toHaveValue('Case à cocher 0 éditée');
-    expect($inputs[3]).toHaveValue('Case à cocher 1');
-    expect($inputs[4]).toHaveValue('Case à cocher 2');
+    expect($inputs[1]).toHaveValue('Case à cocher 0 éditée');
+    expect($inputs[2]).toHaveValue('Case à cocher 1');
+    expect($inputs[3]).toHaveValue('Case à cocher 2');
   });
 
   it('should not display the translation key if no translation is found', async () => {

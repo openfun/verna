@@ -5,7 +5,7 @@ import WidgetPropertiesForm from ':/components/PropertiesForms/WidgetPropertiesF
 import VernaForm from ':/components/VernaForm';
 import VernaToolbar from ':/components/VernaToolbar';
 import VernaProvider, { useVerna } from ':/providers/VernaProvider';
-import { RJSF_ID_SEPARATOR } from ':/settings';
+import { RJSF_ID_SEPARATOR, VERNA_SUPPORTED_LOCALES } from ':/settings';
 import type VernaJSONSchemaType from ':/types/rjsf';
 import ShowCaseWidgetProps, { VernaWidgetProps } from ':/types/Widgets';
 import { addSection, cleanUiSchema } from ':/utils/schema';
@@ -21,5 +21,7 @@ export {
   addSection,
   cleanUiSchema,
   useVerna,
+  VERNA_SUPPORTED_LOCALES,
 };
+
 export type { DropZoneOverloadProps, ShowCaseWidgetProps, VernaJSONSchemaType, VernaWidgetProps };

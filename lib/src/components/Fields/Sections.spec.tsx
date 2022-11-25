@@ -3,11 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { Suspense } from 'react';
 import VernaForm from ':/components/VernaForm';
 import VernaProvider from ':/providers/VernaProvider';
-import {
-  confSchemaFactory,
-  widgetsFactory,
-  vernaComplexSchemaFactory,
-} from ':/tests/mocks/factories';
+import { confSchemaFactory, widgetsFactory, vernaEnumSchemaFactory } from ':/tests/mocks/factories';
 import VernaJSONSchemaType from ':/types/rjsf';
 
 describe('section properties edition', () => {
@@ -17,7 +13,7 @@ describe('section properties edition', () => {
         <VernaProvider
           isEditor
           configSchema={configSchema}
-          defaultSchema={vernaComplexSchemaFactory()}
+          defaultSchema={vernaEnumSchemaFactory()}
           defaultWidgets={widgetsFactory()}
           locale="en-US"
         >

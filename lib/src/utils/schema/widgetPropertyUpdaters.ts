@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import { ResolvedIntlConfig } from 'react-intl';
 import { v4 as uuid } from 'uuid';
 import type { Properties } from './updateWidgetProperties';
 import { VernaContextProps } from ':/providers/VernaProvider';
@@ -42,19 +41,15 @@ function updateItemsTranslations(widget: VernaJSONSchemaType, translationKeys: s
 /**
  * Retrieve unchanged, removed, updated and new translation keys
  *
- * @param translations
+ * @param filteredTranslationEntries array of translation keys linked to this widget
  * @param values The value is a list of strings that we set to this key
  * @param translationKey the corresponding key used in the translation object
  */
 function getTranslationState(
-  translations: Maybe<ResolvedIntlConfig['messages']> = {},
+  filteredTranslationEntries: [string, string][],
   values: string[],
   translationKey: string,
 ) {
-  const filteredTranslationEntries = Object.entries(translations).filter(([key]) =>
-    key.includes(translationKey),
-  );
-
   const state = filteredTranslationEntries.reduce(
     (state, [key, message]) => {
       if (values.includes(message)) {
@@ -119,11 +114,15 @@ function updateEnumTranslations(
   translationKey: string,
   locale: string,
 ) {
-  const translationState = getTranslationState(
-    verna.schema.translationSchema?.[locale],
-    values,
-    translationKey,
+  // Get the translation keys existing in every locale then filter the ones linked to this widget
+  const everyTranslationKeys = Object.entries(verna.schema.translationSchema || {})
+    .flatMap(([, translations]) => Object.entries(translations))
+    .filter(([key]) => key.includes(translationKey));
+  const uniqTranslationKeys = _.uniqWith(everyTranslationKeys, ([keyA], [keyB]) =>
+    _.isEqual(keyA, keyB),
   );
+
+  const translationState = getTranslationState(uniqTranslationKeys, values, translationKey);
 
   // Remove unused keys
   if (translationState.removed.length > 0) {

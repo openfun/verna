@@ -13,13 +13,23 @@ const vernaSchemaFactory = (schema?: VernaSchemaType): VernaSchemaType => ({
 });
 
 /**
- * ComplexSchema contains a select widget, it's needed for tests with deep options
- * to modify on a widget
+ * This schema contains a select widget, it's needed for tests with options
+ * to modify on a widget using an enum
  */
-const vernaComplexSchemaFactory = (emptySelect?: boolean): VernaSchemaType => ({
-  formSchema: selectSchemaFactory(emptySelect),
+const vernaEnumSchemaFactory = (empty?: boolean): VernaSchemaType => ({
+  formSchema: selectSchemaFactory(empty),
   translationSchema: translationsFactory(),
   uiSchema: selectUiSchemaFactory(),
+});
+
+/**
+ * This schema contains a select widget, it's needed for tests with options
+ * to modify on a widget using items
+ */
+const vernaItemsSchemaFactory = (empty?: boolean): VernaSchemaType => ({
+  formSchema: checkBoxesSchemaFactory(empty),
+  translationSchema: translationsFactory(),
+  uiSchema: checkBoxesUiSchemaFactory(),
 });
 
 const schemaFactory = (schema?: VernaJSONSchemaType): VernaJSONSchemaType =>
@@ -91,7 +101,7 @@ const selectUiSchemaFactory = (): UiSchema => ({
   },
 });
 
-const checkBoxesSchemaFactory = (): VernaJSONSchemaType => ({
+const checkBoxesSchemaFactory = (empty?: boolean): VernaJSONSchemaType => ({
   description: 'root_description',
   properties: {
     testSection: {
@@ -99,7 +109,9 @@ const checkBoxesSchemaFactory = (): VernaJSONSchemaType => ({
         checkboxes: {
           description: 'root_testSection_checkboxes_description',
           items: {
-            enum: ['root_testSection_checkboxes_items_0', 'root_testSection_checkboxes_items_1'],
+            enum: empty
+              ? []
+              : ['root_testSection_checkboxes_items_0', 'root_testSection_checkboxes_items_1'],
             type: 'object',
           },
           title: 'root_testSection_checkboxes_title',
@@ -176,7 +188,6 @@ const translationsFactory = (translations: TranslationType = {}) => {
     {
       'en-US': {
         root_description: 'Registration form description',
-        root_testSection_checkboxes_description: 'Description of checkboxes widget',
         root_testSection_checkboxes_items_0: 'Checkbox 0',
         root_testSection_checkboxes_items_1: 'Checkbox 1',
         root_testSection_checkboxes_title: 'Checkboxes widget',
@@ -190,7 +201,6 @@ const translationsFactory = (translations: TranslationType = {}) => {
       },
       'fr-FR': {
         root_description: "Description du formulaire d'inscription",
-        root_testSection_checkboxes_description: 'Description du widget cases à cocher',
         root_testSection_checkboxes_items_0: 'Case à cocher 0',
         root_testSection_checkboxes_items_1: 'Case à cocher 1',
         root_testSection_checkboxes_title: 'Un widget cases à cocher',
@@ -233,6 +243,7 @@ export {
   uiSchemaFactory,
   translationsFactory,
   translationUiFactory,
-  vernaComplexSchemaFactory,
+  vernaEnumSchemaFactory,
+  vernaItemsSchemaFactory,
   vernaSchemaFactory,
 };
