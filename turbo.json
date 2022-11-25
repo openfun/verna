@@ -1,0 +1,30 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "pipeline": {
+    "build": {
+      "cache": true,
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"]
+    },
+    "dev": {
+      "cache": false
+    },
+    "lint": {
+      "cache": true,
+      "dependsOn": ["^build"],
+      "outputs": []
+    },
+    "i18n:compile": {
+      "cache": true
+    },
+    "i18n:extract": {
+      "cache": true
+    },
+    "test": {
+      "cache": true,
+      "dependsOn": ["^build"],
+      "outputs": [],
+      "inputs": ["*.spec.tsx?"]
+    }
+  }
+}

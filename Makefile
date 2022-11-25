@@ -52,6 +52,12 @@ YARN                 = $(COMPOSE_RUN_NODE) yarn
 default: help
 
 # -- Development
+bootstrap: ## Install and build @openfun/verna
+bootstrap: \
+	install \
+	build
+.PHONY: bootstrap
+
 build: ## Build @openfun/verna for production
 	@$(YARN) build
 .PHONY: build
