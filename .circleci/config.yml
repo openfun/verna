@@ -108,6 +108,7 @@ jobs:
           paths:
             - ./lib/node_modules
             - ./examples/playground/node_modules
+            - ./examples/poll/node_modules
             - ./node_modules
           key: v2-front-dependencies-{{ checksum "yarn.lock" }}
 
@@ -235,6 +236,7 @@ jobs:
           paths:
             - lib/i18n/frontend.json
             - examples/playground/i18n/frontend.json
+            - examples/poll/i18n/frontend.json
 
   # Upload translations strings to crowdin. It requires that you have defined
   # CROWDIN_API_TOKEN, CROWDIN_PROJECT_ID, CROWDIN_BASE_PATH environment variables

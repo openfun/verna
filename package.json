@@ -27,7 +27,7 @@
     "i18n:extract": "yarn workspaces run i18n:extract",
     "i18n:compile": "yarn workspaces run i18n:compile",
     "lint": "yarn workspaces run lint",
-    "test": "yarn workspace @openfun/verna run test"
+    "test": "yarn workspaces run test"
   },
   "workspaces": [
     "lib",

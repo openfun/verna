@@ -26,4 +26,9 @@ files:
       dest: '/examples/playground/frontend.json',
       translation: '/examples/playground/i18n/locales/%locale%.json',
     },
+    {
+      source: '/examples/poll/i18n/frontend.json',
+      dest: '/examples/poll/frontend.json',
+      translation: '/examples/poll/i18n/locales/%locale%.json',
+    },
   ]
