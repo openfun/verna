@@ -5,7 +5,7 @@ import { defineMessages } from 'react-intl';
 
 const messages = defineMessages({
   minimum: {
-    defaultMessage: 'Nop ! It must be {comparison} to {limit}',
+    defaultMessage: 'Value must be {comparison} to {limit}',
     description: "Error message displayed when minimum required isn't respected",
     id: 'ErrorCustom.minimum',
   },

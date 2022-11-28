@@ -3,6 +3,12 @@ import { Box, Button, Layer, Select, Text } from 'grommet';
 import _ from 'lodash';
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { messages as CheckboxesWidgetMessages } from ':/widgetToolbarItems/CheckboxesWidget';
+import { messages as CheckboxWidgetMessages } from ':/widgetToolbarItems/CheckboxWidget';
+import { messages as NumberWidgetMessages } from ':/widgetToolbarItems/NumberWidget';
+import { messages as SelectWidgetMessages } from ':/widgetToolbarItems/SelectWidget';
+import { messages as TextareaWidgetMessages } from ':/widgetToolbarItems/TextareaWidget';
+import { messages as TextWidgetMessages } from ':/widgetToolbarItems/TextWidget';
 
 const messages = defineMessages({
   addQuestion: {
@@ -53,12 +59,12 @@ export default function AddQuestionModal({
         <Select
           onChange={(newValue) => setWidget(newValue)}
           options={[
-            intl.formatMessage({ id: 'widgetToolbarItems.TextWidget' }),
-            intl.formatMessage({ id: 'widgetToolbarItems.TextareaWidget' }),
-            intl.formatMessage({ id: 'widgetToolbarItems.NumberWidget' }),
-            intl.formatMessage({ id: 'widgetToolbarItems.CheckboxWidget' }),
-            intl.formatMessage({ id: 'widgetToolbarItems.CheckboxesWidget' }),
-            intl.formatMessage({ id: 'widgetToolbarItems.SelectWidget' }),
+            intl.formatMessage(TextWidgetMessages.TextWidget),
+            intl.formatMessage(TextareaWidgetMessages.TextareaWidget),
+            intl.formatMessage(NumberWidgetMessages.NumberWidget),
+            intl.formatMessage(CheckboxWidgetMessages.CheckboxWidget),
+            intl.formatMessage(CheckboxesWidgetMessages.CheckboxesWidget),
+            intl.formatMessage(SelectWidgetMessages.SelectWidget),
           ]}
         />
         <Box direction="row" gap="15px">
