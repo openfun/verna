@@ -2,7 +2,7 @@ import { type ShowCaseWidgetProps } from '@openfun/verna';
 import { defineMessages, useIntl } from 'react-intl';
 import WidgetWrapper from './WidgetWrapper';
 
-const messages = defineMessages({
+export const messages = defineMessages({
   CheckboxesWidget: {
     defaultMessage: 'Multiple choice question',
     description: 'Label of the multiple choices widget',
