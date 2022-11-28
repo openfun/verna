@@ -8,11 +8,16 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
-## [1.0.0-beta.0]
+## [1.0.0-beta.1]
 
 ### Added
 
 - Add a poll builder example using Grommet library
+
+## [1.0.0-beta.0]
+
+### Added
+
 - Fix bugs in the library and add setSchema action
 - Allow customisation of form options
 - Use a reducer to manage schema
@@ -36,5 +41,6 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Pin React to version less than 17
 
-[unreleased]: https://github.com/openfun/verna/compare/v1.0.0-beta.0...main
+[unreleased]: https://github.com/openfun/verna/compare/v1.0.0-beta.1...main
+[1.0.0-beta.1]: https://github.com/openfun/verna/compare/v1.0.0-beta.0...v1.0.0-beta.1
 [1.0.0-beta.0]: https://github.com/openfun/verna/compare/c7a5eb3b32a4a626f32fc9257019f297d72b85c7...v1.0.0-beta.0
