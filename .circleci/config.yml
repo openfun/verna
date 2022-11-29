@@ -136,6 +136,8 @@ jobs:
     steps:
       - *checkout_fun
       - *restore_node_modules
+      - attach_workspace:
+          at: ~/fun
       - run:
           name: Run tests
           # Circle CI needs the tests to be run sequentially, otherwise it hangs. See Jest docs below:
