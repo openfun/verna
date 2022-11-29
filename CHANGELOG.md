@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Fixed
+
+- Fix bug on the modal to add widgets
+
 ## [1.0.0-beta.1]
 
 ### Added

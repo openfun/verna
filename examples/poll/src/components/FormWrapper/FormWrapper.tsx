@@ -5,27 +5,14 @@ import { CircleInformation, StatusGood } from 'grommet-icons';
 import _ from 'lodash';
 import { useEffect, useState, useMemo } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import CheckboxesWidget from '../../widgetToolbarItems/CheckboxesWidget';
-import CheckboxWidget from '../../widgetToolbarItems/CheckboxWidget';
-import NumberWidget from '../../widgetToolbarItems/NumberWidget';
-import SelectWidget from '../../widgetToolbarItems/SelectWidget';
-import TextareaWidget from '../../widgetToolbarItems/TextareaWidget';
-import TextWidget from '../../widgetToolbarItems/TextWidget';
 import Poll from '../Poll/Poll';
 import { getSchemas } from ':/api/fakeapi';
 import updateStatsFromData from ':/components/FormWrapper/statsUpdaters';
+import WidgetWrapper from ':/components/WidgetWrapper';
+import { getLocalizedWidgetDefinitions } from ':/data/getLocalizedWidgetDefinitions';
 import { useDnd } from ':/providers/DragAndDropProvider';
 import { useLocale } from ':/providers/LocaleProvider';
 import { useStatsProvider } from ':/providers/StatsProvider';
-
-interface FormWrapperProps {
-  setIsEditor: (newValue: boolean) => void;
-}
-
-export enum FormStatusEnum {
-  neutral,
-  completed,
-}
 
 const messages = defineMessages({
   dndInfos: {
@@ -65,9 +52,18 @@ const messages = defineMessages({
   },
 });
 
+export enum FormStatusEnum {
+  neutral,
+  completed,
+}
+
+interface FormWrapperProps {
+  setIsEditor: (newValue: boolean) => void;
+}
+
 export default function FormWrapper({ setIsEditor }: FormWrapperProps) {
   const { isEditor, schema, setSchema } = useVerna();
-  const { formatMessage } = useIntl();
+  const intl = useIntl();
   const [, setIsDragging] = useDnd();
   const localStats = useStatsProvider();
   const [schemaForm, setSchemaForm] = useState<VernaSchemaType[]>([]);
@@ -78,6 +74,7 @@ export default function FormWrapper({ setIsEditor }: FormWrapperProps) {
     () => isEditor && pollSelected !== null,
     [isEditor, pollSelected],
   );
+  const widgets = useMemo(() => getLocalizedWidgetDefinitions(intl), [intl]);
 
   function getGlobalTranslations(newSchemaForm: VernaSchemaType[] = schemaForm) {
     const translations = {};
@@ -143,7 +140,7 @@ export default function FormWrapper({ setIsEditor }: FormWrapperProps) {
           <Text title="" weight="bold">
             <FormattedMessage {...messages.toolbarTitle} />
           </Text>
-          <Tip content={formatMessage(messages.dndInfos)}>
+          <Tip content={intl.formatMessage(messages.dndInfos)}>
             <CircleInformation color="black" />
           </Tip>
         </CardHeader>
@@ -153,12 +150,9 @@ export default function FormWrapper({ setIsEditor }: FormWrapperProps) {
               onDragEnd={() => setIsDragging(false)}
               onDragStart={() => setIsDragging(true)}
             >
-              <TextWidget type="string" widgetName="textWidget" />
-              <TextareaWidget type="string" widgetName="textareaWidget" />
-              <NumberWidget type="number" widgetName="numberWidget" />
-              <CheckboxWidget type="boolean" widgetName="checkboxWidget" />
-              <CheckboxesWidget type="array" widgetName="checkboxesWidget" />
-              <SelectWidget type="string" widgetName="selectWidget" />
+              {widgets.map((widget) => (
+                <WidgetWrapper key={widget.widgetName} {...widget} />
+              ))}
             </VernaToolbar>
           </div>
         </CardBody>
@@ -201,7 +195,7 @@ export default function FormWrapper({ setIsEditor }: FormWrapperProps) {
               <>
                 <Button
                   className="form-goback-button"
-                  label={formatMessage(messages.goBack)}
+                  label={intl.formatMessage(messages.goBack)}
                   onClick={() => {
                     setFormStatus(FormStatusEnum.neutral);
                     saveAndGoToMainPage();
@@ -225,12 +219,12 @@ export default function FormWrapper({ setIsEditor }: FormWrapperProps) {
             {isEditor && (
               <>
                 <Button
-                  label={formatMessage(messages.save)}
+                  label={intl.formatMessage(messages.save)}
                   margin={{ top: '15px' }}
                   onClick={() => (pollSelected !== null ? saveAndGoToMainPage() : saveForm())}
                 />
                 <Button
-                  label={formatMessage(messages.resetData)}
+                  label={intl.formatMessage(messages.resetData)}
                   margin={{ left: '10px', top: '15px' }}
                   onClick={() => {
                     localStorage.clear();

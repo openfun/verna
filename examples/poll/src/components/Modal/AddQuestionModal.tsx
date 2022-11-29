@@ -1,14 +1,13 @@
 import { RJSF_ID_SEPARATOR, useVerna } from '@openfun/verna';
+import { Maybe } from '@openfun/verna/dist/types/utils';
 import { Box, Button, Layer, Select, Text } from 'grommet';
 import _ from 'lodash';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { messages as CheckboxesWidgetMessages } from ':/widgetToolbarItems/CheckboxesWidget';
-import { messages as CheckboxWidgetMessages } from ':/widgetToolbarItems/CheckboxWidget';
-import { messages as NumberWidgetMessages } from ':/widgetToolbarItems/NumberWidget';
-import { messages as SelectWidgetMessages } from ':/widgetToolbarItems/SelectWidget';
-import { messages as TextareaWidgetMessages } from ':/widgetToolbarItems/TextareaWidget';
-import { messages as TextWidgetMessages } from ':/widgetToolbarItems/TextWidget';
+import {
+  getLocalizedWidgetDefinitions,
+  SelectWidgetType,
+} from ':/data/getLocalizedWidgetDefinitions';
 
 const messages = defineMessages({
   addQuestion: {
@@ -44,7 +43,7 @@ export default function AddQuestionModal({
 }: AddQuestionModalProperties) {
   const intl = useIntl();
   const { addVernaWidget, selector, schema } = useVerna();
-  const [widget, setWidget] = useState<any>();
+  const [widget, setWidget] = useState<Maybe<SelectWidgetType>>();
   const lastWidget = _.last(schema.uiSchema?.[idParts[1]]['ui:order']);
 
   return (
@@ -57,25 +56,23 @@ export default function AddQuestionModal({
           <FormattedMessage {...messages.addQuestionTextModal} />
         </Text>
         <Select
-          onChange={(newValue) => setWidget(newValue)}
-          options={[
-            intl.formatMessage(TextWidgetMessages.TextWidget),
-            intl.formatMessage(TextareaWidgetMessages.TextareaWidget),
-            intl.formatMessage(NumberWidgetMessages.NumberWidget),
-            intl.formatMessage(CheckboxWidgetMessages.CheckboxWidget),
-            intl.formatMessage(CheckboxesWidgetMessages.CheckboxesWidget),
-            intl.formatMessage(SelectWidgetMessages.SelectWidget),
-          ]}
+          labelKey="text"
+          options={useMemo(() => getLocalizedWidgetDefinitions(intl), [intl])}
+          onChange={(event) => {
+            setWidget(event.value);
+          }}
         />
         <Box direction="row" gap="15px">
           <Button
+            disabled={!widget}
             label={intl.formatMessage(messages.addQuestion)}
             onClick={() => {
               addVernaWidget(
                 [...idParts, lastWidget].join(RJSF_ID_SEPARATOR),
                 {
-                  ...widget!.value!.props,
                   isDroppedInSection: idParts.length <= 2 && !selector,
+                  type: widget!.type,
+                  widgetName: widget!.widgetName,
                 },
                 intl,
               );

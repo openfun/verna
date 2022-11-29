@@ -7,23 +7,21 @@ import { confSchemaFactory, widgetsFactory, vernaEnumSchemaFactory } from ':/tes
 import VernaJSONSchemaType from ':/types/rjsf';
 
 describe('section properties edition', () => {
-  const VernaSuspenseWrapper = ({ configSchema }: { configSchema?: VernaJSONSchemaType }) => {
-    return (
-      <Suspense fallback="Loading...">
-        <VernaProvider
-          isEditor
-          configSchema={configSchema}
-          defaultSchema={vernaEnumSchemaFactory()}
-          defaultWidgets={widgetsFactory()}
-          locale="en-US"
-        >
-          <div data-testid="wrapper">
-            <VernaForm />
-          </div>
-        </VernaProvider>
-      </Suspense>
-    );
-  };
+  const VernaSuspenseWrapper = ({ configSchema }: { configSchema?: VernaJSONSchemaType }) => (
+    <Suspense fallback="Loading...">
+      <VernaProvider
+        isEditor
+        configSchema={configSchema}
+        defaultSchema={vernaEnumSchemaFactory()}
+        defaultWidgets={widgetsFactory()}
+        locale="en-US"
+      >
+        <div data-testid="wrapper">
+          <VernaForm />
+        </div>
+      </VernaProvider>
+    </Suspense>
+  );
 
   it('should render a custom section', async () => {
     render(<VernaSuspenseWrapper />);
