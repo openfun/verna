@@ -8,7 +8,8 @@
     "@types/react-dom",
     "node",
     "react",
-    "react-dom"
+    "react-dom",
+    "typescript"
   ],
   "ignorePaths": ["**/node_modules/**"]
 }
