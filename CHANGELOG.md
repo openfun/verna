@@ -18,6 +18,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Add a poll builder example using Grommet library
 
+### Changed
+
+- Migrate to React 18
+
 ## [1.0.0-beta.0]
 
 ### Added
