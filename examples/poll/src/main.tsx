@@ -1,10 +1,12 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
 import AppWrapper from ':/AppWrapper';
 
-ReactDOM.render(
-  <React.StrictMode>
+const $container = document.getElementById('root');
+const root = createRoot($container!);
+
+root.render(
+  <StrictMode>
     <AppWrapper />
-  </React.StrictMode>,
-  document.getElementById('root'),
+  </StrictMode>,
 );

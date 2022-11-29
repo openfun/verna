@@ -3,12 +3,7 @@
     "github>openfun/renovate-configuration"
   ],
   "ignoreDeps": [
-    "@testing-library/react",
-    "@types/react",
-    "@types/react-dom",
     "node",
-    "react",
-    "react-dom",
     "typescript"
   ],
   "ignorePaths": ["**/node_modules/**"]
