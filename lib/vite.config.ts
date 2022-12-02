@@ -1,7 +1,7 @@
 import { resolve } from 'path';
-import typescript from '@rollup/plugin-typescript';
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
+import dts from 'vite-plugin-dts';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -22,28 +22,15 @@ export default defineConfig({
           'react-intl': 'ReactIntl',
         },
       },
-      plugins: [
-        typescript({
-          declaration: true,
-          declarationDir: resolve(__dirname, './dist'),
-          exclude: [
-            resolve(__dirname, './dist'),
-            resolve(__dirname, './node_modules/**'),
-            // Ignore all test stuff
-            resolve(__dirname, './src/tests'),
-            resolve(__dirname, './src/**/*.spec.tsx?'),
-          ],
-          noEmitOnError: true,
-          rootDir: resolve(__dirname, './src'),
-          target: 'ESNext',
-        }),
-      ],
     },
   },
-  plugins: [react()],
+  plugins: [dts(), react()],
   resolve: {
-    alias: {
-      ':/': resolve(__dirname, './src'),
-    },
+    alias: [
+      {
+        find: ':',
+        replacement: resolve(__dirname, './src'),
+      },
+    ],
   },
 });
