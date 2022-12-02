@@ -8,12 +8,5 @@
       ":/*": ["./src/*"]
     },
     "outDir": "./dist",
-  },
-  "tsc-alias": {
-    "replacers": {
-      "verna": {
-        "enabled": true,
-      }
-    },
   }
 }

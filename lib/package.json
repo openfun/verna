@@ -5,7 +5,7 @@
   "keywords": ["react", "form", "json-schema"],
   "description": "An extensible form builder based on React JSON Schema Form.",
   "scripts": {
-    "build": "tsc && vite build && tsc-alias",
+    "build": "tsc && vite build",
     "build:check": "if [ ! -d dist ] || [ -n \"$(find src -type f -newer dist)\" ] ; then yarn build ; fi",
     "build:dev": "vite build --watch --logLevel warn --mode development --config ./vite.dev.config.ts",
     "i18n:extract": "yarn formatjs extract --id-interpolation-pattern '[sha512:contenthash:base64:6]' --format crowdin './src/**/*.ts*' --ignore './src/**/*.spec.ts*' --out-file './i18n/frontend.json'",
@@ -57,7 +57,6 @@
     "@babel/preset-react": "7.18.6",
     "@babel/preset-typescript": "7.18.6",
     "@formatjs/cli": "5.1.3",
-    "@rollup/plugin-typescript": "9.0.2",
     "@testing-library/dom": "8.19.0",
     "@testing-library/jest-dom": "5.16.5",
     "@testing-library/react": "12.1.4",
@@ -85,9 +84,9 @@
     "react-dom": "17.0.2",
     "react-intl": "6.2.1",
     "rollup": "3.2.5",
-    "tsc-alias": "1.7.0",
     "tslib": "2.4.1",
     "typescript": "4.8.4",
-    "vite": "3.2.2"
+    "vite": "3.2.2",
+    "vite-plugin-dts": "1.7.1"
   }
 }
