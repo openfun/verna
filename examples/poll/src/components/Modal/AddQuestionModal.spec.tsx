@@ -1,7 +1,7 @@
 import { useVerna, VernaForm, VernaProvider } from '@openfun/verna';
+import { factories } from '@openfun/verna/dist/tests';
 import { VernaSchemaType } from '@openfun/verna/dist/types/rjsf';
 import { Maybe } from '@openfun/verna/dist/types/utils';
-import * as factories from '@openfun/verna/src/tests/mocks/factories';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Suspense } from 'react';
@@ -62,6 +62,7 @@ describe('AddQuestionModal', () => {
     await waitFor(async () => {
       expect(screen.queryByTestId('suspense-fallback')).not.toBeInTheDocument();
     });
+
     // Check that the modal is rendered
     await waitFor(async () => {
       screen.getByText('Select a type of question to add');
