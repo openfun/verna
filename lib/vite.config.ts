@@ -6,11 +6,13 @@ import dts from 'vite-plugin-dts';
 // https://vitejs.dev/config/
 export default defineConfig({
   build: {
+    emptyOutDir: true,
     lib: {
-      entry: resolve(__dirname, './src/index.ts'),
-      fileName: () => 'index.js',
+      entry: {
+        index: resolve(__dirname, './src/index.ts'),
+        tests: resolve(__dirname, './src/tests/index.ts'),
+      },
       formats: ['es'],
-      name: 'index',
     },
     minify: true,
     rollupOptions: {

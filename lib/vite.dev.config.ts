@@ -1,17 +1,18 @@
 import { resolve } from 'path';
-import typescript from '@rollup/plugin-typescript';
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
+import dts from 'vite-plugin-dts';
 
 // https://vitejs.dev/config/
 export default defineConfig({
   build: {
     emptyOutDir: false,
     lib: {
-      entry: resolve(__dirname, './src/index.ts'),
-      fileName: () => 'index.js',
+      entry: {
+        index: resolve(__dirname, './src/index.ts'),
+        tests: resolve(__dirname, './src/tests/index.ts'),
+      },
       formats: ['es'],
-      name: 'index',
     },
     minify: false,
     rollupOptions: {
@@ -19,31 +20,19 @@ export default defineConfig({
       treeshake: false,
     },
     sourcemap: true,
+    // TODO: use server.watch
     watch: {
       exclude: [resolve(__dirname, './src/tests'), resolve(__dirname, './src/**/*.spec.tsx?')],
       include: [resolve(__dirname, './src/**')],
     },
   },
-  plugins: [
-    react(),
-    typescript({
-      declaration: true,
-      declarationDir: resolve(__dirname, './dist'),
-      exclude: [
-        resolve(__dirname, './dist'),
-        resolve(__dirname, './node_modules/**'),
-        // Ignore all test stuff
-        resolve(__dirname, './src/tests'),
-        resolve(__dirname, './src/**/*.spec.tsx?'),
-      ],
-      noEmitOnError: false,
-      rootDir: resolve(__dirname, './src'),
-      target: 'ESNext',
-    }),
-  ],
+  plugins: [dts(), react()],
   resolve: {
-    alias: {
-      ':/': resolve(__dirname, './src'),
-    },
+    alias: [
+      {
+        find: ':',
+        replacement: resolve(__dirname, './src'),
+      },
+    ],
   },
 });
