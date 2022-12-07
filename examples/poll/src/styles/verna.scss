@@ -1,3 +1,5 @@
+@import 'leaflet/dist/leaflet.css';
+
 @font-face {
   font-family: Roboto;
   src: url("/roboto-v30-latin-regular.woff2");
@@ -233,4 +235,12 @@ body {
 
 fieldset {
   border: none;
+}
+
+.country-map {
+  border-radius: 8px;
+  display: flex;
+  height: 50vh;
+  min-height: 320px;
+  width: 100%;
 }

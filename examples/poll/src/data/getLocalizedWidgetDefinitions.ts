@@ -12,6 +12,11 @@ const messages = defineMessages({
     description: 'Label of the multiple choices widget',
     id: 'widgetToolbarItems.CheckboxesWidget',
   },
+  CountryMapWidget: {
+    defaultMessage: 'Country map selection',
+    description: 'Label of the country map widget',
+    id: 'widgetToolbarItems.CountryMapWidget',
+  },
   NumberWidget: {
     defaultMessage: 'Numerical question',
     description: 'Label of the number widget',
@@ -71,5 +76,10 @@ export const getLocalizedWidgetDefinitions = (intl: IntlShape) =>
       text: intl.formatMessage(messages.SelectWidget),
       type: 'string',
       widgetName: 'selectWidget',
+    },
+    {
+      text: intl.formatMessage(messages.CountryMapWidget),
+      type: 'string',
+      widgetName: 'countryMapWidget',
     },
   ] as SelectWidgetType[];

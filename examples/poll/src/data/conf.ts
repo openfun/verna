@@ -5,6 +5,7 @@ import NumberWidget from '../widgets/NumberWidget';
 import SelectWidget from '../widgets/SelectWidget';
 import TextareaWidget from '../widgets/TextareaWidget';
 import TextWidget from '../widgets/TextWidget';
+import CountryMapWidget from ':/widgets/CountryMapWidget';
 
 const configSchema: VernaJSONSchemaType = {
   properties: {
@@ -41,6 +42,14 @@ const configSchema: VernaJSONSchemaType = {
           type: 'boolean',
         },
       },
+    },
+    countryMapWidget: {
+      properties: {
+        required: {
+          type: 'boolean',
+        },
+      },
+      type: 'object',
     },
     numberWidget: {
       properties: {
@@ -102,6 +111,7 @@ const widgets = {
   TextWidget: TextWidget,
   checkboxWidget: CheckboxWidget,
   checkboxesWidget: CheckboxesWidget,
+  countryMapWidget: CountryMapWidget,
   numberWidget: NumberWidget,
   selectWidget: SelectWidget,
   textWidget: TextWidget,
