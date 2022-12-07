@@ -117,6 +117,7 @@ export default function FormWrapper({ setIsEditor }: FormWrapperProps) {
   }
 
   function onSubmit(formData: Record<string, Record<string, string | number>>) {
+    console.log(formData);
     updateStatsFromData(formData, schema, locale, localStats);
     setFormStatus(FormStatusEnum.completed);
     saveAndGoToMainPage();
@@ -129,129 +130,132 @@ export default function FormWrapper({ setIsEditor }: FormWrapperProps) {
   }
 
   return (
-    <div className="verna-wrapper">
-      <Card
-        background="white"
-        className={['widget-wrapper', shouldShowToolbar ? 'widget-wrapper-active' : ''].join(' ')}
-        round="small"
-        style={{ height: '100%', minHeight: '700px', position: 'sticky', top: '20px' }}
-      >
-        <CardHeader margin="10px">
-          <Text title="" weight="bold">
-            <FormattedMessage {...messages.toolbarTitle} />
-          </Text>
-          <Tip content={intl.formatMessage(messages.dndInfos)}>
-            <CircleInformation color="black" />
-          </Tip>
-        </CardHeader>
-        <CardBody>
-          <div className="form-toolbar">
-            <VernaToolbar
-              onDragEnd={() => setIsDragging(false)}
-              onDragStart={() => setIsDragging(true)}
-            >
-              {widgets.map((widget) => (
-                <WidgetWrapper key={widget.widgetName} {...widget} />
-              ))}
-            </VernaToolbar>
-          </div>
-        </CardBody>
-      </Card>
-      <Card>
-        <CardBody background="white" pad="10px" width="1000px">
-          <div className="form-options">
-            <fieldset>
-              <Select
-                defaultValue="Editor"
-                options={['Editor', 'Viewer']}
-                value={isEditor ? 'Editor' : 'Viewer'}
-                onChange={(e) => {
-                  setIsEditor(e.target.value === 'Editor');
-                  setSchema({
-                    ...schema,
-                    uiSchema: {
-                      ...schema.uiSchema,
-                      'ui:submitButtonOptions': {
-                        norender: e.target.value === 'Editor',
+    <Box direction="row">
+      <div className="verna-wrapper">
+        <Card
+          background="white"
+          className={['widget-wrapper', shouldShowToolbar ? 'widget-wrapper-active' : ''].join(' ')}
+          round="small"
+          style={{ height: '100%', minHeight: '700px', position: 'sticky', top: '20px' }}
+        >
+          <CardHeader margin="10px">
+            <Text title="" weight="bold">
+              <FormattedMessage {...messages.toolbarTitle} />
+            </Text>
+            <Tip content={intl.formatMessage(messages.dndInfos)}>
+              <CircleInformation color="black" />
+            </Tip>
+          </CardHeader>
+          <CardBody>
+            <div className="form-toolbar">
+              <VernaToolbar
+                onDragEnd={() => setIsDragging(false)}
+                onDragStart={() => setIsDragging(true)}
+              >
+                {widgets.map((widget) => (
+                  <WidgetWrapper key={widget.widgetName} {...widget} />
+                ))}
+              </VernaToolbar>
+            </div>
+          </CardBody>
+        </Card>
+        <Card>
+          <CardBody background="white" pad="10px" width="1000px">
+            <div className="form-options">
+              <fieldset>
+                <Select
+                  defaultValue="Editor"
+                  options={['Editor', 'Viewer']}
+                  value={isEditor ? 'Editor' : 'Viewer'}
+                  onChange={(e) => {
+                    setIsEditor(e.target.value === 'Editor');
+                    setSchema({
+                      ...schema,
+                      uiSchema: {
+                        ...schema.uiSchema,
+                        'ui:submitButtonOptions': {
+                          norender: e.target.value === 'Editor',
+                        },
                       },
-                    },
-                  });
-                }}
-              />
-            </fieldset>
-            <fieldset className="form_language">
-              <Select
-                options={[...VERNA_SUPPORTED_LOCALES]}
-                value={locale}
-                onChange={(e) => {
-                  setLocale(e.target.value);
-                  setFormStatus(FormStatusEnum.neutral);
-                }}
-              />
-            </fieldset>
-          </div>
-          <fieldset>
-            {pollSelected !== null ? (
-              <>
-                <Button
-                  className="form-goback-button"
-                  label={intl.formatMessage(messages.goBack)}
-                  onClick={() => {
+                    });
+                  }}
+                />
+              </fieldset>
+              <fieldset className="form_language">
+                <Select
+                  options={[...VERNA_SUPPORTED_LOCALES]}
+                  value={locale}
+                  onChange={(e) => {
+                    setLocale(e.target.value);
                     setFormStatus(FormStatusEnum.neutral);
-                    saveAndGoToMainPage();
                   }}
                 />
-                <VernaForm
-                  onSubmit={(data: unknown) =>
-                    onSubmit(data as Record<string, Record<string, string | number>>)
-                  }
+              </fieldset>
+            </div>
+            <fieldset>
+              {pollSelected !== null ? (
+                <>
+                  <Button
+                    className="form-goback-button"
+                    label={intl.formatMessage(messages.goBack)}
+                    onClick={() => {
+                      setFormStatus(FormStatusEnum.neutral);
+                      saveAndGoToMainPage();
+                    }}
+                  />
+                  <VernaForm
+                    onSubmit={(data: unknown) =>
+                      onSubmit(data as Record<string, Record<string, string | number>>)
+                    }
+                  />
+                </>
+              ) : (
+                <Poll
+                  schemaForm={schemaForm}
+                  setFormStatus={setFormStatus}
+                  setPollSelected={setPollSelected}
+                  setSchemaForm={setSchemaForm}
+                  stats={localStats.stats}
                 />
-              </>
-            ) : (
-              <Poll
-                schemaForm={schemaForm}
-                setFormStatus={setFormStatus}
-                setPollSelected={setPollSelected}
-                setSchemaForm={setSchemaForm}
-                stats={localStats.stats}
-              />
-            )}
-            {isEditor && (
-              <>
-                <Button
-                  label={intl.formatMessage(messages.save)}
-                  margin={{ top: '15px' }}
-                  onClick={() => (pollSelected !== null ? saveAndGoToMainPage() : saveForm())}
-                />
-                <Button
-                  label={intl.formatMessage(messages.resetData)}
-                  margin={{ left: '10px', top: '15px' }}
-                  onClick={() => {
-                    localStorage.clear();
-                    window.location.reload();
-                  }}
-                />
-              </>
-            )}
-          </fieldset>
-        </CardBody>
-        {formStatus === FormStatusEnum.completed && (
-          <CardFooter background={{ color: 'lightgreen' }} height="50px">
-            <Box
-              align="center"
-              direction="row"
-              gap="15px"
-              justify="start"
-              margin={{ left: '15px' }}
-            >
-              <StatusGood />
-              <Text>
-                <FormattedMessage {...messages.success} />
-              </Text>
-            </Box>
-          </CardFooter>
-        )}
-      </Card>
-    </div>
+              )}
+              {isEditor && (
+                <>
+                  <Button
+                    label={intl.formatMessage(messages.save)}
+                    margin={{ top: '15px' }}
+                    onClick={() => (pollSelected !== null ? saveAndGoToMainPage() : saveForm())}
+                  />
+                  <Button
+                    label={intl.formatMessage(messages.resetData)}
+                    margin={{ left: '10px', top: '15px' }}
+                    onClick={() => {
+                      localStorage.clear();
+                      window.location.reload();
+                    }}
+                  />
+                </>
+              )}
+            </fieldset>
+          </CardBody>
+          {formStatus === FormStatusEnum.completed && (
+            <CardFooter background={{ color: 'lightgreen' }} height="50px">
+              <Box
+                align="center"
+                direction="row"
+                gap="15px"
+                justify="start"
+                margin={{ left: '15px' }}
+              >
+                <StatusGood />
+                <Text>
+                  <FormattedMessage {...messages.success} />
+                </Text>
+              </Box>
+            </CardFooter>
+          )}
+        </Card>
+      </div>
+      {/*<pre style={{ fontSize: 10 }}>{JSON.stringify(schema, null, 2)}</pre>*/}
+    </Box>
   );
 }
