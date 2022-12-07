@@ -20,19 +20,19 @@ export default function SelectWidget({
   disabled,
   id,
   label,
-  error,
-  message,
+  rawErrors,
   options,
   onChange,
   required,
   value,
+  fieldClasses = [],
 }: VernaWidgetProps) {
   const { formatMessage } = useIntl();
   const values = ((options.enumOptions || []) as option[]).map((option) => option.value);
 
   return (
-    <Field error={error} message={message}>
-      <FormField disabled={disabled} label={label} required={required}>
+    <Field error={!!rawErrors} fieldClasses={fieldClasses}>
+      <FormField disabled={disabled} error={rawErrors?.[0]} label={label} required={required}>
         <Select
           aria-label={label}
           disabled={disabled}
