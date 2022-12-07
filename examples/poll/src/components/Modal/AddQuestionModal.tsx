@@ -64,6 +64,10 @@ export default function AddQuestionModal({
         />
         <Box direction="row" gap="15px">
           <Button
+            label={intl.formatMessage(messages.closeModal)}
+            onClick={() => setIsNewPollModalVisible(false)}
+          />
+          <Button
             disabled={!widget}
             label={intl.formatMessage(messages.addQuestion)}
             onClick={() => {
@@ -78,10 +82,6 @@ export default function AddQuestionModal({
               );
               setIsNewPollModalVisible(false);
             }}
-          />
-          <Button
-            label={intl.formatMessage(messages.closeModal)}
-            onClick={() => setIsNewPollModalVisible(false)}
           />
         </Box>
       </Box>
