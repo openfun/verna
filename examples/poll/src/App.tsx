@@ -1,7 +1,7 @@
 import { VernaProvider } from '@openfun/verna';
 import type { AjvError } from '@rjsf/core';
 import { Grommet } from 'grommet';
-import { Suspense, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import FormWrapper from './components/FormWrapper/FormWrapper';
 import DropZone from './components/VernaOverride/DropZone';
@@ -26,12 +26,18 @@ const messages = defineMessages({
 });
 
 function App() {
-  const [isEditor, setIsEditor] = useState(true);
+  const [isEditor, setIsEditor] = useState(
+    JSON.parse(localStorage.getItem('vernaExampleData-isEditor') || 'true'),
+  );
   const intl = useIntl();
 
   function transformErrorsOverload(errors: AjvError[]): AjvError[] {
     return transformErrors(errors, intl.formatMessage);
   }
+
+  useEffect(() => {
+    localStorage.setItem('vernaExampleData-isEditor', JSON.stringify(isEditor));
+  }, [isEditor]);
 
   return (
     <Grommet
