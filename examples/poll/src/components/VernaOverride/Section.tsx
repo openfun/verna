@@ -3,9 +3,10 @@ import type { ObjectFieldTemplateProps } from '@rjsf/core';
 import { Box, Button, Heading, Paragraph } from 'grommet';
 import { Configure } from 'grommet-icons';
 import React, { useState } from 'react';
-import { defineMessages, useIntl } from 'react-intl';
+import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 import AccordionBox from ':/components/AccordionBox';
 import AddQuestionModal from ':/components/Modal/AddQuestionModal';
+import { messages as pollMessages } from ':/components/Poll/Poll';
 
 const messages = defineMessages({
   newQuestion: {
@@ -40,7 +41,7 @@ export default function Section({
     >
       <Box align="center" direction="row">
         <Heading level="3" style={{ marginBottom: '10px', marginTop: '10px' }}>
-          {title}
+          {title || <FormattedMessage {...pollMessages.defaultSectionName} />}
         </Heading>
         {isEditor && (
           <Box

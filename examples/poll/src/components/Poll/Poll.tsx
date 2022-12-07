@@ -11,7 +11,7 @@ import { FormStatusEnum } from ':/components/FormWrapper/FormWrapper';
 import PollResume from ':/components/Poll/PollResume';
 import Section from ':/components/VernaOverride/Section';
 
-const messages = defineMessages({
+export const messages = defineMessages({
   defaultSectionName: {
     defaultMessage: 'Poll without title',
     description: 'The default name of a poll newly created',
